@@ -31,7 +31,7 @@ public abstract class BaseActivity extends FragmentActivity {
 
     protected static Handler handler = new Handler();
 
-    protected Context mContext;
+
 
     protected Intent intent;
 
@@ -40,7 +40,7 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this;
+        HXApplication.context = this;
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -118,8 +118,8 @@ public abstract class BaseActivity extends FragmentActivity {
 
     public void showNetDialog() {
         if (netDialog == null || netDialog.get() == null) {
-            Dialog dialog = new Dialog(mContext, R.style.NormalDialog);
-            RelativeLayout layout = (RelativeLayout) View.inflate(mContext, R.layout.item_progress_dialog, null);
+            Dialog dialog = new Dialog(HXApplication.context, R.style.NormalDialog);
+            RelativeLayout layout = (RelativeLayout) View.inflate(HXApplication.context, R.layout.item_progress_dialog, null);
             dialog.setContentView(layout);
             dialog.show();
             netDialog = new WeakReference<Dialog>(dialog);

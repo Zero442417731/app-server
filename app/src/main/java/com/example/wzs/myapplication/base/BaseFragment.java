@@ -34,6 +34,8 @@ public abstract class BaseFragment extends Fragment {
 
     protected Intent intent;
 
+    protected Bundle bundle;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -71,6 +73,18 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroy();
         RefWatcher refWatcher = HXApplication.getRefWatcher(getActivity());
         refWatcher.watch(this);
+    }
+
+    public void setParams(Bundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public Bundle getBundle() {
+        return bundle;
+    }
+
+    public void setBundle(Bundle bundle) {
+        this.bundle = bundle;
     }
 
     public HXApplication getApp() {

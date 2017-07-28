@@ -82,6 +82,7 @@ public class RegisterActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.get_sms:
+                smsCode();
               retrofitUtils.postData(ReplyParams1(), new MyCallback<GetSMS>() {
                     @Override
                     public void onSuccess(GetSMS getSMS) {
@@ -95,7 +96,7 @@ public class RegisterActivity extends BaseActivity {
                 });
                 break;
             case R.id.btn_register:
-                //register();
+                register();
 
                 break;
             case R.id.register_login:

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.example.wzs.myapplication.base.BaseActivity;
+import com.example.wzs.myapplication.base.BaseFragment;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.SignInfo;
 import com.example.wzs.myapplication.model.UserInfo;
@@ -22,6 +24,8 @@ public class HXApplication extends Application{
     private UserLoginInfo userLoginInfo;
     private UserInfo userInfo;
     private SignInfo signInfo;
+    public static BaseActivity context;
+    public static BaseFragment lastFragment;
     public synchronized static HXApplication getInstance() {
         return instance;
     }
