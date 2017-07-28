@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 
 import com.example.wzs.myapplication.R;
 import com.example.wzs.myapplication.application.HXApplication;
-import com.example.wzs.myapplication.network.ApiWrapper;
 import com.example.wzs.myapplication.utils.ActivityManagerUtil;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.squareup.leakcanary.RefWatcher;
@@ -137,10 +136,5 @@ public abstract class BaseActivity extends FragmentActivity {
         }
     }
 
-    public ApiWrapper getApiWrapper(boolean show) {
-        if (show) {
-            showNetDialog();
-        }
-        return ApiWrapper.getInstance();
-    }
+
 }

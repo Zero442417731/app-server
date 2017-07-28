@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/login_head_border"
+        app:layout_marginTopPercent="15%h" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/login_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/login_head_gril"
+        app:layout_marginTopPercent="15.3%h" />
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/phone_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@id/login_head"
+        android:background="@drawable/shape_corner"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_heightPercent="8.75%h"
+        app:layout_marginLeftPercent="16.3889%w"
+        app:layout_marginTopPercent="8.75%h"
+        app:layout_widthPercent="60.8333%">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_icon_phone"
+            app:layout_marginLeftPercent="5.8333%w" />
+
+        <TextView
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="#8ecfb8"
+            app:layout_marginPercent="4.1667%w" />
+
+        <EditText
+            android:layout_weight="1"
+            android:id="@+id/register_phone"
+            style="?android:attr/textViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="请输入你的手机号"
+            android:textColorHint="#eafff7"
+            android:textCursorDrawable="@null"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/delete_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/login_text_clear" />
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/sms_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@id/phone_layout"
+        android:background="@drawable/shape_corner"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_heightPercent="8.75%h"
+        app:layout_marginLeftPercent="16.3889%w"
+        app:layout_marginTopPercent="3.59375%h"
+        app:layout_widthPercent="60.8333%">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_icon_sms"
+            app:layout_marginLeftPercent="5.8333%w" />
+
+        <TextView
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="#8ecfb8"
+            app:layout_marginPercent="4.1667%w" />
+
+        <EditText
+            style="?android:attr/textViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="验证码"
+            android:textColorHint="#eafff7"
+            android:textCursorDrawable="@null"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/get_sms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/shape_register"
+            android:text="获取验证码"
+            android:textColor="#00c1a4"
+            android:textSize="10sp"
+            app:layout_heightPercent="44.6428%h"
+            app:layout_widthPercent="24%w" />
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+    <Button
+        android:id="@+id/btn_register"
+        app:layout_widthPercent="75%w"
+        android:layout_width="0dp"
+        android:textSize="24sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sms_layout"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_register"
+        android:text="注册"
+        android:textColor="#00c1a4"
+        app:layout_marginTopPercent="3.59375%h" />
+
+
+    <TextView
+        android:id="@+id/register_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_register"
+        android:layout_marginTop="25dp"
+        android:text="已有账号，登录"
+        android:textColor="#effff9"
+        app:layout_marginLeftPercent="22.3889%w" />
+    <TextView
+        android:layout_width="2dp"
+        android:layout_height="wrap_content"
+        android:background="#8ecfb8"
+        app:layout_marginPercent="4.1667%w"
+        android:layout_alignBaseline="@+id/register_login"
+        android:layout_alignBottom="@+id/register_login"
+        android:layout_toRightOf="@+id/register_login"
+        android:layout_toEndOf="@+id/register_login"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp" />
+    <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_register"
+        android:layout_marginTop="25dp"
+        android:layout_toRightOf="@id/register_login"
+        android:text="忘记密码？"
+        android:textColor="#effff9"
+        app:layout_marginLeftPercent="11.6667%w" />
+</com.zhy.android.percent.support.PercentRelativeLayout>

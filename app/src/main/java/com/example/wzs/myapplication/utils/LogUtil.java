@@ -17,7 +17,7 @@ public class LogUtil {
     /**
      * debug级别信息log
      *
-     * @param context
+     * @param tag
      * @param log_content
      */
     public static void w(String tag, String log_content) {

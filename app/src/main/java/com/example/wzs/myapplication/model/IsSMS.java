@@ -1,30 +1,19 @@
 package com.example.wzs.myapplication.model;
 
-import java.io.Serializable;
-
 /**
- * Created by hxcs-02 on 2017/7/25.
+ * Created by hxcs-02 on 2017/7/28.
  */
 
+public class IsSMS {
 
-public class RemoteReturnData<DataType> implements Serializable {
 
-    /**
-     * header : {"code":"服务编号"}
-     * body : {"isSuccessful":"调用流程是否成功执行完毕，布尔类型","errorCode":"错误码,参见附录-错误码定义","errorMsg":"错误信息,参见附录-错误码定义","resultData":"数据内容，参数由具体的接口定义\u2026\u2026\u201d"}
+ /**
+     * header : {"code":"HXCS-JC-DXYZ"}
+     * body : {"isSuccessful":"调用流程是否成功执行完毕，布尔类型","errorCode":"错误码","errorMsg":"错误信息","resultData":"是否验证成功，布尔类型"}
      */
 
     private HeaderBean header;
     private BodyBean body;
-    private DataType data;
-
-    public DataType getData() {
-        return data;
-    }
-
-    public void setData(DataType data) {
-        this.data = data;
-    }
 
     public HeaderBean getHeader() {
         return header;
@@ -44,7 +33,7 @@ public class RemoteReturnData<DataType> implements Serializable {
 
     public static class HeaderBean {
         /**
-         * code : 服务编号
+         * code : HXCS-JC-DXYZ
          */
 
         private String code;
@@ -58,12 +47,12 @@ public class RemoteReturnData<DataType> implements Serializable {
         }
     }
 
-    public static class BodyBean<T> {
+    public static class BodyBean {
         /**
          * isSuccessful : 调用流程是否成功执行完毕，布尔类型
-         * errorCode : 错误码,参见附录-错误码定义
-         * errorMsg : 错误信息,参见附录-错误码定义
-         * resultData : 数据内容，参数由具体的接口定义……”
+         * errorCode : 错误码
+         * errorMsg : 错误信息
+         * resultData : 是否验证成功，布尔类型
          */
 
         private String isSuccessful;

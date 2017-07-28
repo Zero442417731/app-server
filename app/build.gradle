@@ -17,6 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -24,10 +29,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+
+
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
@@ -35,10 +42,15 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'cn.finalteam:galleryfinal:1.4.6'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'com.pnikosis:materialish-progress:1.5'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.zhy:percent-support-extends:1.0.1'
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+
 }

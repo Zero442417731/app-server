@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 
 import com.example.wzs.myapplication.R;
 import com.example.wzs.myapplication.application.HXApplication;
-import com.example.wzs.myapplication.network.ApiWrapper;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.lang.ref.WeakReference;
@@ -100,11 +99,6 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    protected ApiWrapper getApiWrapper(boolean show) {
-        if (show) {
-            showNetDialog();
-        }
-        return ApiWrapper.getInstance();
-    }
+
 }
 

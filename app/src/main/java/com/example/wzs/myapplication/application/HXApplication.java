@@ -8,13 +8,10 @@ import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.SignInfo;
 import com.example.wzs.myapplication.model.UserInfo;
 import com.example.wzs.myapplication.model.UserLoginInfo;
-import com.example.wzs.myapplication.network.ApiWrapper;
+import com.example.wzs.myapplication.network.RetrofitUtils;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
-import com.example.wzs.myapplication.utils.ToastUtil;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-
-import rx.Subscriber;
 
 /**
  * Created by hxcs-02 on 2017/7/25.
@@ -47,6 +44,11 @@ public class HXApplication extends Application{
         //leakcanary install
         refWatcher = LeakCanary.install(this);
     }
+    public static Context getAppContext(){
+
+        return instance == null ? null : instance.getApplicationContext();
+
+    }
     private void autoLogin() {
         if (isLogin) {
             return;
@@ -59,7 +61,7 @@ public class HXApplication extends Application{
         if (TextUtils.isEmpty(password)) {
             return;
         }
-        ApiWrapper.getInstance().login(phone, password).subscribe(new Subscriber<UserLoginInfo>() {
+       /* ApiWrapper.getInstance().login(phone, password).subscribe(new Subscriber<UserLoginInfo>() {
             @Override
             public void onCompleted() {
 
@@ -78,7 +80,7 @@ public class HXApplication extends Application{
                     ToastUtil.showToast("自动登录成功");
                 }
             }
-        });
+        });*/
     }
     public static RefWatcher getRefWatcher(Context context) {
         HXApplication hxApplication = (HXApplication) context.getApplicationContext();
