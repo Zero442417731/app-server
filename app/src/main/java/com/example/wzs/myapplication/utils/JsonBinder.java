@@ -1,7 +1,9 @@
 package com.example.wzs.myapplication.utils;
 
-import android.annotation.SuppressLint;
-import android.util.Log;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonParseException;
@@ -13,11 +15,8 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
+import android.annotation.SuppressLint;
+import android.util.Log;
 
 @SuppressLint("SimpleDateFormat")
 public class JsonBinder {
@@ -88,7 +87,7 @@ public class JsonBinder {
 		try {
 			return mapper.writeValueAsString(object);
 		} catch (IOException e) {
-
+			Log.e("write to json string error:" + object ,e.toString());
 			return null;
 		}
 	}
@@ -105,8 +104,13 @@ public class JsonBinder {
 	/**
 	 * 字符串转json对象
 	 * */
-	public JSONObject stringToJSONObject(String str) throws JSONException {
-		JSONObject dataJson = new JSONObject(str);
+	public JSONObject stringToJSONObject(String str) {
+		JSONObject dataJson = null;
+		try {
+			dataJson = new JSONObject(str);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return dataJson;
 	}
 

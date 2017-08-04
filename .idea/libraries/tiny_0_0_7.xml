@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="tiny-0.0.7">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/91e0cf29323660ea1794ec44b817d552efef6708/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/91e0cf29323660ea1794ec44b817d552efef6708/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.zxy.android/tiny/0.0.7/ab8d0fcf21cfc929a34994805f8a586e05684e5/tiny-0.0.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

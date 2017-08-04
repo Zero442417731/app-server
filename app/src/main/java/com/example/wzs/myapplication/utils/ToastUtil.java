@@ -42,4 +42,6 @@ public class ToastUtil {
     public static void showToast(String msg) {
         Toast.makeText(HXApplication.getInstance().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
+
+
 }

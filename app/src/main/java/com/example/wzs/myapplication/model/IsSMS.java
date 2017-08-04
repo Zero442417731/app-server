@@ -7,7 +7,7 @@ package com.example.wzs.myapplication.model;
 public class IsSMS {
 
 
- /**
+    /**
      * header : {"code":"HXCS-JC-DXYZ"}
      * body : {"isSuccessful":"调用流程是否成功执行完毕，布尔类型","errorCode":"错误码","errorMsg":"错误信息","resultData":"是否验证成功，布尔类型"}
      */
@@ -55,17 +55,17 @@ public class IsSMS {
          * resultData : 是否验证成功，布尔类型
          */
 
-        private String isSuccessful;
+        private boolean isSuccessful;
         private String errorCode;
         private String errorMsg;
-        private String resultData;
+        private boolean resultData;
 
-        public String getIsSuccessful() {
+        public boolean isSuccessful() {
             return isSuccessful;
         }
 
-        public void setIsSuccessful(String isSuccessful) {
-            this.isSuccessful = isSuccessful;
+        public void setSuccessful(boolean successful) {
+            isSuccessful = successful;
         }
 
         public String getErrorCode() {
@@ -84,11 +84,11 @@ public class IsSMS {
             this.errorMsg = errorMsg;
         }
 
-        public String getResultData() {
+        public boolean isResultData() {
             return resultData;
         }
 
-        public void setResultData(String resultData) {
+        public void setResultData(boolean resultData) {
             this.resultData = resultData;
         }
     }

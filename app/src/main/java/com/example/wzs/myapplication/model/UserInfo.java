@@ -5,4 +5,5 @@ package com.example.wzs.myapplication.model;
  */
 
 public class UserInfo {
+    
 }

@@ -41,7 +41,7 @@ public abstract class BaseActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         HXApplication.context = this;
-
+        HXApplication.mContext = this;
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -52,8 +52,7 @@ public abstract class BaseActivity extends FragmentActivity {
         if (isInitWindow()) {
             initWindow();
         }
-
-        ButterKnife.bind(this);
+         ButterKnife.bind(this);
         initTitleBar();
         initView();
         initData();
@@ -75,6 +74,7 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        HXApplication.context = this;
     }
 
     @Override
@@ -86,10 +86,8 @@ public abstract class BaseActivity extends FragmentActivity {
     protected void onDestroy() {
         ActivityManagerUtil.create().finishActivity(this);
         System.gc();
-
+        HXApplication.getRefWatcher().watch(this);
         ButterKnife.unbind(this);
-        RefWatcher refWatcher = HXApplication.getRefWatcher(this);
-        refWatcher.watch(this);
 
         super.onDestroy();
     }
@@ -104,9 +102,10 @@ public abstract class BaseActivity extends FragmentActivity {
     protected void initWindow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.app_basic));
         }
     }
 
@@ -135,6 +134,7 @@ public abstract class BaseActivity extends FragmentActivity {
             netDialog.get().dismiss();
         }
     }
+
 
 
 }

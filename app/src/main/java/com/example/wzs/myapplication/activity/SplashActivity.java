@@ -34,13 +34,14 @@ public class SplashActivity extends Activity {
 
             @Override
             public void run() {
+
                 enterHomeActivity();
             }
         }, 2000);
     }
 
     private void enterHomeActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
         finish();
     }

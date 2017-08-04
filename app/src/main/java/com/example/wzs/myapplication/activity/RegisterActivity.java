@@ -2,25 +2,23 @@ package com.example.wzs.myapplication.activity;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wzs.myapplication.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
-import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.GetSMS;
-import com.example.wzs.myapplication.model.SendSMS;
+import com.example.wzs.myapplication.model.IsSMS;
 import com.example.wzs.myapplication.network.MyCallback;
-import com.example.wzs.myapplication.network.RetrofitUtils;
-import com.example.wzs.myapplication.utils.JsonBinder;
+import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
+import com.example.wzs.myapplication.utils.DoubleClickExitUtil;
 import com.example.wzs.myapplication.utils.LogUtil;
-import com.example.wzs.myapplication.utils.MD5Util;
 import com.example.wzs.myapplication.utils.ToastUtil;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
@@ -31,7 +29,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import rx.Subscriber;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -51,15 +48,17 @@ public class RegisterActivity extends BaseActivity {
     TextView registerLogin;
     @Bind(R.id.forgot_password)
     TextView forgotPassword;
-    @Bind(R.id.delete_phone)
-    ImageView deletePhone;
 
-    RetrofitUtils retrofitUtils;
+    @Bind(R.id.et_sms)
+    EditText etSms;
 
     private TimeCounter counter = new TimeCounter(60 * 1000, 1000);
 
     private String phone;
-
+    private DoubleClickExitUtil doubleClickExitUtil;
+    private boolean successful;
+    private String phone1;
+    private String resultData;
 
     @Override
     protected int setLayoutId() {
@@ -68,83 +67,137 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        retrofitUtils = RetrofitUtils.getInstance();
+
     }
 
     @Override
     protected void initData() {
-
+        doubleClickExitUtil = new DoubleClickExitUtil();
     }
 
 
-
-    @OnClick({R.id.get_sms, R.id.btn_register, R.id.register_login, R.id.forgot_password,R.id.delete_phone})
+    @OnClick({R.id.get_sms, R.id.btn_register, R.id.register_login, R.id.forgot_password})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.get_sms:
-                smsCode();
-              retrofitUtils.postData(ReplyParams1(), new MyCallback<GetSMS>() {
+
+                HXApplication.retrofitUtils.postData(registerJson(), new MyCallback<GetSMS>() {
                     @Override
                     public void onSuccess(GetSMS getSMS) {
-                        LogUtil.w("qqqqq",getSMS.getBody().getResultData());
+                        resultData = getSMS.getBody().getResultData();
                     }
 
                     @Override
                     public void onError(String msg) {
-                            LogUtil.e("aaaa",msg);
+                        LogUtil.e("aaaa", msg);
                     }
                 });
                 break;
             case R.id.btn_register:
                 register();
-
                 break;
             case R.id.register_login:
                 break;
             case R.id.forgot_password:
+                ActivityLauncherUtil.launcher(this,ForgotPwdActivity.class);
                 break;
-            case R.id.delete_phone:
-                break;
+
         }
     }
+
     private void smsCode() {
         counter.start();
         getSms.setClickable(false);
     }
 
-    private String ReplyParams1(){
+
+    private String registerJson() {
         phone = registerPhone.getText().toString().trim();
+        HXApplication.phone = phone;
         if (TextUtils.isEmpty(phone)) {
-            ToastUtil.showToast("请输入手机号");
+            ToastUtil.showLong(this, "请输入手机号");
         }
-        // smsCode();
-        SendSMS.BodyBean bodyBean = new SendSMS.BodyBean();
-        bodyBean.setMobile(phone);
-        bodyBean.setType("1");
-        SendSMS.HeaderBean headerBean = new SendSMS.HeaderBean();
-        headerBean.setCode("HXCS-JC-FSDX");
-        SendSMS sendSMS = new SendSMS();
-        sendSMS.setHeader(headerBean);
-        sendSMS.setBody(bodyBean);
-        JsonBinder jsonBinder = JsonBinder.buildNormalBinder();
-        String toJson = jsonBinder.toJson(sendSMS);
-        return toJson;
+        smsCode();
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject1 = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        try {
+            jsonObject.put("code", "HXCS-JC-FSDX");
+            jsonObject1.put("mobile", phone);
+            jsonObject1.put("type", "1");
+            jsonObject2.put("header", jsonObject);
+            jsonObject2.put("body", jsonObject1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject2.toString();
     }
 
     private void register() {
-        String phone = registerPhone.getText().toString().trim();
-        if (TextUtils.isEmpty(phone)) {
-            ToastUtil.showToast("请输入手机号");
+        phone1 = registerPhone.getText().toString().trim();
+        if (TextUtils.isEmpty(phone1)) {
+            ToastUtil.showLong(this, "请输入手机号");
             return;
         }
 
-        String sms = getSms.getText().toString().trim();
+        String sms = etSms.getText().toString().trim();
         if (TextUtils.isEmpty(sms)) {
-            ToastUtil.showToast("请输入验证码");
+            ToastUtil.showLong(this, "请输入验证码");
             return;
         }
+        if (resultData.equals("0")) {
+            HXApplication.retrofitUtils.postData(isSMS(), new MyCallback<IsSMS>() {
+                @Override
+                public void onSuccess(IsSMS isSMS) {
+                    successful = isSMS.getBody().isResultData();
+
+                }
+
+                @Override
+                public void onError(String msg) {
+                    Log.d("错误信息-----------", msg);
+                }
+            });
+
+            if (successful) {
+                ActivityLauncherUtil.launcher(this, SetPasswordActivity.class);
+            }
+        } else if (resultData.equals("1")) {
+
+
+        } else if (resultData.equals("2")) {
+            ToastUtil.showLong(this, "手机号已注册");
+        } else {
+            return;
+        }
+
 
     }
+
+    private String isSMS() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject1 = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        try {
+            jsonObject.put("code", "HXCS-JC-DXYZ");
+            jsonObject1.put("mobilePhone", phone1);
+            jsonObject1.put("smsValidCode", etSms.getText().toString().trim());
+            jsonObject2.put("header", jsonObject);
+            jsonObject2.put("body", jsonObject1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject2.toString();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+
     private class TimeCounter extends CountDownTimer {
         public TimeCounter(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
@@ -160,5 +213,19 @@ public class RegisterActivity extends BaseActivity {
             getSms.setClickable(true);
             getSms.setText("再次获取");
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return doubleClickExitUtil.onKeyDown(keyCode, event);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.gc();
     }
 }

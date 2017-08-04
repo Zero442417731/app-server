@@ -3,73 +3,68 @@ package com.example.wzs.myapplication.utils;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.example.wzs.myapplication.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseFragment;
 
-
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class FragmentBuilder {
 
+    private static BaseFragment lasrfragment;
 
-
-    private static FragmentBuilder fragmentBuilder;
-    public FragmentManager fragmentManager;
-    private BaseFragment fragment;
-
-    private FragmentBuilder(){
-        init();
-    }
-    public static synchronized FragmentBuilder getInstance(){
-
-        if (fragmentBuilder==null)
-            fragmentBuilder=new FragmentBuilder();
-
-        return fragmentBuilder;
-    }
-    private void init(){
-        fragmentManager = HXApplication.context.getSupportFragmentManager();
-    }
-    public FragmentBuilder startFragment(Class<? extends BaseFragment> fragmentClass){
-
-        String fragmentName = fragmentClass.getSimpleName();
-
-        fragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentName);
-
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        if (fragment ==null){
+    /**
+     * 切换Fragment的方法
+     *
+     * @param fragmentClass 要跳转的Fragment
+     * @param containId     容器ID
+     * @param isHidden      是否隐藏
+     * @param bundle        参数
+     * @param isBack        是否添加到回退栈
+     * @return
+     */
+    public static BaseFragment changeFragment(Class<? extends BaseFragment> fragmentClass, int containId, boolean isHidden, Bundle bundle, boolean isBack) {
+        FragmentManager manager = HXApplication.context.getSupportFragmentManager();
+        //开启事物
+        FragmentTransaction transaction = manager.beginTransaction();
+        String simpleName = fragmentClass.getSimpleName();
+        //通过名字 找到当前fragment
+        BaseFragment currentFragment = (BaseFragment) manager.findFragmentByTag(simpleName);
+        if (currentFragment == null) {
             try {
-                fragment =fragmentClass.newInstance();
-                transaction.add(R.id.mFram,fragment,fragmentName);
+                //如果没有，就创建一个fragment
+                currentFragment = fragmentClass.newInstance();
+                //添加到事物
+                transaction.add(containId, currentFragment, simpleName);
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-
         }
-        if (HXApplication.lastFragment!=null){
-            transaction.hide(HXApplication.lastFragment);
+        if (isHidden) {
+            //隐藏上一个fragment
+            if (lasrfragment != null) {
+                transaction.hide(lasrfragment);
+                transaction.show(currentFragment);
+            }
+        } else {
+            //如果不隐藏的话，就替换他
+            transaction.replace(containId, currentFragment, simpleName);
         }
-        transaction.show(fragment);
-
-        transaction.addToBackStack(fragmentName);
-
-        HXApplication.lastFragment=fragment;
-
+        if (bundle != null) {
+            currentFragment.setBundle(bundle);
+        }
+        if (isBack) {
+            transaction.addToBackStack(simpleName);
+        }
         transaction.commit();
-        return this;
-    }
-
-    public FragmentBuilder setParams(Bundle bundle){
-        fragment.setParams(bundle);
-        return this;
-    }
-
-    public BaseFragment build(){
-        return fragment;
+        lasrfragment = currentFragment;
+        return lasrfragment;
     }
 
 

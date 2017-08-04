@@ -18,6 +18,7 @@ import com.example.wzs.myapplication.application.HXApplication;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 
 import butterknife.ButterKnife;
 
@@ -41,6 +42,7 @@ public abstract class BaseFragment extends Fragment {
         super.onAttach(activity);
         mContext = activity;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,8 +73,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RefWatcher refWatcher = HXApplication.getRefWatcher(getActivity());
-        refWatcher.watch(this);
+        HXApplication.getRefWatcher().watch(this);
     }
 
     public void setParams(Bundle bundle) {

@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 import com.example.wzs.myapplication.R;
@@ -29,14 +30,13 @@ public class WelcomeGuideActivity extends Activity implements OnClickListener {
 	private ViewPager vp;
 	private GuideViewPagerAdapter adapter;
 	private List<View> views;
-	private Button startBtn;
+	private TextView startBtn;
 
 	// 引导页图片资源
 	private static final int[] pics = { R.layout.guid_view1,
 			R.layout.guid_view2, R.layout.guid_view3, R.layout.guid_view4 };
 
 	// 底部小点图片
-	private ImageView[] dots;
 
 	// 记录当前选中位置
 	private int currentIndex;
@@ -53,7 +53,7 @@ public class WelcomeGuideActivity extends Activity implements OnClickListener {
 			View view = LayoutInflater.from(this).inflate(pics[i], null);
 			
 			if (i == pics.length - 1) {
-				startBtn = (Button) view.findViewById(R.id.btn_login);
+				startBtn = (TextView) view.findViewById(R.id.btn_login);
 				startBtn.setTag("enter");
 				startBtn.setOnClickListener(this);
 			}
@@ -68,7 +68,7 @@ public class WelcomeGuideActivity extends Activity implements OnClickListener {
 		vp.setAdapter(adapter);
 		vp.setOnPageChangeListener(new PageChangeListener());
 
-		initDots();
+
 		
 	}
 
@@ -95,23 +95,7 @@ public class WelcomeGuideActivity extends Activity implements OnClickListener {
 		super.onDestroy();
 	}
 
-	private void initDots() {
-		LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
-		dots = new ImageView[pics.length];
 
-		// 循环取得小点图片
-		for (int i = 0; i < pics.length; i++) {
-			// 得到一个LinearLayout下面的每一个子元素
-			dots[i] = (ImageView) ll.getChildAt(i);
-			dots[i].setEnabled(false);// 都设为灰色
-			dots[i].setOnClickListener(this);
-			dots[i].setTag(i);// 设置位置tag，方便取出与当前位置对应
-		}
-
-		currentIndex = 0;
-		dots[currentIndex].setEnabled(true); // 设置为白色，即选中状态
-
-	}
 
 	/**
 	 * 设置当前view
@@ -127,15 +111,13 @@ public class WelcomeGuideActivity extends Activity implements OnClickListener {
 
 	/**
 	 * 设置当前指示点
-	 * 
+	 *
 	 * @param position
 	 */
 	private void setCurDot(int position) {
 		if (position < 0 || position > pics.length || currentIndex == position) {
 			return;
 		}
-		dots[position].setEnabled(true);
-		dots[currentIndex].setEnabled(false);
 		currentIndex = position;
 	}
 

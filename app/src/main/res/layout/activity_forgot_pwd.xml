@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#cccccc"
+    android:orientation="vertical"
+    tools:context="com.example.wzs.myapplication.activity.SetPasswordActivity">
+
+    <RelativeLayout
+        android:id="@+id/base_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#767670">
+
+        <ImageView
+            android:id="@+id/title_back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/navibar_icon_return"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="忘记密码"
+            android:textColor="#e8fffb"
+            android:textSize="25.3sp" />
+    </RelativeLayout>
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        app:layout_heightPercent="20%h"
+        app:layout_widthPercent="100%w">
+
+
+        <com.zhy.android.percent.support.PercentLinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/base_action_bar"
+            android:background="#ffffff"
+            android:gravity="center_vertical"
+            app:layout_heightPercent="50%h"
+            app:layout_widthPercent="100%w">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="手机号 : " />
+
+            <com.example.wzs.myapplication.weight.PasswordEditText
+                android:id="@+id/set_password"
+                style="?android:attr/textViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="输入你的手机号"
+                android:inputType="textPassword"
+                android:textColorHint="#cccccc"
+                android:textCursorDrawable="@null"
+                android:textSize="12sp"
+                app:layout_widthPercent="70%w" />
+
+
+        </com.zhy.android.percent.support.PercentLinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp" />
+
+        <com.zhy.android.percent.support.PercentLinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/base_action_bar"
+            android:background="#ffffff"
+            android:gravity="center_vertical"
+            app:layout_heightPercent="50%h"
+            app:layout_widthPercent="100%w">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="验证码 : " />
+
+            <com.example.wzs.myapplication.weight.PasswordEditText
+
+                android:id="@+id/set_password_again"
+                style="?android:attr/textViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="输入验证码"
+                android:inputType="textPassword"
+                android:textColorHint="#cccccc"
+                android:textCursorDrawable="@null"
+                android:textSize="12sp"
+                app:layout_widthPercent="50%w" />
+
+            <Button
+                android:id="@+id/get_sms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/shape_register"
+                android:text="获取验证码"
+                android:textColor="#00c1a4"
+                android:textSize="10sp"
+                app:layout_heightPercent="44.6428%h"
+                app:layout_widthPercent="24%w" />
+        </com.zhy.android.percent.support.PercentLinearLayout>
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/shape_register"
+        android:text="下一步"
+        android:textColor="#00c1a4"
+        android:textSize="24sp"
+        app:layout_marginTopPercent="3.59375%h"
+        app:layout_widthPercent="75%w" />
+</com.zhy.android.percent.support.PercentLinearLayout>

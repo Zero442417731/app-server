@@ -4,4 +4,33 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="app_white">#ffffff</color>
+    <color name="app_white_half">#7fffffff</color>
+    <color name="app_black">#000000</color>
+    <color name="app_black_half">#7f000000</color>
+    <color name="app_transparent">#00000000</color>
+    <color name="app_gray">#EFEDED</color>
+    <color name="app_hui">#cccccc</color>
+    <color name="navigation_default">#999999</color>
+    <color name="navigation_selected">#007ad9</color>
+    <color name="navigation_dialog_live">#3092e0</color>
+
+    <color name="home_navigation_text_default">#007ad9</color>
+    <color name="home_navigation_text_selected">#ffa101</color>
+    <color name="login_register">#1b1a1f</color>
+    <color name="login_other">#767670</color>
+    <color name="register_smscode">#999999</color>
+    <color name="my_common">#666666</color>
+    <color name="my_rank_title_default">#999999</color>
+    <color name="my_rank_title_selected">#ffffff</color>
+    <color name="my_contribute_label">#eeeeee</color>
+    <color name="my_grade_distance">#ff6666</color>
+    <color name="home_hot_nickname">#333333</color>
+    <color name="home_nearby_title">#333333</color>
+    <color name="home_nearby_star">#666666</color>
+    <color name="home_nearby_distance">#007ad9</color>
+    <color name="home_nearby_distance_to">#318EDD</color>
+    <color name="home_follow_like">#44000000</color>
+    <color name="home_search_introduction">#999999</color>
+    <color name="separator_color">#B0B0B0</color>
 </resources>

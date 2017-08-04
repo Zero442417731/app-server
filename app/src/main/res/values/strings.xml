@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="app_back_exit">再按一次退出应用</string>
+    <string name="app_list_loading">加载中</string>
+    <string name="app_toolbar_save">保存</string>
+
+    <string name="load_failed">加载失败</string>
+    <string name="load_no_more">没有更多</string>
+    <string name="loading_data">正在加载</string>
+    <string name="my_setting_title">设置</string>
+    <string name="my_setting_safe_title">账号安全</string>
+    <string name="my_setting_blacklist_title">消息通知</string>
+    <string name="my_setting_push_title">隐私</string>
+    <string name="my_setting_help_title">帮助反馈</string>
+    <string name="my_setting_clear_title">清除缓存</string>
+    <string name="my_setting_update_title">检查更新</string>
+    <string name="my_setting_about_title">关于产品</string>
+    <string name="my_setting_exit_title">退出登录</string>
 </resources>
