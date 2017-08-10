@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.wzs.myapplication">
+    package="com.nonecity">
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -27,7 +29,7 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
     <application
-        android:name=".application.HXApplication"
+        android:name="com.example.wzs.myapplication.application.HXApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -49,44 +51,40 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <!-- 判断页 -->
-        <activity android:name=".activity.SplashActivity">
-
-        </activity>
-        <!-- 引导页 -->
-
         <activity
-            android:name=".activity.WelcomeGuideActivity"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.LoginActivity">
+            android:name="com.example.wzs.myapplication.activity.SplashActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SetPasswordActivity">
+        <!-- 引导页 -->
 
-        </activity>
-        <activity android:name=".activity.PersonHbActivity" />
-        <activity android:name=".activity.PersonDataActivity">
+        <activity
+            android:name="com.example.wzs.myapplication.activity.WelcomeGuideActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
+        <activity android:name="com.example.wzs.myapplication.activity.MainActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.RegisterActivity" />
+        <activity android:name="com.example.wzs.myapplication.activity.LoginActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.SetPasswordActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.PersonHbActivity" />
+        <activity android:name="com.example.wzs.myapplication.activity.PersonDataActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.ForgotPwdActivity" />
+        <activity android:name="com.example.wzs.myapplication.activity.SettingActivity" />
+        <activity android:name="com.example.wzs.myapplication.activity.SafeActivity" />
+        <activity android:name="com.example.wzs.myapplication.activity.TZActivity" />
 
-        </activity>
-        <activity android:name=".activity.ForgotPwdActivity" />
-        <activity android:name=".activity.SettingActivity" />
-        <activity android:name=".activity.SafeActivity" />
-        <activity android:name=".activity.TZActivity"></activity>
-
-
-        <receiver android:name=".receiver.MyReceiver" android:enabled="true">
+        <receiver
+            android:name="com.example.wzs.myapplication.event.MyReceiver"
+            android:enabled="true">
             <intent-filter>
-                <action android:name="com.hxcs">
-
-                </action>
-
+                <action android:name="com.hxcs"></action>
             </intent-filter>
         </receiver>
+
+        <activity android:name="com.example.wzs.myapplication.activity.ChatActivity"></activity>
     </application>
 
 </manifest>

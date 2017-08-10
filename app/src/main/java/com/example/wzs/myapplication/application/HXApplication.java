@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.example.wzs.myapplication.BuildConfig;
+
 import com.example.wzs.myapplication.base.BaseActivity;
 import com.example.wzs.myapplication.base.BaseFragment;
 import com.example.wzs.myapplication.config.Constant;
@@ -18,6 +18,7 @@ import com.example.wzs.myapplication.network.RetrofitUtils;
 import com.example.wzs.myapplication.utils.GlideImageLoader;
 import com.example.wzs.myapplication.utils.SDPackageUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
+import com.nonecity.BuildConfig;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.zxy.tiny.Tiny;

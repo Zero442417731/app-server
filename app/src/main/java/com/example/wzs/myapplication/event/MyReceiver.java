@@ -1,4 +1,4 @@
-package com.example.wzs.myapplication.receiver;
+package com.example.wzs.myapplication.event;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

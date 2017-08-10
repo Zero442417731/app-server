@@ -2,7 +2,7 @@ package com.example.wzs.myapplication.fragment;
 
 import android.view.View;
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.base.BaseFragment;
 
 /**

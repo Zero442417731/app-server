@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -22,9 +22,7 @@ import java.lang.reflect.Field;
 
 import butterknife.ButterKnife;
 
-/**
- * @AUTHOR HACKER
- */
+
 public abstract class BaseFragment extends Fragment {
 
     protected Context mContext;

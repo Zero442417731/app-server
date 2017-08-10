@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseFragment;
 

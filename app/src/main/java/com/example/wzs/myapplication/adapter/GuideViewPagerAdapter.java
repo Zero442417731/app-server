@@ -1,4 +1,4 @@
-package com.example.wzs.myapplication.activity;
+package com.example.wzs.myapplication.adapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;

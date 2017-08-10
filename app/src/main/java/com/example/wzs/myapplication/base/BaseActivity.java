@@ -15,7 +15,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.utils.ActivityManagerUtil;
 import com.readystatesoftware.systembartint.SystemBarTintManager;

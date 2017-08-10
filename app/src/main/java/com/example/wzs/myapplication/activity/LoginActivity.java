@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
 import com.example.wzs.myapplication.config.Constant;
@@ -87,6 +87,9 @@ public class LoginActivity extends BaseActivity {
                 ClientUtil.sendMessage(setLogin());
                 SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone",name );
                 SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "password", pwd);
+                HXApplication.isLogin = true;
+                ActivityLauncherUtil.launcher(HXApplication.mContext,MainActivity.class);
+                finish();
                 break;
             case R.id.register_login:
                 ActivityLauncherUtil.launcher(this, RegisterActivity.class);

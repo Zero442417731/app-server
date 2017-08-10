@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="materialish-progress-1.5">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/e01dfa6f61b3d42e59ee265570edaf58a0976a34/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/e01dfa6f61b3d42e59ee265570edaf58a0976a34/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/53662dd6d11669f057e2e5a09c50c5bcb0fe2dc1/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/53662dd6d11669f057e2e5a09c50c5bcb0fe2dc1/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.activity.PersonDataActivity;
 import com.example.wzs.myapplication.base.BaseFragment;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;

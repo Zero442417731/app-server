@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,8 +14,7 @@ import android.view.View.OnFocusChangeListener;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.TranslateAnimation;
-
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 
 public class PasswordEditText extends android.support.v7.widget.AppCompatEditText implements
         OnFocusChangeListener, TextWatcher {
@@ -80,20 +81,20 @@ public class PasswordEditText extends android.support.v7.widget.AppCompatEditTex
                     this.setText("");
                 }
             }
-//            if(getCompoundDrawables()[0] != null){
-//                boolean touchLeft = event.getX()>0 && event.getX()<getCompoundDrawables()[0].getIntrinsicWidth();
-//                if(touchLeft){
-//                    if(isShow==false){
-//                        isShow = true;
-//                        //设置为可见
-//                        this.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-//                    }else{
-//                        isShow = false;
-//                        //设置为密码模式
-//                        this.setTransformationMethod(PasswordTransformationMethod.getInstance());
-//                    }
-//                }
-//            }
+            if(getCompoundDrawables()[0] != null){
+                boolean touchLeft = event.getX()>0 && event.getX()<getCompoundDrawables()[0].getIntrinsicWidth();
+                if(touchLeft){
+                    if(isShow==false){
+                        isShow = true;
+                        //设置为可见
+                        this.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }else{
+                        isShow = false;
+                        //设置为密码模式
+                        this.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    }
+                }
+            }
         }
 
         return super.onTouchEvent(event);

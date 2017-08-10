@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.base.BaseActivity;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 

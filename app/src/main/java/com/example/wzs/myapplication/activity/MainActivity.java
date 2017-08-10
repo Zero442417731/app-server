@@ -19,7 +19,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
 import com.example.wzs.myapplication.base.BaseFragment;
@@ -126,16 +126,18 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             case R.id.message:
                 FragmentBuilder.changeFragment(MessageFragment.class,R.id.mFram,true,null,false);
                 baseActionBar.setVisibility(View.VISIBLE);
+                tabTitle.setText("消息");
                 message.setTextColor(Color.parseColor("#ff00ff"));
                 break;
             case R.id.friend:
                 FragmentBuilder.changeFragment(FriendFragment.class,R.id.mFram,true,null,false);
                 baseActionBar.setVisibility(View.VISIBLE);
+                tabTitle.setText("好友列表");
                 message.setTextColor(Color.parseColor("#000000"));
                 break;
             case R.id.my:
                 FragmentBuilder.changeFragment(MineFragment.class,R.id.mFram,true,null,true);
-               baseActionBar.setVisibility(View.GONE);
+                baseActionBar.setVisibility(View.GONE);
                 break;
         }
     }

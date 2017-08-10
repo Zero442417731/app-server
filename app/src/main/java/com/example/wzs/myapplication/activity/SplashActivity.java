@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
+import android.view.WindowManager;
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
+import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.config.Constant;
+import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 
 
@@ -17,6 +21,7 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // 判断是否是第一次开启应用
         boolean isFirstOpen = SharedPreferencesUtil.getBoolean(this, Constant.FIRST_OPEN);
         // 如果是第一次启动，则先进入功能引导页
@@ -34,7 +39,8 @@ public class SplashActivity extends Activity {
 
             @Override
             public void run() {
-
+                if (HXApplication.isLogin)
+                    ActivityLauncherUtil.launcher(HXApplication.mContext, MainActivity.class);
                 enterHomeActivity();
             }
         }, 2000);

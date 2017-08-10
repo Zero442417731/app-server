@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
 import com.example.wzs.myapplication.model.GetSMS;
@@ -97,6 +97,7 @@ public class RegisterActivity extends BaseActivity {
                 register();
                 break;
             case R.id.register_login:
+                ActivityLauncherUtil.launcher(HXApplication.mContext,LoginActivity.class);
                 break;
             case R.id.forgot_password:
                 ActivityLauncherUtil.launcher(this,ForgotPwdActivity.class);

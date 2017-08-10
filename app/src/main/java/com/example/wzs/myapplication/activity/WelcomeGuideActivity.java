@@ -3,19 +3,16 @@ package com.example.wzs.myapplication.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
+import com.example.wzs.myapplication.adapter.GuideViewPagerAdapter;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 

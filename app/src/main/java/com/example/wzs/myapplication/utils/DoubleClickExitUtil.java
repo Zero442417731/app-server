@@ -5,7 +5,7 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 
 

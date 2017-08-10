@@ -23,8 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
-import com.example.wzs.myapplication.R;
+import com.nonecity.R;
 
 /**
  * ActionSheet
