@@ -68,6 +68,10 @@ public class UserAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext,users.get(position).getName(),Toast.LENGTH_SHORT).show();
+
+
+
+
             }
         });
         //当前的item的title与上一个item的title不同的时候回显示title(A,B,C......)

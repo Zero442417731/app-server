@@ -19,6 +19,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
@@ -57,6 +58,8 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     public static final int RIGHT_TYPE = 5;
     @Bind(R.id.tab_title)
     TextView tabTitle;
+    @Bind(R.id.add_friends)
+    ImageView addfriends;
     @Bind(R.id.person_sign)
     ImageView personSign;
     @Bind(R.id.base_action_bar)
@@ -113,12 +116,13 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     @Override
     protected void initData() {
         checkPermissions();
+
          FragmentBuilder.changeFragment(MessageFragment.class,R.id.mFram,true,null,false);
         doubleClickExitUtil = new DoubleClickExitUtil();
         startLocation();
     }
 
-    @OnClick({R.id.person_sign, R.id.message, R.id.friend, R.id.my})
+    @OnClick({R.id.person_sign, R.id.message, R.id.friend, R.id.my,R.id.add_friends})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.person_sign:
@@ -127,17 +131,23 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 FragmentBuilder.changeFragment(MessageFragment.class,R.id.mFram,true,null,false);
                 baseActionBar.setVisibility(View.VISIBLE);
                 tabTitle.setText("消息");
+                addfriends.setVisibility(View.GONE);
                 message.setTextColor(Color.parseColor("#ff00ff"));
                 break;
             case R.id.friend:
                 FragmentBuilder.changeFragment(FriendFragment.class,R.id.mFram,true,null,false);
                 baseActionBar.setVisibility(View.VISIBLE);
+                addfriends.setVisibility(View.VISIBLE);
                 tabTitle.setText("好友列表");
                 message.setTextColor(Color.parseColor("#000000"));
                 break;
             case R.id.my:
+                addfriends.setVisibility(View.GONE);
                 FragmentBuilder.changeFragment(MineFragment.class,R.id.mFram,true,null,true);
                 baseActionBar.setVisibility(View.GONE);
+                break;
+            case R.id.add_friends:
+                ActivityLauncherUtil.launcher(this,AddActivity.class);
                 break;
         }
     }

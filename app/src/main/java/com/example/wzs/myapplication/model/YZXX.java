@@ -1,10 +1,13 @@
 package com.example.wzs.myapplication.model;
 
+import java.io.Serializable;
+
 /**
  * Created by hxcs-02 on 2017/8/4.
  */
 
-public class YZXX {
+//好友验证推送
+public class YZXX implements Serializable{
 
     /**
      * friendId : 好友关系id

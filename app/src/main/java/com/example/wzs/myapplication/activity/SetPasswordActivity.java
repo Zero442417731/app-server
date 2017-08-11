@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.wzs.myapplication.config.Constant;
+import com.example.wzs.myapplication.network.ClientUtil;
+import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
@@ -92,23 +95,12 @@ public class SetPasswordActivity extends BaseActivity {
         } else if (!pwd.equals(pwd1)) {
             ToastUtil.showShort(this, "两次密码输入不一致");
         } else {
+         //   SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER_PWD, "password", MD5Util.getMD5Str(pwd));
             // 关闭软键盘
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(
                     setPassword.getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
-            HXApplication.retrofitUtils.postData(setSetPassword(), new MyCallback<SetPwd>() {
-                @Override
-                public void onSuccess(SetPwd setPwd) {
-
-                }
-
-                @Override
-                public void onError(String msg) {
-
-                }
-            });
-
             HXApplication.retrofitUtils.postData(getZC(), new MyCallback<Register>() {
                 @Override
                 public void onSuccess(Register register) {
@@ -126,18 +118,35 @@ public class SetPasswordActivity extends BaseActivity {
                 @Override
                 public void run() {
                     if ("1".equals(resultData)) {
+
                         ActivityLauncherUtil.launcher(SetPasswordActivity.this, MainActivity.class);
                     } else {
                         ToastUtil.showLong(SetPasswordActivity.this, "注册失败");
                     }
-
                 }
             }, 1000);
 
         }
 
     }
+    private String setLogin() {
 
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject1 = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        try {
+            jsonObject.put("code", "HXCS-JC-YHDL");
+            jsonObject1.put("username",pwd );
+            jsonObject1.put("password", MD5Util.getMD5Str(pwd));
+            jsonObject1.put("deviceId", HXApplication.PHONE_ID);
+            jsonObject1.put("ostype", "1");
+            jsonObject2.put("header", jsonObject);
+            jsonObject2.put("body", jsonObject1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject2.toString();
+    }
     private String getZC() {
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonObject1 = new JSONObject();
@@ -147,23 +156,8 @@ public class SetPasswordActivity extends BaseActivity {
             jsonObject.put("code", "HXCS-JC-YHZC");
             jsonObject1.put("mobile", HXApplication.phone);
             jsonObject1.put("ostype", "1");
+            jsonObject1.put("password", MD5Util.getMD5Str(pwd));
             jsonObject1.put("gps", "12");
-            jsonObject2.put("header", jsonObject);
-            jsonObject2.put("body", jsonObject1);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObject2.toString();
-    }
-
-    public String setSetPassword() {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject jsonObject1 = new JSONObject();
-        JSONObject jsonObject2 = new JSONObject();
-        try {
-            jsonObject.put("code", "HXCS-JC-CZMM");
-            jsonObject1.put("mobile", HXApplication.phone);
-            jsonObject1.put("newPassword", MD5Util.getMD5Str(pwd));
             jsonObject2.put("header", jsonObject);
             jsonObject2.put("body", jsonObject1);
         } catch (JSONException e) {

@@ -1,30 +1,30 @@
 package com.example.wzs.myapplication.event;
 
 
-public class MessageEvent {
-    public String friendUserId;
+public class MessageEvent<T> {
+    public int friendUserId;
 
-    public Object messageContent;
+    public T messageContent;
 
-    public MessageEvent(String friendUserId, Object messageContent) {
+    public MessageEvent(int friendUserId, T messageContent) {
         this.friendUserId = friendUserId;
         this.messageContent = messageContent;
     }
 
-    public Object getMessageContent() {
+    public T getMessageContent() {
         return messageContent;
     }
 
-    public void setMessageContent(Object messageContent) {
+    public void setMessageContent(T messageContent) {
         this.messageContent = messageContent;
     }
 
-    public String getFriendUserId() {
+    public int getFriendUserId() {
 
         return friendUserId;
     }
 
-    public void setFriendUserId(String friendUserId) {
+    public void setFriendUserId(int friendUserId) {
         this.friendUserId = friendUserId;
     }
 }

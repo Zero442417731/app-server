@@ -21,6 +21,8 @@ import com.example.wzs.myapplication.utils.ActivityManagerUtil;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.squareup.leakcanary.RefWatcher;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;

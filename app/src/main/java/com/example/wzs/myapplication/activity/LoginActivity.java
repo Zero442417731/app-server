@@ -1,22 +1,31 @@
 package com.example.wzs.myapplication.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.wzs.myapplication.event.EventId;
+import com.example.wzs.myapplication.event.MessageEvent;
+import com.example.wzs.myapplication.model.UserLoginInfo;
+import com.example.wzs.myapplication.utils.MD5Util;
+import com.example.wzs.myapplication.utils.ToastUtil;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
-import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.network.ClientUtil;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 import com.example.wzs.myapplication.utils.DoubleClickExitUtil;
-import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.example.wzs.myapplication.weight.PasswordEditText;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,12 +58,12 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected int setLayoutId() {
+        EventBus.getDefault().register(this);
         return R.layout.activity_login;
     }
 
     @Override
     protected void initView() {
-
     }
 
     @Override
@@ -83,13 +92,30 @@ public class LoginActivity extends BaseActivity {
             case R.id.btn_login:
                 name = loginName.getText().toString().trim();
                 pwd = loginPwd.getText().toString().trim();
+
                 ClientUtil.connected();
                 ClientUtil.sendMessage(setLogin());
-                SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone",name );
-                SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "password", pwd);
-                HXApplication.isLogin = true;
-                ActivityLauncherUtil.launcher(HXApplication.mContext,MainActivity.class);
-                finish();
+
+
+                UserLoginInfo userLoginInfo;
+
+              /*  if (userLoginInfo.getBody().isSuccessful()) {
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone", userLoginInfo.getUsername());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token", userLoginInfo.getToken());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userid", userLoginInfo.getUserid());
+                    LogUtil.e("username------", userLoginInfo.getUsername());
+                    LogUtil.e("userid------", userLoginInfo.getUserid());
+                    LogUtil.e("usertoken------", userLoginInfo.getToken());
+                    HXApplication.isLogin = true;
+                    ActivityLauncherUtil.launcher(HXApplication.mContext, MainActivity.class);
+                    finish();
+
+
+                } else {
+                    ToastUtil.showToast(userLoginInfo.getBody().getErrorMsg());
+                }*/
+
+
                 break;
             case R.id.register_login:
                 ActivityLauncherUtil.launcher(this, RegisterActivity.class);
@@ -100,6 +126,37 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+
+    @Subscribe
+    public void userLogin(MessageEvent messageEvent) {
+        switch (messageEvent.getFriendUserId()) {
+            case EventId.USERLOGIN_SUSSES:
+                boolean successful = (boolean) messageEvent.getMessageContent();
+                if (successful) {
+                    ActivityLauncherUtil.launcher(this, MainActivity.class);
+                }
+                break;
+            case EventId.USERLOGIN_ERROR:
+                String errorMsg = (String) messageEvent.getMessageContent();
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        //执行耗时操作
+                        Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                    }
+                };
+                new Thread() {
+                    public void run() {
+                        new Handler(Looper.getMainLooper()).post(runnable);//在子线程中直接去new 一个handler
+                //这种情况下，Runnable对象是运行在主线程中的，不可以进行联网操作，但是可以更新UI
+                    }
+                }.start();
+
+                break;
+        }
+
+    }
+
     private String setLogin() {
 
         JSONObject jsonObject = new JSONObject();
@@ -107,8 +164,8 @@ public class LoginActivity extends BaseActivity {
         JSONObject jsonObject2 = new JSONObject();
         try {
             jsonObject.put("code", "HXCS-JC-YHDL");
-            jsonObject1.put("username","13720018370" );
-            jsonObject1.put("password", "1234567");
+            jsonObject1.put("username", name);
+            jsonObject1.put("password", MD5Util.getMD5Str(pwd));
             jsonObject1.put("deviceId", HXApplication.PHONE_ID);
             jsonObject1.put("ostype", "1");
             jsonObject2.put("header", jsonObject);
@@ -117,5 +174,11 @@ public class LoginActivity extends BaseActivity {
             e.printStackTrace();
         }
         return jsonObject2.toString();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//解除订阅
     }
 }

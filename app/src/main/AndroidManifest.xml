@@ -68,9 +68,9 @@
         <activity android:name="com.example.wzs.myapplication.activity.MainActivity"></activity>
         <activity android:name="com.example.wzs.myapplication.activity.RegisterActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.LoginActivity"></activity>
-        <activity android:name="com.example.wzs.myapplication.activity.SetPasswordActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.SetPasswordActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.PersonHbActivity" />
-        <activity android:name="com.example.wzs.myapplication.activity.PersonDataActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.PersonDataActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.ForgotPwdActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.SettingActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.SafeActivity" />
@@ -80,11 +80,13 @@
             android:name="com.example.wzs.myapplication.event.MyReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="com.hxcs"></action>
+                <action android:name="com.hxcs" />
             </intent-filter>
         </receiver>
 
-        <activity android:name="com.example.wzs.myapplication.activity.ChatActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.ChatActivity" />
+        <activity android:name="com.example.wzs.myapplication.activity.AddActivity" />
+        <activity android:name="com.example.wzs.myapplication.activity.FriendDetailsActivity"></activity>
     </application>
 
 </manifest>

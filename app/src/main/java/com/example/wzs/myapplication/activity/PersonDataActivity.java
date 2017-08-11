@@ -229,9 +229,9 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                 //邮编
                 String code = citySelected[3];
                 if (province.equals(city)) {
-                    changeAddress.setText(city + district);
+                    changeAddress.setText(city + district+code);
                 } else {
-                    changeAddress.setText(province + city + district);
+                    changeAddress.setText(province + city + district+code);
                 }
             }
 

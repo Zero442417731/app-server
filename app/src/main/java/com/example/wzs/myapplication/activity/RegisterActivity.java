@@ -2,10 +2,12 @@ package com.example.wzs.myapplication.activity;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,6 +26,9 @@ import com.zhy.android.percent.support.PercentLinearLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -73,6 +78,8 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void initData() {
         doubleClickExitUtil = new DoubleClickExitUtil();
+        registerPhone.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+        etSms.setInputType(EditorInfo.TYPE_CLASS_PHONE);
     }
 
 
@@ -80,6 +87,10 @@ public class RegisterActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.get_sms:
+                if (!isMobile(registerPhone.getText().toString().trim())) {
+                    ToastUtil.showToast("手机号不正确");
+                    return;
+                }
 
                 HXApplication.retrofitUtils.postData(registerJson(), new MyCallback<GetSMS>() {
                     @Override
@@ -97,10 +108,10 @@ public class RegisterActivity extends BaseActivity {
                 register();
                 break;
             case R.id.register_login:
-                ActivityLauncherUtil.launcher(HXApplication.mContext,LoginActivity.class);
+                ActivityLauncherUtil.launcher(HXApplication.mContext, LoginActivity.class);
                 break;
             case R.id.forgot_password:
-                ActivityLauncherUtil.launcher(this,ForgotPwdActivity.class);
+                ActivityLauncherUtil.launcher(this, ForgotPwdActivity.class);
                 break;
 
         }
@@ -159,10 +170,21 @@ public class RegisterActivity extends BaseActivity {
                     Log.d("错误信息-----------", msg);
                 }
             });
+            new Handler().postDelayed(new Runnable() {
 
-            if (successful) {
-                ActivityLauncherUtil.launcher(this, SetPasswordActivity.class);
-            }
+                @Override
+                public void run() {
+
+                    if (successful) {
+                        ActivityLauncherUtil.launcher(RegisterActivity.this, SetPasswordActivity.class);
+                    } else {
+                        ToastUtil.showLong(RegisterActivity.this, "注册失败");
+                    }
+
+                }
+            }, 1000);
+
+
         } else if (resultData.equals("1")) {
 
 
@@ -222,6 +244,16 @@ public class RegisterActivity extends BaseActivity {
             return doubleClickExitUtil.onKeyDown(keyCode, event);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public static boolean isMobile(final String str) {
+        Pattern p = null;
+        Matcher m = null;
+        boolean b = false;
+        p = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$"); // 验证手机号
+        m = p.matcher(str);
+        b = m.matches();
+        return b;
     }
 
     @Override

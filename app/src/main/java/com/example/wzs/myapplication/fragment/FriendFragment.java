@@ -8,6 +8,10 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.wzs.myapplication.event.EventId;
+import com.example.wzs.myapplication.event.MessageEvent;
+import com.example.wzs.myapplication.model.HYXX;
+import com.example.wzs.myapplication.model.YZXX;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseFragment;
@@ -17,6 +21,8 @@ import com.example.wzs.myapplication.weight.ChineseToEnglish;
 import com.example.wzs.myapplication.weight.CompareSort;
 import com.example.wzs.myapplication.weight.SideBarView;
 import com.example.wzs.myapplication.adapter.UserAdapter;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,6 +91,24 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 
     }
 
+
+
+    @Subscribe
+    public void userLogin(MessageEvent messageEvent) {
+        switch (messageEvent.getFriendUserId()){
+            case EventId.USER_TS:
+                YZXX messageContent = (YZXX) messageEvent.getMessageContent();
+
+
+
+
+                break;
+        }
+
+
+
+    }
+
     private void init() {
 
         //排序
@@ -106,6 +130,12 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
         setListviewPosition(letter);
         mTip.setText(letter);
         mTip.setVisibility(View.VISIBLE);
+
+
+
+
+
+         
     }
 
     @Override
