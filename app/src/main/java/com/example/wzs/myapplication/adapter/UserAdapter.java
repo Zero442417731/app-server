@@ -62,12 +62,23 @@ public class UserAdapter extends BaseAdapter{
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        User user = users.get(position);
+
+        user.getName();
+
+
 
         viewHolder.tvName.setText(users.get(position).getName());
         viewHolder.tvItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
+
                 Toast.makeText(mContext,users.get(position).getName(),Toast.LENGTH_SHORT).show();
+
+
 
 
 

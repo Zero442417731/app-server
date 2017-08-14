@@ -63,8 +63,13 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     }
 
     private void addData() {
+
+
+
+
+
         String[] contactsArray = getResources().getStringArray(R.array.data);
-        String[] headArray = getResources().getStringArray(R.array.head);
+       // String[] headArray = getResources().getStringArray(R.array.head);
 
         //模拟添加数据到Arraylist
         int length = contactsArray.length;
@@ -81,6 +86,7 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
             }
             userArrayList.add(user);
         }
+/*
 
         for (int i = 0; i < headArray.length; i++) {
             User user = new User();
@@ -88,6 +94,7 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
             user.setLetter("@");
             userArrayList.add(user);
         }
+*/
 
     }
 
@@ -98,10 +105,6 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
         switch (messageEvent.getFriendUserId()){
             case EventId.USER_TS:
                 YZXX messageContent = (YZXX) messageEvent.getMessageContent();
-
-
-
-
                 break;
         }
 

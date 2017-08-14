@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.multidex.MultiDex;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -80,6 +81,11 @@ public class HXApplication extends Application {
         return instance == null ? null : instance.getApplicationContext();
 
     }
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
 
     private void autoLogin() {
         if (isLogin) {

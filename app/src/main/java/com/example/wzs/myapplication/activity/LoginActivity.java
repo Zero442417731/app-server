@@ -68,6 +68,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+                ClientUtil.connected();
         doubleClickExitUtil = new DoubleClickExitUtil();
     }
 
@@ -93,7 +94,6 @@ public class LoginActivity extends BaseActivity {
                 name = loginName.getText().toString().trim();
                 pwd = loginPwd.getText().toString().trim();
 
-                ClientUtil.connected();
                 ClientUtil.sendMessage(setLogin());
 
 

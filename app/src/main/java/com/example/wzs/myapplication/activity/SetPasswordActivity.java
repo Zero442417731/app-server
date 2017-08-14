@@ -118,8 +118,7 @@ public class SetPasswordActivity extends BaseActivity {
                 @Override
                 public void run() {
                     if ("1".equals(resultData)) {
-
-                        ActivityLauncherUtil.launcher(SetPasswordActivity.this, MainActivity.class);
+                        ActivityLauncherUtil.launcher(SetPasswordActivity.this, LoginActivity.class);
                     } else {
                         ToastUtil.showLong(SetPasswordActivity.this, "注册失败");
                     }
