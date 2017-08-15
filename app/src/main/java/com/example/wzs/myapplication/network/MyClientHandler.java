@@ -10,6 +10,7 @@ import com.example.wzs.myapplication.event.MessageEvent;
 import com.example.wzs.myapplication.model.HYXX;
 import com.example.wzs.myapplication.model.UserLoginInfo;
 import com.example.wzs.myapplication.model.YZXX;
+import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 
 import org.codehaus.jackson.JsonNode;
@@ -71,18 +72,25 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
         } else if (code.equals("HXCS-JC-YZXX")) {
             //好友验证
             YZXX yzxx = objectMapper.readValue(body.toString(), YZXX.class);
-            EventBus.getDefault().post(new MessageEvent<YZXX>(EventId.USER_TS,yzxx));
-
+            EventBus.getDefault().post(new MessageEvent<YZXX>(EventId.USER_TS, yzxx));
+            Log.d("body", yzxx.getFriendId());
         } else if (code.equals("HXCS-JC-HYXX")) {
             //好友信息
             HYXX hyxx = objectMapper.readValue(body.toString(), HYXX.class);
             String friendUserId = body.get("friendUserId").getTextValue();
             //processCustomMessage(friendUserId,hyxx);
             //EventBus.getDefault().post(new MessageEvent(friendUserId, hyxx));
+
             Intent intent = new Intent();
             intent.putExtra(friendUserId, hyxx);
             intent.setAction(friendUserId);
             HXApplication.mContext.sendBroadcast(intent);
+
+
+
+
+
+
         }
 
 

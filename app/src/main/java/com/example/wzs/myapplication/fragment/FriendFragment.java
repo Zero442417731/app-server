@@ -104,7 +104,13 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     public void userLogin(MessageEvent messageEvent) {
         switch (messageEvent.getFriendUserId()){
             case EventId.USER_TS:
+
                 YZXX messageContent = (YZXX) messageEvent.getMessageContent();
+                String friendId = messageContent.getFriendId();
+                if (messageContent.getFriendId()!=null){
+
+
+                }
                 break;
         }
 

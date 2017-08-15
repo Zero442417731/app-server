@@ -19,22 +19,31 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
+import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.UploadHead;
+import com.example.wzs.myapplication.model.UserChangeModel;
+import com.example.wzs.myapplication.model.UserDetails;
 import com.example.wzs.myapplication.network.IUpLoad;
+import com.example.wzs.myapplication.network.MyCallback;
 import com.example.wzs.myapplication.utils.ActionSheet;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
+import com.example.wzs.myapplication.utils.DateUtil;
 import com.example.wzs.myapplication.utils.DensityUtils;
 import com.example.wzs.myapplication.utils.GlideImageLoaderUtil;
 import com.example.wzs.myapplication.utils.LogUtil;
+import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.example.wzs.myapplication.utils.ToastUtil;
 import com.lljjcoder.citypickerview.widget.CityPicker;
+import com.nonecity.R;
 import com.zhy.android.percent.support.PercentLinearLayout;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 import com.zxy.tiny.Tiny;
 import com.zxy.tiny.callback.FileCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
@@ -58,6 +67,10 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
     private static final int READ_PHONE_STATE = 10000;
     @Bind(R.id.rl_person_data)
     PercentLinearLayout rlPersonData;
+    @Bind(R.id.change_signature)
+    TextView changeSignature;
+    @Bind(R.id.person_data_signature)
+    PercentRelativeLayout personDataSignature;
 
     private PhotoInfo photoInfo;
     @Bind(R.id.name)
@@ -107,8 +120,6 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
     private File file;
     private Uri uri;
     private PopupWindow popupWindow;
-    String token = "ZKNgHfqI/p5HCfwcYfhmzNicgurE64geDLjbgja2XcrGQqNkHfLnoC1hrUSX5mrRNL1WCNT5N2k=";
-
 
     @Override
     protected int setLayoutId() {
@@ -118,11 +129,35 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
     @Override
     protected void initView() {
         changeTitle.setText("个人资料");
+        String id = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "id");
+        String nickName = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "nickName");
+        String userCode = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userCode");
+        String phone = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone");
+        String userHead = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead");
+        String userSignature = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userSignature");
+        String sex = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "sex");
+        String area = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "area");
+        String addVerify = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "addVerify");
+
+        LogUtil.e("nickName--------", nickName);
+        LogUtil.e("userHead--------", userHead);
+        LogUtil.e("userSignature--------", userSignature);
+        LogUtil.e("addVerify--------", addVerify);
+        LogUtil.e("id--------", id);
+        name.setText(nickName);
+        changeName.setText(nickName);
+        changeSex.setText(sex);
+        changeAddress.setText(addVerify);
+        changeSignature.setText(userSignature);
+        changeId.setText(id);
+        GlideImageLoaderUtil.displayImageInActivity(PersonDataActivity.this, userHead, changeHead);
+
     }
 
     @Override
     protected void initData() {
-    requestReadPhoneStatePermission();
+        requestReadPhoneStatePermission();
+
     }
 
     @Override
@@ -132,7 +167,7 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.change_head, R.id.person_data_name, R.id.person_data_id, R.id.person_data_sex, R.id.person_data_address, R.id.person_data_setting, R.id.title_back_img})
+    @OnClick({R.id.change_head, R.id.person_data_name, R.id.person_data_id, R.id.person_data_sex, R.id.person_data_address, R.id.person_data_setting, R.id.title_back_img, R.id.person_data_signature})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.change_head:
@@ -155,6 +190,9 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                 break;
             case R.id.title_back_img:
                 finish();
+                break;
+            case R.id.person_data_signature:
+
                 break;
 
         }
@@ -183,6 +221,7 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
             EasyPermissions.requestPermissions(this, "", CAMERA_PERMISSION, Manifest.permission.CAMERA, Manifest.permission.CAMERA);
         }
     }
+
     @AfterPermissionGranted(READ_PHONE_STATE)
 
     public void requestReadPhoneStatePermission() {
@@ -205,9 +244,9 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                 .cancelTextColor("#000000")
                 .province("北京市")
                 .city("北京市")
-                .district("昌平区")
+                .district("东城区")
                 .textColor(Color.parseColor("#000000"))
-                .provinceCyclic(true)
+                .provinceCyclic(false)
                 .cityCyclic(false)
                 .districtCyclic(false)
                 .visibleItemsCount(7)
@@ -229,9 +268,13 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                 //邮编
                 String code = citySelected[3];
                 if (province.equals(city)) {
-                    changeAddress.setText(city + district+code);
+                    changeAddress.setText(city + district);
+                    changeUser("area", city + district);
+                    changeUser("areaCode", code);
                 } else {
-                    changeAddress.setText(province + city + district+code);
+                    changeAddress.setText(province + city + district);
+                    changeUser("area", province + city + district);
+                    changeUser("areaCode", code);
                 }
             }
 
@@ -257,9 +300,11 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
         switch (itemPosition) {
             case 0:
                 changeSex.setText("男");
+                changeUser("sex", "男");
                 break;
             case 1:
                 changeSex.setText("女");
+                changeUser("sex", "女");
                 break;
         }
     }
@@ -285,7 +330,10 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
         view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeName.setText(editText.getText().toString().trim());
+                String userName = editText.getText().toString().trim();
+                changeName.setText(userName);
+                changeUser("nickName", userName);
+                name.setText(userName);
                 popupWindow.dismiss();
             }
         });
@@ -309,8 +357,6 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                         //  GalleryFinal.openCamera(REQUEST_CODE_CAMERA, mOnHanlderResultCallback);
                         useCamera();
                         GlideImageLoaderUtil.displayImageInActivity(PersonDataActivity.this, uri + "", changeHead);
-
-
                         break;
                     default:
                         break;
@@ -328,7 +374,7 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                 photoInfo = resultList.get(0);
                 GlideImageLoaderUtil.displayImageInActivity(PersonDataActivity.this, "file://" + photoInfo.getPhotoPath(), changeHead);
 
-                HXApplication.retrofitUtils.upload(photoInfo.getPhotoPath(), token, "1111111", new IUpLoad<UploadHead>() {
+                HXApplication.retrofitUtils.upload(photoInfo.getPhotoPath(), SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"), DateUtil.getNowTime(), new IUpLoad<UploadHead>() {
                     @Override
                     public void onSuccess(Response<ResponseBody> responseBody) {
                         if (responseBody.isSuccessful()) {
@@ -348,6 +394,7 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                         LogUtil.e("上传文件--------", "失败2");
                     }
                 });
+
             }
 
 
@@ -398,15 +445,15 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                     if (!isSuccess) {
                         return;
                     } else {
-                       //在手机相册中显示刚拍摄的图片
-                        LogUtil.e("压缩地址----",outfile);
+                        //在手机相册中显示刚拍摄的图片
+                        LogUtil.e("压缩地址----", outfile);
                         File file = new File(outfile);
-                        LogUtil.e("file----",file.getPath());
+                        LogUtil.e("file----", file.getPath());
                         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                         Uri contentUri = Uri.fromFile(file);
                         mediaScanIntent.setData(contentUri);
                         sendBroadcast(mediaScanIntent);
-                        HXApplication.retrofitUtils.upload(outfile, token, "1111111", new IUpLoad<UploadHead>() {
+                        HXApplication.retrofitUtils.upload(outfile, SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"), DateUtil.getNowTime(), new IUpLoad<UploadHead>() {
                             @Override
                             public void onSuccess(Response<ResponseBody> responseBody) {
                                 if (responseBody.isSuccessful()) {
@@ -426,12 +473,68 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                                 LogUtil.e("上传文件--------", "失败2");
                             }
                         });
+
                     }
 
                 }
 
             });
         }
+    }
+
+    private void changeUser(String ket, String value) {
+        HXApplication.retrofitUtils.postData(setNameJson(ket, value), new MyCallback<UserChangeModel>() {
+            @Override
+            public void onSuccess(UserChangeModel userChangeModel) {
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+    }
+
+    private void upload(String path) {
+        HXApplication.retrofitUtils.upload(path, SharedPreferencesUtil.getString(PersonDataActivity.this, "token"), DateUtil.getNowTime(), new IUpLoad<UploadHead>() {
+            @Override
+            public void onSuccess(Response<ResponseBody> responseBody) {
+                if (responseBody.isSuccessful()) {
+                    LogUtil.e("上传文件--------", "成功");
+                    ToastUtil.showToast("上传头像成功");
+                } else {
+                    LogUtil.e("上传文件--------", "message" + responseBody.message());
+                    LogUtil.e("上传文件--------", "body" + responseBody.body());
+                    LogUtil.e("上传文件--------", "toString" + responseBody.toString());
+                    LogUtil.e("上传文件--------", "headers" + responseBody.headers());
+                    LogUtil.e("上传文件--------", "raw" + responseBody.raw());
+                    LogUtil.e("上传文件--------", "errorBody" + responseBody.errorBody());
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                LogUtil.e("上传文件--------", msg);
+            }
+        });
+    }
+
+
+    public String setNameJson(String key, String value) {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject1 = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        try {
+            jsonObject.put("code", "HXCS-JC-YHXG");
+            jsonObject1.put(key, value);
+            jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
+            jsonObject2.put("header", jsonObject);
+            jsonObject2.put("body", jsonObject1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject2.toString();
     }
 
 

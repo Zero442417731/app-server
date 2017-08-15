@@ -70,8 +70,7 @@ public class HXApplication extends Application {
         retrofitUtils = RetrofitUtils.getInstance();
         refWatcher = LeakCanary.install(this);
         initGalleryFinal();
-        //    PHONE_ID = SDPackageUtil.getDeviceId();
-        PHONE_ID = "12311231";
+        PHONE_ID = SDPackageUtil.getDeviceId();
         Tiny.getInstance().init(this);
         autoLogin();
     }

@@ -37,10 +37,17 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+
+        <!--百度地图-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="YQe6xSR7zOVLkPKEe9zsCgAX8kcPYnOW" />
+            android:value="LYrhvnUs0yxGBEWquKbOEI8t0svULsDg" />
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
 
+        <!--7.0相机/相册配置-->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.wzs.myapplication.fileProvider"
@@ -65,9 +72,11 @@
         <activity
             android:name="com.example.wzs.myapplication.activity.WelcomeGuideActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
-        <activity android:name="com.example.wzs.myapplication.activity.MainActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.MainActivity">
+
+        </activity>
         <activity android:name="com.example.wzs.myapplication.activity.RegisterActivity" />
-        <activity android:name="com.example.wzs.myapplication.activity.LoginActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.LoginActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.SetPasswordActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.PersonHbActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.PersonDataActivity" />
@@ -86,7 +95,8 @@
 
         <activity android:name="com.example.wzs.myapplication.activity.ChatActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.AddActivity" />
-        <activity android:name="com.example.wzs.myapplication.activity.FriendDetailsActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.FriendDetailsActivity" />
+        <activity android:name="com.example.wzs.myapplication.activity.FriendRequestsActivity"></activity>
     </application>
 
 </manifest>
