@@ -2,28 +2,34 @@ package com.example.wzs.myapplication.activity;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
-import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.GetSMS;
 import com.example.wzs.myapplication.model.IsSMS;
 import com.example.wzs.myapplication.network.MyCallback;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
+import com.example.wzs.myapplication.utils.DoubleClickExitUtil;
 import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.ToastUtil;
 import com.example.wzs.myapplication.weight.PasswordEditText;
+import com.nonecity.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,24 +42,23 @@ public class ForgotPwdActivity extends BaseActivity {
     ImageView titleBackImg;
     @Bind(R.id.base_action_bar)
     RelativeLayout baseActionBar;
-    @Bind(R.id.set_password)
-    PasswordEditText registerPhone;
+    @Bind(R.id.forgot_phone)
+    PasswordEditText forgotPhone;
     @Bind(R.id.textView)
     TextView textView;
-    @Bind(R.id.set_password_again)
+    @Bind(R.id.et_sms)
     PasswordEditText etSms;
     @Bind(R.id.get_sms)
     Button getSms;
     @Bind(R.id.btn_login)
     Button btnLogin;
+
     private TimeCounter counter = new TimeCounter(60 * 1000, 1000);
-    private String resultData;
+
     private String phone;
     private boolean successful;
-    private String phone1;
 
-
-
+    private String resultData;
     @Override
     protected int setLayoutId() {
         return R.layout.activity_forgot_pwd;
@@ -66,15 +71,11 @@ public class ForgotPwdActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
+        forgotPhone.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+        etSms.setInputType(EditorInfo.TYPE_CLASS_PHONE);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 
     @OnClick({R.id.title_back_img, R.id.get_sms, R.id.btn_login})
     public void onViewClicked(View view) {
@@ -83,6 +84,12 @@ public class ForgotPwdActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.get_sms:
+                phone = forgotPhone.getText().toString().trim();
+                if (!isMobile(phone)) {
+                    ToastUtil.showToast("手机号不正确");
+                    return;
+                }
+
                 HXApplication.retrofitUtils.postData(registerJson(), new MyCallback<GetSMS>() {
                     @Override
                     public void onSuccess(GetSMS getSMS) {
@@ -100,8 +107,13 @@ public class ForgotPwdActivity extends BaseActivity {
                 break;
         }
     }
+    private void smsCode() {
+        counter.start();
+        getSms.setClickable(false);
+    }
+
+
     private String registerJson() {
-        phone = registerPhone.getText().toString().trim();
         HXApplication.phone = phone;
         if (TextUtils.isEmpty(phone)) {
             ToastUtil.showLong(this, "请输入手机号");
@@ -113,7 +125,7 @@ public class ForgotPwdActivity extends BaseActivity {
         try {
             jsonObject.put("code", "HXCS-JC-FSDX");
             jsonObject1.put("mobile", phone);
-            jsonObject1.put("type", "1");
+            jsonObject1.put("type", "2");
             jsonObject2.put("header", jsonObject);
             jsonObject2.put("body", jsonObject1);
         } catch (JSONException e) {
@@ -123,8 +135,8 @@ public class ForgotPwdActivity extends BaseActivity {
     }
 
     private void register() {
-        phone1 = registerPhone.getText().toString().trim();
-        if (TextUtils.isEmpty(phone1)) {
+
+        if (TextUtils.isEmpty(phone)) {
             ToastUtil.showLong(this, "请输入手机号");
             return;
         }
@@ -135,9 +147,6 @@ public class ForgotPwdActivity extends BaseActivity {
             return;
         }
         if (resultData.equals("0")) {
-            ToastUtil.showLong(this, "发送成功");
-        } else if (resultData.equals("1")) {
-
             HXApplication.retrofitUtils.postData(isSMS(), new MyCallback<IsSMS>() {
                 @Override
                 public void onSuccess(IsSMS isSMS) {
@@ -150,10 +159,24 @@ public class ForgotPwdActivity extends BaseActivity {
                     Log.d("错误信息-----------", msg);
                 }
             });
+            new Handler().postDelayed(new Runnable() {
 
-            if (successful) {
-                ActivityLauncherUtil.launcher(this, SetPasswordActivity.class);
-            }
+                @Override
+                public void run() {
+
+                    if (successful) {
+                        ActivityLauncherUtil.launcher(ForgotPwdActivity.this, SetPasswordActivity.class);
+                    } else {
+                        ToastUtil.showLong(ForgotPwdActivity.this, "找回密码失败");
+                    }
+
+                }
+            }, 1000);
+
+
+        } else if (resultData.equals("1")) {
+
+
         } else if (resultData.equals("2")) {
             ToastUtil.showLong(this, "手机号已注册");
         } else {
@@ -169,7 +192,7 @@ public class ForgotPwdActivity extends BaseActivity {
         JSONObject jsonObject2 = new JSONObject();
         try {
             jsonObject.put("code", "HXCS-JC-DXYZ");
-            jsonObject1.put("mobilePhone", phone1);
+            jsonObject1.put("mobilePhone", phone);
             jsonObject1.put("smsValidCode", etSms.getText().toString().trim());
             jsonObject2.put("header", jsonObject);
             jsonObject2.put("body", jsonObject1);
@@ -177,10 +200,16 @@ public class ForgotPwdActivity extends BaseActivity {
             e.printStackTrace();
         }
         return jsonObject2.toString();
-    } private void smsCode() {
-        counter.start();
-        getSms.setClickable(false);
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+
     private class TimeCounter extends CountDownTimer {
         public TimeCounter(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
@@ -196,5 +225,21 @@ public class ForgotPwdActivity extends BaseActivity {
             getSms.setClickable(true);
             getSms.setText("再次获取");
         }
+    }
+
+    public static boolean isMobile(final String str) {
+        Pattern p = null;
+        Matcher m = null;
+        boolean b = false;
+        p = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$"); // 验证手机号
+        m = p.matcher(str);
+        b = m.matches();
+        return b;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.gc();
     }
 }

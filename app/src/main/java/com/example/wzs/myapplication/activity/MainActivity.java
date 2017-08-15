@@ -19,7 +19,11 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.example.wzs.myapplication.config.Constant;
+import com.example.wzs.myapplication.model.UserDetails;
+import com.example.wzs.myapplication.network.MyCallback;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
+import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
@@ -33,10 +37,12 @@ import com.example.wzs.myapplication.utils.FragmentBuilder;
 import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.ToastUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -78,6 +84,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private DoubleClickExitUtil doubleClickExitUtil;
 
     private LocationClient locationClient;
+
     public void changeFragment(BaseFragment fragment, Bundle bundle, boolean isBack) {
 
         supportFragmentManager = getSupportFragmentManager();
@@ -117,25 +124,25 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     protected void initData() {
         checkPermissions();
 
-         FragmentBuilder.changeFragment(MessageFragment.class,R.id.mFram,true,null,false);
+        FragmentBuilder.changeFragment(FriendFragment.class, R.id.mFram, true, null, false);
         doubleClickExitUtil = new DoubleClickExitUtil();
         startLocation();
     }
 
-    @OnClick({R.id.person_sign, R.id.message, R.id.friend, R.id.my,R.id.add_friends})
+    @OnClick({R.id.person_sign, R.id.message, R.id.friend, R.id.my, R.id.add_friends})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.person_sign:
                 break;
             case R.id.message:
-                FragmentBuilder.changeFragment(MessageFragment.class,R.id.mFram,true,null,false);
+                FragmentBuilder.changeFragment(MessageFragment.class, R.id.mFram, true, null, false);
                 baseActionBar.setVisibility(View.VISIBLE);
                 tabTitle.setText("消息");
                 addfriends.setVisibility(View.GONE);
                 message.setTextColor(Color.parseColor("#ff00ff"));
                 break;
             case R.id.friend:
-                FragmentBuilder.changeFragment(FriendFragment.class,R.id.mFram,true,null,false);
+                FragmentBuilder.changeFragment(FriendFragment.class, R.id.mFram, true, null, false);
                 baseActionBar.setVisibility(View.VISIBLE);
                 addfriends.setVisibility(View.VISIBLE);
                 tabTitle.setText("好友列表");
@@ -143,13 +150,52 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 break;
             case R.id.my:
                 addfriends.setVisibility(View.GONE);
-                FragmentBuilder.changeFragment(MineFragment.class,R.id.mFram,true,null,true);
+                HXApplication.retrofitUtils.postData(setUserJson(), new MyCallback<UserDetails>() {
+                    @Override
+                    public void onSuccess(UserDetails userDetails) {
+                            UserDetails.BodyBean.ResultDataBean resultData = userDetails.getBody().getResultData();
+                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "id", resultData.getId());
+                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "nickName", resultData.getNickName());
+                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userCode", resultData.getUserCode());
+                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone", resultData.getMobile());
+                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead", resultData.getPicUrl());
+                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userSignature", resultData.getSignature());
+                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "sex", resultData.getSex());
+                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "area", resultData.getArea());
+                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "addVerify", resultData.getAddVerify());
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
+
+
+
+                FragmentBuilder.changeFragment(MineFragment.class, R.id.mFram, true, null, true);
                 baseActionBar.setVisibility(View.GONE);
                 break;
             case R.id.add_friends:
-                ActivityLauncherUtil.launcher(this,AddActivity.class);
+                ActivityLauncherUtil.launcher(this, AddActivity.class);
                 break;
         }
+    }
+
+
+    public String setUserJson() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject1 = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        try {
+            jsonObject.put("code", "HXCS-JC-YHXX");
+            jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
+            jsonObject2.put("header", jsonObject);
+            jsonObject2.put("body", jsonObject1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject2.toString();
     }
 
     @Override
@@ -161,6 +207,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     public void onPermissionsDenied(List<String> perms) {
 
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -168,6 +215,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         }
         return super.onKeyDown(keyCode, event);
     }
+
     private void checkPermissions() {
         requestLocationPermission();
         requestCameraPermission();
@@ -217,6 +265,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             EasyPermissions.requestPermissions(this, "", STORAGE_PERMISSION, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
     }
+
     public void startLocation() {
         if (locationClient == null) {
             locationClient = new LocationClient(this);
@@ -224,7 +273,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
             option.setIsNeedAddress(true);
             option.setOpenGps(true);
-            option.setCoorType("gcj02");
+            option.setCoorType("bd09ll");
             locationClient.setLocOption(option);
             locationClient.registerLocationListener(new BDLocationListener() {
                 @Override
@@ -235,22 +284,43 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     Variable.location = location;
                     //获取定位结果
                     StringBuffer sb = new StringBuffer(256);
-                    sb.append("time : ");
-                    sb.append(location.getTime());    //获取定位时间
-                    sb.append("\nerror code : ");
-                    sb.append(location.getLocType());    //获取类型类型
-                    sb.append("\nlatitude : ");
-                    sb.append(location.getLatitude());    //获取纬度信息
+                    sb.append(location.getTime());
+                    sb.append("\nerror code : ");
+                    sb.append(location.getLocType());
+                    sb.append("\nlatitude : ");
+                    sb.append(location.getLatitude());
+                    sb.append("\nlongtitude : ");
+                    sb.append(location.getLongitude());
+                    sb.append("\nradius : ");
+                    sb.append(location.getRadius());
+                    sb.append("\nCountryCode : ");
+                    sb.append(location.getCountryCode());
+                    sb.append("\nCountry : ");
+                    sb.append(location.getCountry());
+                    sb.append("\ncitycode : ");
+                    sb.append(location.getCityCode());
+                    sb.append("\ncity : ");
+                    sb.append(location.getCity());
+                    sb.append("\nDistrict : ");
+                    sb.append(location.getDistrict());
+                    sb.append("\nStreet : ");
+                    sb.append(location.getStreet());
+                    sb.append("\naddr : ");
+                    sb.append(location.getAddrStr());
+                    sb.append("\nDescribe: ");
+                    sb.append(location.getLocationDescribe());
+                    sb.append("\nDirection(not all devices have value): ");
+                    sb.append(location.getDirection());
+                    sb.append("\nPoi: ");
 
-                    sb.append("\nlontitude : ");
-                    sb.append(location.getLongitude());    //获取经度信息
 
-                    sb.append("\nradius : ");
-                    sb.append(location.getRadius());    //获取定位精准度
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER,"latitude",location.getLatitude()+"");
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER,"longitude",location.getLongitude()+"");
 
-                    LogUtil.w("aaaaa",sb.toString());
 
-                    ToastUtil.showLong(getApplicationContext(),"定位成功");
+                    LogUtil.w("aaaaa", sb.toString());
+
+                    ToastUtil.showLong(getApplicationContext(), "定位成功");
 
                     if (locationClient != null && locationClient.isStarted()) {
                         locationClient.stop();
@@ -258,10 +328,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     }
                 }
 
-                @Override
-                public void onConnectHotSpotMessage(String s, int i) {
 
-                }
             });
         }
 

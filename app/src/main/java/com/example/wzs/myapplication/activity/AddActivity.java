@@ -95,16 +95,17 @@ public class AddActivity extends BaseActivity implements SearchView.OnQueryTextL
             @Override
             public void onSuccess(UserSearch userSearch) {
 
-                if (userSearch.getBody().isSuccessful()){
+                if (userSearch.getBody().isSuccessful()) {
 
                     UserSearch.BodyBean.ResultDataBean userInfo = userSearch.getBody().getResultData();
                     Bundle bundle = new Bundle();
-                    bundle.putString("userName",userInfo.getNickName());
-                    bundle.putString("userId",userInfo.getUserCode());
-                    bundle.putString("userSex",userInfo.getSex());
-                    bundle.putString("userAddress",userInfo.getArea());
-                    bundle.putString("userSignature",userInfo.getSignature());
-                    ActivityLauncherUtil.launcher(AddActivity.this,FriendDetailsActivity.class,bundle,"userInfo");
+                    bundle.putString("userName", userInfo.getNickName());
+                    bundle.putString("userId", userInfo.getUserCode());
+                    bundle.putString("userSex", userInfo.getSex());
+                    bundle.putString("userAddress", userInfo.getArea());
+                    bundle.putString("userSignature", userInfo.getSignature());
+                    bundle.putString("userHead",userInfo.getHeadImgPath());
+                    ActivityLauncherUtil.launcher(AddActivity.this, FriendDetailsActivity.class, bundle, "userInfo");
                 }
 
                 userCode = userSearch.getBody().getResultData().getUserCode();
@@ -134,8 +135,8 @@ public class AddActivity extends BaseActivity implements SearchView.OnQueryTextL
             jsonObject.put("code", "HXCS-JC-YHCZ");
             jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
             jsonObject1.put("code", friendId);
-            jsonObject2.put("header",jsonObject);
-            jsonObject2.put("body",jsonObject1);
+            jsonObject2.put("header", jsonObject);
+            jsonObject2.put("body", jsonObject1);
 
         } catch (JSONException e) {
             e.printStackTrace();

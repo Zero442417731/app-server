@@ -95,7 +95,7 @@ public class SetPasswordActivity extends BaseActivity {
         } else if (!pwd.equals(pwd1)) {
             ToastUtil.showShort(this, "两次密码输入不一致");
         } else {
-         //   SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER_PWD, "password", MD5Util.getMD5Str(pwd));
+            //   SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER_PWD, "password", MD5Util.getMD5Str(pwd));
             // 关闭软键盘
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(
@@ -105,7 +105,7 @@ public class SetPasswordActivity extends BaseActivity {
                 @Override
                 public void onSuccess(Register register) {
                     resultData = register.getBody().getResultData();
-                    LogUtil.e(TAG, "成功"+resultData);
+                    LogUtil.e(TAG, "成功" + resultData);
                 }
 
                 @Override
@@ -128,24 +128,7 @@ public class SetPasswordActivity extends BaseActivity {
         }
 
     }
-    private String setLogin() {
 
-        JSONObject jsonObject = new JSONObject();
-        JSONObject jsonObject1 = new JSONObject();
-        JSONObject jsonObject2 = new JSONObject();
-        try {
-            jsonObject.put("code", "HXCS-JC-YHDL");
-            jsonObject1.put("username",pwd );
-            jsonObject1.put("password", MD5Util.getMD5Str(pwd));
-            jsonObject1.put("deviceId", HXApplication.PHONE_ID);
-            jsonObject1.put("ostype", "1");
-            jsonObject2.put("header", jsonObject);
-            jsonObject2.put("body", jsonObject1);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObject2.toString();
-    }
     private String getZC() {
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonObject1 = new JSONObject();
@@ -156,7 +139,8 @@ public class SetPasswordActivity extends BaseActivity {
             jsonObject1.put("mobile", HXApplication.phone);
             jsonObject1.put("ostype", "1");
             jsonObject1.put("password", MD5Util.getMD5Str(pwd));
-            jsonObject1.put("gps", "12");
+            jsonObject1.put("gps", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "latitude")
+                    + "," + SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "longitude"));
             jsonObject2.put("header", jsonObject);
             jsonObject2.put("body", jsonObject1);
         } catch (JSONException e) {

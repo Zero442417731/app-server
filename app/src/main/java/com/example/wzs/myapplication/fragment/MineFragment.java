@@ -1,33 +1,46 @@
 package com.example.wzs.myapplication.fragment;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 
+import com.example.wzs.myapplication.application.HXApplication;
+import com.example.wzs.myapplication.config.Constant;
+
+import com.example.wzs.myapplication.model.UserDetails;
+import com.example.wzs.myapplication.network.MyCallback;
+import com.example.wzs.myapplication.utils.GlideImageLoaderUtil;
+import com.example.wzs.myapplication.utils.LogUtil;
+import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.nonecity.R;
 import com.example.wzs.myapplication.activity.PersonDataActivity;
 import com.example.wzs.myapplication.base.BaseFragment;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URL;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by hxcs-02 on 2017/7/28.
- */
+import static com.example.wzs.myapplication.utils.GlideImageLoaderUtil.*;
+
 
 public class MineFragment extends BaseFragment {
-    @Bind(R.id.mine_head)
-    CircleImageView mineHead;
+
     @Bind(R.id.mine_name)
     TextView mineName;
     @Bind(R.id.mine_signature)
@@ -42,6 +55,7 @@ public class MineFragment extends BaseFragment {
     PercentRelativeLayout personCollection;
     @Bind(R.id.person_setting)
     PercentRelativeLayout personSetting;
+    private CircleImageView userHead;
 
     @Override
     protected int setLayoutId() {
@@ -50,11 +64,40 @@ public class MineFragment extends BaseFragment {
 
     @Override
     protected void initView(View contentView) {
-
+        userHead = (CircleImageView) contentView.findViewById(R.id.mine_head);
     }
 
     @Override
     protected void initData() {
+        //   GlideImageLoaderUtil.displayImage(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead"), mineHead);
+
+        //     displayImageInFragment(this,SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead"), mineHead);
+        String userHead = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead");
+        LogUtil.e("userhead", userHead);
+
+       // GlideImageLoaderUtil.displayImageInFragment(this, userHead, this.userHead);
+        mineName.setText(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "nickName"));
+        mineSignature.setText(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userSignature"));
+       /* try {
+            new Thread(new Runnable(){
+                Drawable drawable = Drawable.createFromStream(new URL(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead")).openStream(), "image.jpg");
+                @Override
+                public void run() {
+
+
+                    mineBg.post(new Runnable(){
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            mineBg.setBackground(drawable); ;
+                        }}) ;
+                }
+
+            }).start()  ;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+*/
 
     }
 
@@ -72,15 +115,10 @@ public class MineFragment extends BaseFragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick({R.id.mine_head, R.id.mine_name, R.id.mine_signature, R.id.person_data, R.id.person_board, R.id.person_collection, R.id.person_setting})
+    @OnClick({R.id.person_data, R.id.person_board, R.id.person_collection, R.id.person_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.mine_head:
-                break;
-            case R.id.mine_name:
-                break;
-            case R.id.mine_signature:
-                break;
+
             case R.id.person_data:
                 ActivityLauncherUtil.launcher(getContext(), PersonDataActivity.class);
                 break;
@@ -91,19 +129,5 @@ public class MineFragment extends BaseFragment {
             case R.id.person_setting:
                 break;
         }
-    }
-    @Override
-    public void onDetach(){
-        super.onDetach();
-        try {
-            Field childFragmentManager =Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this,null);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
     }
 }

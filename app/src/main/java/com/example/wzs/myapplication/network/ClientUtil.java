@@ -27,6 +27,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 
 
@@ -70,14 +72,14 @@ public class ClientUtil {
                     bootstrap.option(ChannelOption.TCP_NODELAY, true);
                     bootstrap.option(ChannelOption.SO_TIMEOUT, 5000);
 
-                    bootstrap.remoteAddress(HOST, PORT);
+                    bootstrap.remoteAddress(Constant.HOST, Constant.PORT);
 
                     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline().addLast(new IdleStateHandler(20, 10, 0));
-                            socketChannel.pipeline().addLast(new ObjectEncoder());
-                            socketChannel.pipeline().addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(this.getClass().getClassLoader())));
+                            socketChannel.pipeline().addLast(new StringEncoder());
+                            socketChannel.pipeline().addLast(new StringDecoder());
                             //客户端的逻辑
                             socketChannel.pipeline().addLast("handler", new MyClientHandler());
                         }
@@ -111,5 +113,7 @@ public class ClientUtil {
             }
         });
     }
+
+
 
 }
