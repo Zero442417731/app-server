@@ -27,7 +27,10 @@ public class Constant {
     public static String CONFIG_SHAREDPREFRENCE_CONFIG = "sharedprefrence_config";
     public static String CONFIG_SHAREDPREFRENCE_USER = "sharedprefrence_user";
     public static String CONFIG_SHAREDPREFRENCE_USER_PWD = "sharedprefrence_user_pwd";
+/***
+ * 接口编号
+ */
 
-
+public static String HXCS_JC_YHCZ="HXCS-JC-YHCZ";
 
 }

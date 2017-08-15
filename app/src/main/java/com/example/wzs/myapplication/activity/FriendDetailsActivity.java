@@ -1,6 +1,7 @@
 package com.example.wzs.myapplication.activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.wzs.myapplication.base.BaseActivity;
 import com.example.wzs.myapplication.model.UserSearch;
+import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 import com.nonecity.R;
 
 import java.io.Serializable;
@@ -46,6 +48,7 @@ public class FriendDetailsActivity extends BaseActivity {
     TextView userSource;
     @Bind(R.id.add_friend)
     Button addFriend;
+    String friendUserId = null;
 
     @Override
     protected int setLayoutId() {
@@ -65,18 +68,26 @@ public class FriendDetailsActivity extends BaseActivity {
         userSex.setText(mbundle.getString("userSex"));
         userAddress.setText(mbundle.getString("userAddress"));
         userSignature.setText(mbundle.getString("userSignature"));
-
+        friendUserId = mbundle.getString("userId");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 
     @OnClick(R.id.add_friend)
-    public void onViewClicked() {
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.add_friend:
+                Bundle bundle = new Bundle();
+                bundle.putString("userID", friendUserId);
+                ActivityLauncherUtil.launcher(FriendDetailsActivity.this, VerificationFriendsActivity.class, bundle, "userInfo");
+                break;
+        }
 
     }
+
+
 }

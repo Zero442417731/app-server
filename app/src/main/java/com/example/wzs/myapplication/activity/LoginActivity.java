@@ -93,11 +93,8 @@ public class LoginActivity extends BaseActivity {
             case R.id.btn_login:
                 name = loginName.getText().toString().trim();
                 pwd = loginPwd.getText().toString().trim();
-
                 ClientUtil.sendMessage(setLogin());
-
-
-                UserLoginInfo userLoginInfo;
+             //  UserLoginInfo userLoginInfo;
 
               /*  if (userLoginInfo.getBody().isSuccessful()) {
                     SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone", userLoginInfo.getUsername());
@@ -114,8 +111,6 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     ToastUtil.showToast(userLoginInfo.getBody().getErrorMsg());
                 }*/
-
-
                 break;
             case R.id.register_login:
                 ActivityLauncherUtil.launcher(this, RegisterActivity.class);
@@ -132,12 +127,14 @@ public class LoginActivity extends BaseActivity {
         switch (messageEvent.getFriendUserId()) {
             case EventId.USERLOGIN_SUSSES:
                 boolean successful = (boolean) messageEvent.getMessageContent();
+                Log.i(TAG, "userLogin: "+successful );
                 if (successful) {
                     ActivityLauncherUtil.launcher(this, MainActivity.class);
                 }
                 break;
             case EventId.USERLOGIN_ERROR:
                 String errorMsg = (String) messageEvent.getMessageContent();
+                Log.i(TAG, "userLogin: "+errorMsg);
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {

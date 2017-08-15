@@ -72,7 +72,6 @@ public class ForgotPwdActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 
@@ -87,6 +86,7 @@ public class ForgotPwdActivity extends BaseActivity {
                     @Override
                     public void onSuccess(GetSMS getSMS) {
                         resultData = getSMS.getBody().getResultData();
+                        LogUtil.e("aaa",resultData);
                     }
 
                     @Override
@@ -177,7 +177,8 @@ public class ForgotPwdActivity extends BaseActivity {
             e.printStackTrace();
         }
         return jsonObject2.toString();
-    } private void smsCode() {
+    }
+    private void smsCode() {
         counter.start();
         getSms.setClickable(false);
     }

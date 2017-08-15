@@ -68,7 +68,6 @@ public class AddActivity extends BaseActivity implements SearchView.OnQueryTextL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 
@@ -100,17 +99,14 @@ public class AddActivity extends BaseActivity implements SearchView.OnQueryTextL
                     UserSearch.BodyBean.ResultDataBean userInfo = userSearch.getBody().getResultData();
                     Bundle bundle = new Bundle();
                     bundle.putString("userName",userInfo.getNickName());
-                    bundle.putString("userId",userInfo.getUserCode());
+                    bundle.putString("userId",userInfo.getId());
                     bundle.putString("userSex",userInfo.getSex());
                     bundle.putString("userAddress",userInfo.getArea());
                     bundle.putString("userSignature",userInfo.getSignature());
                     ActivityLauncherUtil.launcher(AddActivity.this,FriendDetailsActivity.class,bundle,"userInfo");
                 }
-
                 userCode = userSearch.getBody().getResultData().getUserCode();
-
             }
-
             @Override
             public void onError(String msg) {
 
