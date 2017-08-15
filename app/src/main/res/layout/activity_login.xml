@@ -1,39 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_bg">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_widthPercent="70%"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/login_head_border"
-        app:layout_marginTopPercent="15%h" />
+        android:layout_centerHorizontal="true">
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:id="@+id/login_head_background"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/shape_round"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            app:layout_marginTopPercent="15.3%h">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/login_head"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/login_head_gril"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_widthPercent="97%"
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/login_head"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/login_head_gril"
-        app:layout_marginTopPercent="15.3%h" />
+                />
+        </com.zhy.android.percent.support.PercentRelativeLayout>
+
+
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:id="@+id/phone_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_below="@id/login_head"
+        android:layout_below="@id/login_head_background"
         android:layout_centerHorizontal="true"
         android:background="@drawable/shape_corner"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_heightPercent="7.75%h"
+        app:layout_heightPercent="8%h"
         app:layout_marginTopPercent="8.75%h"
-        app:layout_widthPercent="76.9333%">
+        app:layout_widthPercent="100%">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -73,9 +87,9 @@
         android:background="@drawable/shape_corner"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_heightPercent="7.75%h"
+        app:layout_heightPercent="8%h"
         app:layout_marginTopPercent="2.6%h"
-        app:layout_widthPercent="76.9333%">
+        app:layout_widthPercent="100%">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -118,7 +132,7 @@
         android:textSize="19dp"
         app:layout_heightPercent="7.75%h"
         app:layout_marginTopPercent="2.6%h"
-        app:layout_widthPercent="76.9333%" />
+        app:layout_widthPercent="100%" />
 
 
     <TextView
@@ -153,4 +167,5 @@
         android:text="忘记密码？"
         android:textColor="#effff9"
         app:layout_marginLeftPercent="11.6667%w" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
 </com.zhy.android.percent.support.PercentRelativeLayout>
