@@ -29,7 +29,6 @@
             android:text="设置密码"
             android:textColor="#e8fffb"
             android:textSize="25.3sp" />
-
         <Button
             android:id="@+id/btn_send_message"
             android:layout_width="wrap_content"
@@ -38,7 +37,6 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/btn_shape"
-            android:src="@drawable/navibar_icon_return"
             android:text="发送"
             android:textColor="@color/white"
             android:visibility="visible" />

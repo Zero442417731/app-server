@@ -80,16 +80,10 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
             String friendUserId = body.get("friendUserId").getTextValue();
             //processCustomMessage(friendUserId,hyxx);
             //EventBus.getDefault().post(new MessageEvent(friendUserId, hyxx));
-
             Intent intent = new Intent();
             intent.putExtra(friendUserId, hyxx);
             intent.setAction(friendUserId);
             HXApplication.mContext.sendBroadcast(intent);
-
-
-
-
-
 
         }
 

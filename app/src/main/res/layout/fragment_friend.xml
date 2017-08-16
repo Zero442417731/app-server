@@ -12,16 +12,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="新的朋友"
+        android:text="新的好友"
         android:layout_margin="10dp"
         android:textColor="@color/app_black"
         android:textSize="18sp" />
 
-    <ImageView
+    <TextView
+        android:text="1"
+        android:textSize="12sp"
+       android:gravity="center"
+        android:id="@+id/text_add_friends_not_read_number"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/login_head_gril" />
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
 
     <RelativeLayout

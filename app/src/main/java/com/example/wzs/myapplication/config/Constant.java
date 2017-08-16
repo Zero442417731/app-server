@@ -30,5 +30,6 @@ public class Constant {
  */
 
 public static String HXCS_JC_YHCZ="HXCS-JC-YHCZ";
+public static String HXCS_JC_HYTJ="HXCS-JC-HYTJ";
 
 }

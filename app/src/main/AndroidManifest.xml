@@ -85,6 +85,7 @@
         <activity android:name="com.example.wzs.myapplication.activity.SafeActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.TZActivity" />
 <activity android:name="com.example.wzs.myapplication.activity.VerificationFriendsActivity"/>
+        <activity android:name="com.example.wzs.myapplication.activity.FriendsRequestsActivity"/>
         <receiver
             android:name="com.example.wzs.myapplication.event.MyReceiver"
             android:enabled="true">

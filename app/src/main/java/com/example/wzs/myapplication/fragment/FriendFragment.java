@@ -1,17 +1,23 @@
 package com.example.wzs.myapplication.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.wzs.myapplication.activity.FriendsRequestsActivity;
 import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
 import com.example.wzs.myapplication.model.HYXX;
 import com.example.wzs.myapplication.model.YZXX;
+import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseFragment;
@@ -29,6 +35,7 @@ import java.util.Collections;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import q.rorbin.badgeview.QBadgeView;
 
 /**
  * Created by hxcs-02 on 2017/7/28.
@@ -41,7 +48,10 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     SideBarView sideBarView;
     @Bind(R.id.tip)
     TextView mTip;
-
+    @Bind(R.id.new_friend)
+    RelativeLayout rel_new_friends;
+    @Bind(R.id.text_add_friends_not_read_number)
+    TextView not_read_number;
     private UserAdapter mAdapter;
     private ArrayList<User> userArrayList = new ArrayList<>();
 
@@ -63,13 +73,8 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     }
 
     private void addData() {
-
-
-
-
-
         String[] contactsArray = getResources().getStringArray(R.array.data);
-       // String[] headArray = getResources().getStringArray(R.array.head);
+        // String[] headArray = getResources().getStringArray(R.array.head);
 
         //模拟添加数据到Arraylist
         int length = contactsArray.length;
@@ -99,30 +104,27 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     }
 
 
-
     @Subscribe
     public void userLogin(MessageEvent messageEvent) {
-        switch (messageEvent.getFriendUserId()){
+        switch (messageEvent.getFriendUserId()) {
             case EventId.USER_TS:
-
                 YZXX messageContent = (YZXX) messageEvent.getMessageContent();
                 String friendId = messageContent.getFriendId();
-                if (messageContent.getFriendId()!=null){
-
-
+                Log.i("eventbus", "userLogin: " + friendId);
+                if (messageContent.getFriendId() != null) {
+                    rel_new_friends.setVisibility(View.VISIBLE);
+                    new QBadgeView(getContext()).bindTarget(not_read_number).setBadgeNumber(1).setBadgeBackgroundColor(0xffffeb3b).setBadgeTextColor(0xff000000).stroke(0xff000000, 1, true);
                 }
                 break;
         }
 
 
-
     }
 
     private void init() {
-
+        //  rel_new_friends.setVisibility(View.GONE);
         //排序
         Collections.sort(userArrayList, new CompareSort());
-
         //设置数据
         mAdapter = new UserAdapter(HXApplication.mContext);
         mAdapter.setData(userArrayList);
@@ -130,7 +132,7 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 
         //设置回调
         sideBarView.setOnLetterSelectListen(this);
-
+        rel_new_friends.setOnClickListener(RelOnClickListener);
     }
 
 
@@ -139,12 +141,6 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
         setListviewPosition(letter);
         mTip.setText(letter);
         mTip.setVisibility(View.VISIBLE);
-
-
-
-
-
-         
     }
 
     @Override
@@ -191,4 +187,11 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
+    private View.OnClickListener RelOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ActivityLauncherUtil.launcher(getContext(), FriendsRequestsActivity.class);
+        }
+    };
 }

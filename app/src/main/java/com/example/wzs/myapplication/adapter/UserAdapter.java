@@ -72,17 +72,7 @@ public class UserAdapter extends BaseAdapter{
         viewHolder.tvItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
-
                 Toast.makeText(mContext,users.get(position).getName(),Toast.LENGTH_SHORT).show();
-
-
-
-
-
-
             }
         });
         //当前的item的title与上一个item的title不同的时候回显示title(A,B,C......)
@@ -92,8 +82,6 @@ public class UserAdapter extends BaseAdapter{
         }else {
             viewHolder.tvTitle.setVisibility(View.GONE);
         }
-
-
         return convertView;
     }
 

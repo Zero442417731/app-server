@@ -16,7 +16,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="15dp"
+            android:layout_height="20dp"
             android:layout_marginLeft="10dp"
             android:text="你需要发送验证申请，等待对方通过" />
 
@@ -26,11 +26,11 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_margin="10dp"
-            android:background="@null"
+            android:background="@color/white"
             android:text="2323233"
             android:textColorHint="#eafff7"
             android:textCursorDrawable="@null"
-
             android:textSize="12sp" />
     </LinearLayout>
+
 </LinearLayout>

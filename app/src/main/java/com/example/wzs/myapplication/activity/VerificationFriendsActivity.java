@@ -56,32 +56,39 @@ public class VerificationFriendsActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_send_message:
-                checkRemake();
+             checkRemake();
                 break;
+                default:break;
         }
     }
 
     public void checkRemake() {
         add_friend_remake = remake.getText().toString();
         if (add_friend_remake.length() > 1) {
-            senMessage(friendUserId);
+            senMessage(friendUserId,add_friend_remake);
         } else {
             Toast.makeText(getApplicationContext(), "随便说点什么吧", Toast.LENGTH_LONG).show();
             return;
         }
     }
 
-    public void senMessage(String friendUserId) {
+    public void senMessage(String friendUserId,String add_friend_remake) {
+       // add_friend_remake=remake.getText().toString();
         HXApplication.retrofitUtils.postData(userSearch(friendUserId, add_friend_remake), new MyCallback<AddFriendsStatus>() {
             @Override
             public void onSuccess(AddFriendsStatus addFriendsStatus) {
+                Log.i(TAG, "onSuccess: "+addFriendsStatus.getBody().getResultData());
                 if (addFriendsStatus.getBody().isSuccessful()) {
-                    int resultID = Integer.parseInt(addFriendsStatus.getBody().getResultData());
-                    Log.e(TAG, "onSuccess: " + addFriendsStatus.getBody().getErrorMsg());
-                    switch (resultID) {
-                        // "resultData" : "结果反馈。 0：添加失败；1：添加成功；2：好友之前已被添加，
-                        //  3：好友信息不存在，4: 好友验证信息已发送"
+                    Log.i(TAG, "onSuccess: "+addFriendsStatus.getBody().getResultData());
 
+                    String  resultID = addFriendsStatus.getBody().getResultData();
+                    int resultid=Integer.parseInt(resultID);
+                    Log.e(TAG, "onSuccess: " + addFriendsStatus.getBody().getErrorMsg());
+                 //   Toast.makeText(getApplicationContext(),""+toastmsg,Toast.LENGTH_LONG).show();
+                 //   ToastUtil.showToast(toastmsg);
+                    switch (resultid) {
+//                         "resultData" : "结果反馈。 0：添加失败；1：添加成功；2：好友之前已被添加，
+//                          3：好友信息不存在，4: 好友验证信息已发送"
                         case 0://
                             ToastUtil.showLong(getApplicationContext(), "添加失败");
                             break;
@@ -103,7 +110,7 @@ public class VerificationFriendsActivity extends BaseActivity {
 
             @Override
             public void onError(String msg) {
-
+                Log.e(TAG, "onError: "+msg );
             }
         });
 
@@ -116,18 +123,16 @@ public class VerificationFriendsActivity extends BaseActivity {
         JSONObject jsonObject2 = new JSONObject();
 
         try {
-            jsonObject.put("code", Constant.HXCS_JC_YHCZ);
+            jsonObject.put("code", Constant.HXCS_JC_HYTJ);
             jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
-            jsonObject1.put("remake", remake);
-            jsonObject1.put("code", friendId);
+            jsonObject1.put("remark", remake);
+            jsonObject1.put("friendUserId", friendId);
             jsonObject2.put("header", jsonObject);
             jsonObject2.put("body", jsonObject1);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         return jsonObject2.toString();
     }
 }
