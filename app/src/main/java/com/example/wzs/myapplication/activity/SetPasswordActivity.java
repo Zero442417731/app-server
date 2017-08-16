@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.wzs.myapplication.config.Constant;
+import com.example.wzs.myapplication.model.ForgotPwd;
 import com.example.wzs.myapplication.network.ClientUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.nonecity.R;
@@ -52,6 +53,8 @@ public class SetPasswordActivity extends BaseActivity {
 
     private String resultData;
     private String pwd;
+    private String flag;
+
 
 
     @Override
@@ -61,6 +64,8 @@ public class SetPasswordActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        Bundle bundle = this.getIntent().getBundleExtra("pwd");
+        flag = bundle.getString("flag");
 
     }
 
@@ -95,24 +100,45 @@ public class SetPasswordActivity extends BaseActivity {
         } else if (!pwd.equals(pwd1)) {
             ToastUtil.showShort(this, "两次密码输入不一致");
         } else {
-            //   SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER_PWD, "password", MD5Util.getMD5Str(pwd));
+
             // 关闭软键盘
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(
                     setPassword.getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
-            HXApplication.retrofitUtils.postData(getZC(), new MyCallback<Register>() {
-                @Override
-                public void onSuccess(Register register) {
-                    resultData = register.getBody().getResultData();
-                    LogUtil.e(TAG, "成功" + resultData);
-                }
 
-                @Override
-                public void onError(String msg) {
-                    LogUtil.e(TAG, "失败" + msg);
-                }
-            });
+
+            if (flag.equals("set")){
+                HXApplication.retrofitUtils.postData(getZC(), new MyCallback<Register>() {
+                    @Override
+                    public void onSuccess(Register register) {
+                        resultData = register.getBody().getResultData();
+                        LogUtil.e(TAG, "成功" + resultData);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        LogUtil.e(TAG, "失败" + msg);
+                    }
+                });
+            }else if (flag.equals("forgot")){
+                HXApplication.retrofitUtils.postData(forgotPwd(), new MyCallback<ForgotPwd>() {
+                    @Override
+                    public void onSuccess(ForgotPwd forgotPwd) {
+                        resultData = forgotPwd.getBody().getResultData();
+                        LogUtil.e(TAG, "成功" + forgotPwd.getBody().getResultData()
+                        );
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        LogUtil.e(TAG, "失败" + msg);
+                    }
+                });
+            }
+
+
+
             new Handler().postDelayed(new Runnable() {
 
                 @Override
@@ -120,7 +146,7 @@ public class SetPasswordActivity extends BaseActivity {
                     if ("1".equals(resultData)) {
                         ActivityLauncherUtil.launcher(SetPasswordActivity.this, LoginActivity.class);
                     } else {
-                        ToastUtil.showLong(SetPasswordActivity.this, "注册失败");
+                        ToastUtil.showLong(SetPasswordActivity.this, "失败");
                     }
                 }
             }, 1000);
@@ -129,6 +155,7 @@ public class SetPasswordActivity extends BaseActivity {
 
     }
 
+
     private String getZC() {
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonObject1 = new JSONObject();
@@ -136,11 +163,28 @@ public class SetPasswordActivity extends BaseActivity {
 
         try {
             jsonObject.put("code", "HXCS-JC-YHZC");
-            jsonObject1.put("mobile", HXApplication.phone);
+            jsonObject1.put("mobile",HXApplication.phone);
             jsonObject1.put("ostype", "1");
             jsonObject1.put("password", MD5Util.getMD5Str(pwd));
             jsonObject1.put("gps", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "latitude")
                     + "," + SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "longitude"));
+            jsonObject2.put("header", jsonObject);
+            jsonObject2.put("body", jsonObject1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject2.toString();
+    }
+
+    private String forgotPwd() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject1 = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+
+        try {
+            jsonObject.put("code", "HXCS-JC-CZMM");
+            jsonObject1.put("mobile", HXApplication.phone);
+            jsonObject1.put("newPassword", MD5Util.getMD5Str(pwd));
             jsonObject2.put("header", jsonObject);
             jsonObject2.put("body", jsonObject1);
         } catch (JSONException e) {

@@ -67,6 +67,7 @@
             android:src="@drawable/login_head_gril"
             app:layout_heightPercent="80%h"
             app:layout_widthPercent="23%w"
+            android:layout_marginRight="23dp"
             circleimageview:civ_border_color="@color/login_register"
             circleimageview:civ_border_overlay="false"
             circleimageview:civ_border_width="2dp"
@@ -81,6 +82,8 @@
         android:layout_marginTop="5dp"
         android:background="#ffffff"
         android:paddingLeft="30dp">
+
+
 
         <TextView
             android:layout_width="wrap_content"
