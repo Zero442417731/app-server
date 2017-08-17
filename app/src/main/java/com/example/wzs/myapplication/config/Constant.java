@@ -16,7 +16,7 @@ public class Constant {
     public static final Long DELAY_HAND_SHAKE = 5l;
 
     public static final String HOST = "netty.nonecity.com";
-    public static final int PORT = 9999;
+    public static final int PORT = 8999;
     public static final String URL_SERVICE_CENTER = "http://app.nonecity.com:81/hxcs-server/app/";
     public static final String FLAG_MT = "1";
     public static final String FIRST_OPEN = "first_open";

@@ -3,9 +3,11 @@ package com.example.wzs.myapplication.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wzs.myapplication.adapter.FriendsRequestAdapter;
 import com.example.wzs.myapplication.base.BaseActivity;
@@ -53,8 +55,16 @@ public class FriendsRequestsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         changeTitle.setText("好友申请");
+        adapter=new FriendsRequestAdapter(this);
         recyclviewFriends.setLayoutManager(new LinearLayoutManager(this));
-        recyclviewFriends.setAdapter(new FriendsRequestAdapter(this));
+        recyclviewFriends.setAdapter(adapter);
         recyclviewFriends.addItemDecoration(new LinearDividerItemDecoration(this,1));
+        recyclviewFriends.setHasFixedSize(true);
+      adapter.setOnItemClickListener(new FriendsRequestAdapter.OnItemClickListener() {
+          @Override
+          public void onItemClick(View view, int position) {
+              Toast.makeText(getApplicationContext(),"点击了 我",Toast.LENGTH_LONG).show();
+          }
+      });
     }
 }

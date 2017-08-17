@@ -36,7 +36,7 @@ public class ClientUtil {
     private static final String TAG = "MainActivity";
     private static Context context;
     public static int MSG_REC = 0xabc;
-    public static int PORT = 9999;
+    public static int PORT = Constant.PORT;
     public static final String HOST = "netty.nonecity.com";
     private static NioEventLoopGroup group;
     private static SocketChannel socketChannel;

@@ -19,6 +19,7 @@
 
     <TextView
         android:text="1"
+        android:textColor="@color/liji_material_red_500"
         android:textSize="12sp"
        android:gravity="center"
         android:id="@+id/text_add_friends_not_read_number"
