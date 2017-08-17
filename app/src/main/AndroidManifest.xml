@@ -38,16 +38,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <!--百度地图-->
+        <!-- 百度地图 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="LYrhvnUs0yxGBEWquKbOEI8t0svULsDg" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
 
-        <!--7.0相机/相册配置-->
+        <!-- 7.0相机/相册配置 -->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.wzs.myapplication.fileProvider"
@@ -72,9 +73,7 @@
         <activity
             android:name="com.example.wzs.myapplication.activity.WelcomeGuideActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
-        <activity android:name="com.example.wzs.myapplication.activity.MainActivity">
-
-        </activity>
+        <activity android:name="com.example.wzs.myapplication.activity.MainActivity"></activity>
         <activity android:name="com.example.wzs.myapplication.activity.RegisterActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.LoginActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.SetPasswordActivity" />
@@ -97,7 +96,8 @@
         <activity android:name="com.example.wzs.myapplication.activity.ChatActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.AddActivity" />
         <activity android:name="com.example.wzs.myapplication.activity.FriendDetailsActivity" />
-        <activity android:name="com.example.wzs.myapplication.activity.FriendRequestsActivity"></activity>
+        <activity android:name="com.example.wzs.myapplication.activity.FriendRequestsActivity" />
+        <activity android:name="com.example.wzs.myapplication.activity.ChangeSignatureActivity"></activity>
     </application>
 
 </manifest>

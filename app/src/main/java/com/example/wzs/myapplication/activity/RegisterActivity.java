@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.wzs.myapplication.config.Constant;
+import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
@@ -126,6 +128,7 @@ public class RegisterActivity extends BaseActivity {
     private String registerJson() {
         phone = registerPhone.getText().toString().trim();
         HXApplication.phone = phone;
+        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER,"user_phone",phone);
         if (TextUtils.isEmpty(phone)) {
             ToastUtil.showLong(this, "请输入手机号");
         }
@@ -176,7 +179,10 @@ public class RegisterActivity extends BaseActivity {
                 public void run() {
 
                     if (successful) {
-                        ActivityLauncherUtil.launcher(RegisterActivity.this, SetPasswordActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("flag","set");
+                        ActivityLauncherUtil.launcher(RegisterActivity.this, SetPasswordActivity.class,bundle,"pwd");
+
                     } else {
                         ToastUtil.showLong(RegisterActivity.this, "注册失败");
                     }

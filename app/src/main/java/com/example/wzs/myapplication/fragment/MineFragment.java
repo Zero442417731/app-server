@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wzs.myapplication.application.HXApplication;
@@ -46,7 +47,7 @@ public class MineFragment extends BaseFragment {
     @Bind(R.id.mine_signature)
     TextView mineSignature;
     @Bind(R.id.mine_bg)
-    PercentRelativeLayout mineBg;
+    ImageView mineBg;
     @Bind(R.id.person_data)
     PercentRelativeLayout personData;
     @Bind(R.id.person_board)
@@ -69,35 +70,12 @@ public class MineFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        //   GlideImageLoaderUtil.displayImage(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead"), mineHead);
-
-        //     displayImageInFragment(this,SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead"), mineHead);
         String userHead = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead");
         LogUtil.e("userhead", userHead);
-
-       // GlideImageLoaderUtil.displayImageInFragment(this, userHead, this.userHead);
+        GlideImageLoaderUtil.displayImageInFragment(this, userHead, this.userHead);
+        GlideImageLoaderUtil.displayImageInFragment(this, userHead, mineBg);
         mineName.setText(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "nickName"));
         mineSignature.setText(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userSignature"));
-       /* try {
-            new Thread(new Runnable(){
-                Drawable drawable = Drawable.createFromStream(new URL(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead")).openStream(), "image.jpg");
-                @Override
-                public void run() {
-
-
-                    mineBg.post(new Runnable(){
-                        @Override
-                        public void run() {
-                            // TODO Auto-generated method stub
-                            mineBg.setBackground(drawable); ;
-                        }}) ;
-                }
-
-            }).start()  ;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-*/
 
     }
 

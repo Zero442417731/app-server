@@ -7,31 +7,34 @@
     android:background="#E6EBEF"
     android:orientation="vertical">
 
-    <com.zhy.android.percent.support.PercentRelativeLayout
-
+    <ImageView
         android:id="@+id/mine_bg"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:scaleType="fitXY"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/login_bg"
+        android:src="@drawable/login_bg"
         app:layout_heightPercent="40%h"
-        app:layout_widthPercent="100%w">
+        app:layout_widthPercent="100%w"/>
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:circleimageview="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:circleimageview="http://schemas.android.com/apk/res-auto"
             android:id="@+id/mine_head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:src="@drawable/login_head_gril"
-            app:layout_marginTopPercent="15.8%h"
+            app:layout_heightPercent="13%h"
+            android:layout_centerHorizontal="true"
+            app:layout_widthPercent="15.8%w"
+            app:layout_marginTopPercent="9%h"
             circleimageview:civ_border_color="@color/liji_material_red_700"
             circleimageview:civ_border_overlay="false"
             circleimageview:civ_border_width="2dp"
-            circleimageview:civ_fill_color="@android:color/holo_blue_light" />
+            circleimageview:civ_fill_color="@android:color/holo_blue_light"
+             />
+
         <TextView
             android:id="@+id/mine_name"
             android:layout_width="wrap_content"
@@ -39,7 +42,7 @@
             android:layout_centerHorizontal="true"
             android:text="昵称"
             android:textColor="@color/liji_material_red_700"
-            app:layout_marginTopPercent="70%h" />
+            app:layout_marginTopPercent="25%h" />
 
         <TextView
             android:id="@+id/mine_signature"
@@ -51,7 +54,6 @@
             android:textColor="@color/liji_material_red_700"
             app:layout_marginTopPercent="6%h" />
 
-    </com.zhy.android.percent.support.PercentRelativeLayout>
 
 
     <com.zhy.android.percent.support.PercentRelativeLayout

@@ -15,12 +15,14 @@ import android.widget.TextView;
 
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
+import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.GetSMS;
 import com.example.wzs.myapplication.model.IsSMS;
 import com.example.wzs.myapplication.network.MyCallback;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 import com.example.wzs.myapplication.utils.DoubleClickExitUtil;
 import com.example.wzs.myapplication.utils.LogUtil;
+import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.example.wzs.myapplication.utils.ToastUtil;
 import com.example.wzs.myapplication.weight.PasswordEditText;
 import com.nonecity.R;
@@ -59,6 +61,7 @@ public class ForgotPwdActivity extends BaseActivity {
     private boolean successful;
 
     private String resultData;
+
     @Override
     protected int setLayoutId() {
         return R.layout.activity_forgot_pwd;
@@ -74,7 +77,6 @@ public class ForgotPwdActivity extends BaseActivity {
         forgotPhone.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         etSms.setInputType(EditorInfo.TYPE_CLASS_PHONE);
     }
-
 
 
     @OnClick({R.id.title_back_img, R.id.get_sms, R.id.btn_login})
@@ -107,6 +109,7 @@ public class ForgotPwdActivity extends BaseActivity {
                 break;
         }
     }
+
     private void smsCode() {
         counter.start();
         getSms.setClickable(false);
@@ -114,7 +117,9 @@ public class ForgotPwdActivity extends BaseActivity {
 
 
     private String registerJson() {
+        phone = forgotPhone.getText().toString().trim();
         HXApplication.phone = phone;
+        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER,"user_phone",phone);
         if (TextUtils.isEmpty(phone)) {
             ToastUtil.showLong(this, "请输入手机号");
         }
@@ -135,7 +140,8 @@ public class ForgotPwdActivity extends BaseActivity {
     }
 
     private void register() {
-
+        phone = forgotPhone.getText().toString().trim();
+        HXApplication.phone = phone;
         if (TextUtils.isEmpty(phone)) {
             ToastUtil.showLong(this, "请输入手机号");
             return;
@@ -165,7 +171,9 @@ public class ForgotPwdActivity extends BaseActivity {
                 public void run() {
 
                     if (successful) {
-                        ActivityLauncherUtil.launcher(ForgotPwdActivity.this, SetPasswordActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("flag","forgot");
+                        ActivityLauncherUtil.launcher(ForgotPwdActivity.this, SetPasswordActivity.class,bundle,"pwd");
                     } else {
                         ToastUtil.showLong(ForgotPwdActivity.this, "找回密码失败");
                     }

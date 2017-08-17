@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.wzs.myapplication.activity.ChangeSignatureActivity">
+
+    <include layout="@layout/title_layout" />
+
+    <com.example.wzs.myapplication.weight.PasswordEditText
+        android:id="@+id/ed_change_signature"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@null"
+        android:textCursorDrawable="@null" />
+
+    <Button
+        android:text="发布签名"
+        android:id="@+id/confirm_change"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    </Button>
+</LinearLayout>

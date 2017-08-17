@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,14 +145,22 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
         LogUtil.e("userSignature--------", userSignature);
         LogUtil.e("addVerify--------", addVerify);
         LogUtil.e("id--------", id);
-        name.setText(nickName);
-        changeName.setText(nickName);
-        changeSex.setText(sex);
-        changeAddress.setText(addVerify);
-        changeSignature.setText(userSignature);
-        changeId.setText(id);
-        GlideImageLoaderUtil.displayImageInActivity(PersonDataActivity.this, userHead, changeHead);
-
+        if (!TextUtils.isEmpty(nickName)) {
+            name.setText(nickName);
+            changeName.setText(nickName);
+        }
+        if (!TextUtils.isEmpty(sex))
+            changeSex.setText(sex);
+        if (!TextUtils.isEmpty(addVerify))
+            changeAddress.setText(addVerify);
+        if (!TextUtils.isEmpty(userSignature))
+            changeSignature.setText(userSignature);
+        if (!TextUtils.isEmpty(id))
+            changeId.setText(id);
+        if (!TextUtils.isEmpty(userHead))
+            GlideImageLoaderUtil.displayImageInActivity(PersonDataActivity.this, userHead, changeHead);
+        if (!TextUtils.isEmpty(area))
+            changeAddress.setText(area);
     }
 
     @Override
@@ -192,7 +201,7 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
                 finish();
                 break;
             case R.id.person_data_signature:
-
+                ActivityLauncherUtil.launcher(this,ChangeSignatureActivity.class);
                 break;
 
         }
