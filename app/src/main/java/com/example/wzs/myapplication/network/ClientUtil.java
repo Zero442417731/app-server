@@ -24,6 +24,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
@@ -36,8 +38,6 @@ public class ClientUtil {
     private static final String TAG = "MainActivity";
     private static Context context;
     public static int MSG_REC = 0xabc;
-    public static int PORT = Constant.PORT;
-    public static final String HOST = "netty.nonecity.com";
     private static NioEventLoopGroup group;
     private static SocketChannel socketChannel;
     private ChannelFuture cf;
@@ -77,14 +77,15 @@ public class ClientUtil {
                     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new IdleStateHandler(20, 10, 0));
+                            socketChannel.pipeline().addLast("linecoder",new LineBasedFrameDecoder(100000000));
                             socketChannel.pipeline().addLast(new StringEncoder());
                             socketChannel.pipeline().addLast(new StringDecoder());
                             //客户端的逻辑
                             socketChannel.pipeline().addLast("handler", new MyClientHandler());
+
                         }
                     });
-                    ChannelFuture future = bootstrap.connect(HOST, PORT).sync();
+                    ChannelFuture future = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
                     if (future.isSuccess()) {
                         socketChannel = (SocketChannel) future.channel();
 
@@ -106,7 +107,8 @@ public class ClientUtil {
             public void run() {
                 try {
                     // Log.i(TAG, "mChannel.write sth & " + mChannel.isOpen());
-                    socketChannel.writeAndFlush(o);
+                    socketChannel.writeAndFlush(o+ System.getProperty("line.separator"));
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

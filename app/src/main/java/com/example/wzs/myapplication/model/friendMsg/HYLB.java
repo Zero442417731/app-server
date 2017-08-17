@@ -1,17 +1,16 @@
-package com.example.wzs.myapplication.model;
+package com.example.wzs.myapplication.model.friendMsg;
 
-import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by hxcs-02 on 2017/8/4.
  */
 
-//好友验证推送
-public class YZXX implements Serializable{
+public class HYLB {
 
     /**
-     * friendId : 好友关系id
      * id : 单用户登录唯一标示
+     * friendId : 好友关系id, 主要用于后续好友之间创建画板
      * userCode : 用户编号
      * mobilePhone : 手机号
      * headImgPath : 用户头像path
@@ -19,10 +18,11 @@ public class YZXX implements Serializable{
      * signature : 个性签名
      * sex : 性别 男/女/
      * area : 地区
+     * onLine : 是否在线，0:不在线，1:在线
      */
 
-    private String friendId;
     private String id;
+    private String friendId;
     private String userCode;
     private String mobilePhone;
     private String headImgPath;
@@ -30,14 +30,7 @@ public class YZXX implements Serializable{
     private String signature;
     private String sex;
     private String area;
-
-    public String getFriendId() {
-        return friendId;
-    }
-
-    public void setFriendId(String friendId) {
-        this.friendId = friendId;
-    }
+    private String onLine;
 
     public String getId() {
         return id;
@@ -45,6 +38,14 @@ public class YZXX implements Serializable{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getFriendId() {
+        return friendId;
+    }
+
+    public void setFriendId(String friendId) {
+        this.friendId = friendId;
     }
 
     public String getUserCode() {
@@ -102,4 +103,13 @@ public class YZXX implements Serializable{
     public void setArea(String area) {
         this.area = area;
     }
+
+    public String getOnLine() {
+        return onLine;
+    }
+
+    public void setOnLine(String onLine) {
+        this.onLine = onLine;
+    }
+
 }

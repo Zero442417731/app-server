@@ -7,16 +7,16 @@ import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
-import com.example.wzs.myapplication.model.HYXX;
+import com.example.wzs.myapplication.model.friendMsg.HYXX;
+import com.example.wzs.myapplication.model.XTJC;
 import com.example.wzs.myapplication.model.UserLoginInfo;
-import com.example.wzs.myapplication.model.YZXX;
+import com.example.wzs.myapplication.model.friendMsg.YZXX;
 import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -62,6 +62,7 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
                 JsonNode resultData = jsonNode.get("body").get("resultData");
                 userLoginInfo = objectMapper.readValue(resultData.toString(), UserLoginInfo.class);
                 HXApplication.isLogin = userLoginInfo.isIsLogined();
+
                 SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token", userLoginInfo.getToken());
                 EventBus.getDefault().post(new MessageEvent(EventId.USERLOGIN_SUSSES, userLoginInfo.isIsLogined()));
             } else {
@@ -69,6 +70,10 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
             }
         } else if (code.equals("HXCS-JC-XTJC")) {
             //心跳包检测
+            LogUtil.e("心跳----",body.toString());
+            XTJC test = objectMapper.readValue(body.toString(), XTJC.class);
+            EventBus.getDefault().post(new MessageEvent<XTJC>(EventId.TEST, test));
+
         } else if (code.equals("HXCS-JC-YZXX")) {
             //好友验证
             YZXX yzxx = objectMapper.readValue(body.toString(), YZXX.class);

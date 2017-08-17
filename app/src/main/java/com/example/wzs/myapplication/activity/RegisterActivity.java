@@ -219,12 +219,7 @@ public class RegisterActivity extends BaseActivity {
         return jsonObject2.toString();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 
 
     private class TimeCounter extends CountDownTimer {
