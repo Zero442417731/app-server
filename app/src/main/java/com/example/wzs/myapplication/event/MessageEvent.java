@@ -11,6 +11,10 @@ public class MessageEvent<T> {
         this.messageContent = messageContent;
     }
 
+    public MessageEvent(int friendUserId) {
+        this.friendUserId = friendUserId;
+    }
+
     public T getMessageContent() {
         return messageContent;
     }
@@ -20,7 +24,6 @@ public class MessageEvent<T> {
     }
 
     public int getFriendUserId() {
-
         return friendUserId;
     }
 

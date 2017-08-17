@@ -45,7 +45,6 @@ public abstract class BaseActivity extends FragmentActivity {
         HXApplication.context = this;
         HXApplication.mContext = this;
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         TAG = this.getClass().getSimpleName();
@@ -55,6 +54,7 @@ public abstract class BaseActivity extends FragmentActivity {
             initWindow();
         }
          ButterKnife.bind(this);
+
         initTitleBar();
         initView();
         initData();
@@ -90,7 +90,7 @@ public abstract class BaseActivity extends FragmentActivity {
         System.gc();
         HXApplication.getRefWatcher().watch(this);
         ButterKnife.unbind(this);
-
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -106,7 +106,7 @@ public abstract class BaseActivity extends FragmentActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
+          //  tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
             tintManager.setStatusBarTintEnabled(true);
         }
     }

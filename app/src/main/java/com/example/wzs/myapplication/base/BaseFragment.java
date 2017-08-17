@@ -17,6 +17,8 @@ import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.squareup.leakcanary.RefWatcher;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 
@@ -44,6 +46,7 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
@@ -72,6 +75,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         HXApplication.getRefWatcher().watch(this);
+        EventBus.getDefault().unregister(this);
     }
 
     public void setParams(Bundle bundle) {

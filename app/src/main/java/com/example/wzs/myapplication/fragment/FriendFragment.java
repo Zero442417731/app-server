@@ -22,7 +22,9 @@ import com.example.wzs.myapplication.weight.CompareSort;
 import com.example.wzs.myapplication.weight.SideBarView;
 import com.example.wzs.myapplication.adapter.UserAdapter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +49,7 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 
     @Override
     protected int setLayoutId() {
+        EventBus.getDefault().register(this);
         return R.layout.fragment_friend;
     }
 
@@ -100,13 +103,15 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 
 
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
     public void userLogin(MessageEvent messageEvent) {
         switch (messageEvent.getFriendUserId()){
             case EventId.USER_TS:
 
                 YZXX messageContent = (YZXX) messageEvent.getMessageContent();
                 String friendId = messageContent.getFriendId();
+                LogUtil.e("test----------",friendId);
+
                 if (messageContent.getFriendId()!=null){
 
 

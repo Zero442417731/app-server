@@ -6,6 +6,9 @@ package com.example.wzs.myapplication.event;
 
 public class EventId {
 
+    //测试
+    public static final int TEST = 001;
+
     //登陆验证
     public static final int UDER_NAME = 100;
     public static final int UDER_PWD = 101;
@@ -16,5 +19,7 @@ public class EventId {
 
     //好友验证推送
     public static final int USER_TS = 300;
+
+
 
 }

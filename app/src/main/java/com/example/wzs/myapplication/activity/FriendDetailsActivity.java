@@ -6,8 +6,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
+import com.example.wzs.myapplication.model.AddFriend;
 import com.example.wzs.myapplication.model.UserSearch;
+import com.example.wzs.myapplication.network.MyCallback;
 import com.example.wzs.myapplication.utils.GlideImageLoaderUtil;
 import com.nonecity.R;
 
@@ -80,6 +83,19 @@ public class FriendDetailsActivity extends BaseActivity {
 
     @OnClick(R.id.add_friend)
     public void onViewClicked() {
+        HXApplication.retrofitUtils.postData("", new MyCallback<AddFriend>() {
+            @Override
+            public void onSuccess(AddFriend addFriend) {
 
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
     }
+
+
+
 }

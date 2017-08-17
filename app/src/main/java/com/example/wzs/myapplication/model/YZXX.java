@@ -9,7 +9,9 @@ import java.io.Serializable;
 //好友验证推送
 public class YZXX implements Serializable{
 
+
     /**
+     * remark : 好友验证信息备注
      * friendId : 好友关系id
      * id : 单用户登录唯一标示
      * userCode : 用户编号
@@ -21,6 +23,7 @@ public class YZXX implements Serializable{
      * area : 地区
      */
 
+    private String remark;
     private String friendId;
     private String id;
     private String userCode;
@@ -30,6 +33,14 @@ public class YZXX implements Serializable{
     private String signature;
     private String sex;
     private String area;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getFriendId() {
         return friendId;
