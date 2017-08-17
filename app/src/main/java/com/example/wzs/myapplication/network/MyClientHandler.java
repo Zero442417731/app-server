@@ -7,10 +7,10 @@ import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
-import com.example.wzs.myapplication.model.HYXX;
+import com.example.wzs.myapplication.model.friendMsg.HYXX;
 import com.example.wzs.myapplication.model.XTJC;
 import com.example.wzs.myapplication.model.UserLoginInfo;
-import com.example.wzs.myapplication.model.YZXX;
+import com.example.wzs.myapplication.model.friendMsg.YZXX;
 import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 

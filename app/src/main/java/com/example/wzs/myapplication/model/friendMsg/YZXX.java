@@ -1,16 +1,19 @@
-package com.example.wzs.myapplication.model;
+package com.example.wzs.myapplication.model.friendMsg;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * Created by hxcs-02 on 2017/8/4.
  */
 
-public class HYLB {
+//好友验证推送
+public class YZXX implements Serializable{
+
 
     /**
+     * remark : 好友验证信息备注
+     * friendId : 好友关系id
      * id : 单用户登录唯一标示
-     * friendId : 好友关系id, 主要用于后续好友之间创建画板
      * userCode : 用户编号
      * mobilePhone : 手机号
      * headImgPath : 用户头像path
@@ -18,11 +21,11 @@ public class HYLB {
      * signature : 个性签名
      * sex : 性别 男/女/
      * area : 地区
-     * onLine : 是否在线，0:不在线，1:在线
      */
 
-    private String id;
+    private String remark;
     private String friendId;
+    private String id;
     private String userCode;
     private String mobilePhone;
     private String headImgPath;
@@ -30,14 +33,13 @@ public class HYLB {
     private String signature;
     private String sex;
     private String area;
-    private String onLine;
 
-    public String getId() {
-        return id;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getFriendId() {
@@ -46,6 +48,14 @@ public class HYLB {
 
     public void setFriendId(String friendId) {
         this.friendId = friendId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserCode() {
@@ -103,13 +113,4 @@ public class HYLB {
     public void setArea(String area) {
         this.area = area;
     }
-
-    public String getOnLine() {
-        return onLine;
-    }
-
-    public void setOnLine(String onLine) {
-        this.onLine = onLine;
-    }
-
 }

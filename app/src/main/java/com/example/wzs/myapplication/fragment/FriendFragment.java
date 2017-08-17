@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
-import com.example.wzs.myapplication.model.HYXX;
-import com.example.wzs.myapplication.model.YZXX;
+import com.example.wzs.myapplication.model.friendMsg.YZXX;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseFragment;

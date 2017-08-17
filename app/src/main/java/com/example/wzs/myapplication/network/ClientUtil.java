@@ -77,7 +77,7 @@ public class ClientUtil {
                     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast("linecoder",new LineBasedFrameDecoder(1024));
+                            socketChannel.pipeline().addLast("linecoder",new LineBasedFrameDecoder(100000000));
                             socketChannel.pipeline().addLast(new StringEncoder());
                             socketChannel.pipeline().addLast(new StringDecoder());
                             //客户端的逻辑
