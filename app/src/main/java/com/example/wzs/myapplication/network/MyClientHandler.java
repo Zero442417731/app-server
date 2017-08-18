@@ -7,6 +7,7 @@ import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
+import com.example.wzs.myapplication.model.FriendsRequestsPush;
 import com.example.wzs.myapplication.model.friendMsg.HYXX;
 import com.example.wzs.myapplication.model.XTJC;
 import com.example.wzs.myapplication.model.UserLoginInfo;
@@ -28,7 +29,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class MyClientHandler extends SimpleChannelInboundHandler<String> {
     public static final String TAG = "MyClientHandler";
     private UserLoginInfo userLoginInfo;
-
+    private FriendsRequestsPush friendsRequestsPush;//好友验证推送
 
     @Override
 
@@ -54,15 +55,12 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
 
         //Log.d("header",header.get("code").getTextValue().toString());
         // Log.d("body",body.get("isSuccessful").getBooleanValue()+"");
-
-
         if (code.equals("HXCS-JC-YHDL")) {
             //用户登录
             if (body.get("isSuccessful").asBoolean()) {
                 JsonNode resultData = jsonNode.get("body").get("resultData");
                 userLoginInfo = objectMapper.readValue(resultData.toString(), UserLoginInfo.class);
                 HXApplication.isLogin = userLoginInfo.isIsLogined();
-
                 SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token", userLoginInfo.getToken());
                 EventBus.getDefault().post(new MessageEvent(EventId.USERLOGIN_SUSSES, userLoginInfo.isIsLogined()));
             } else {
@@ -70,7 +68,7 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
             }
         } else if (code.equals("HXCS-JC-XTJC")) {
             //心跳包检测
-            LogUtil.e("心跳----",body.toString());
+            LogUtil.e("心跳----", body.toString());
             XTJC test = objectMapper.readValue(body.toString(), XTJC.class);
             EventBus.getDefault().post(new MessageEvent<XTJC>(EventId.TEST, test));
 
@@ -78,6 +76,11 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
             //好友验证
             YZXX yzxx = objectMapper.readValue(body.toString(), YZXX.class);
             EventBus.getDefault().post(new MessageEvent<YZXX>(EventId.USER_TS, yzxx));
+            if (body.get("isSuccessful").asBoolean()) {
+                JsonNode resultData = jsonNode.get("body");
+                friendsRequestsPush = objectMapper.readValue(resultData.toString(), FriendsRequestsPush.class);
+            }
+            SharedPreferencesUtil.setIntPreferences(Constant.CONFIG_SHAREDPREFRENCE_CONFIG,Constant.PUSH_MESSAGE_NUMBER,1);
             Log.d("body", yzxx.getFriendId());
         } else if (code.equals("HXCS-JC-HYXX")) {
             //好友信息

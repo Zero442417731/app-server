@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.example.wzs.myapplication.adapter.FriendsRequestAdapter;
 import com.example.wzs.myapplication.base.BaseActivity;
+import com.example.wzs.myapplication.model.FriendsRequestsPush;
+import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 import com.example.wzs.myapplication.weight.LinearDividerItemDecoration;
 import com.nonecity.R;
 
@@ -22,7 +24,7 @@ import butterknife.ButterKnife;
  * 好友申请
  */
 
-public class FriendsRequestsActivity extends BaseActivity {
+public class FriendsRequestsActivity extends BaseActivity implements FriendsRequestAdapter.YesOrNo {
 
 
     @Bind(R.id.recyclview_friends)
@@ -34,6 +36,8 @@ public class FriendsRequestsActivity extends BaseActivity {
     TextView changeTitle;
     @Bind(R.id.base_action_bar)
     RelativeLayout baseActionBar;
+    FriendsRequestsPush pushben;
+
 
     @Override
     protected int setLayoutId() {
@@ -56,6 +60,7 @@ public class FriendsRequestsActivity extends BaseActivity {
         ButterKnife.bind(this);
         changeTitle.setText("好友申请");
         adapter=new FriendsRequestAdapter(this);
+        adapter.setYesorot(this);
         recyclviewFriends.setLayoutManager(new LinearLayoutManager(this));
         recyclviewFriends.setAdapter(adapter);
         recyclviewFriends.addItemDecoration(new LinearDividerItemDecoration(this,1));
@@ -63,8 +68,26 @@ public class FriendsRequestsActivity extends BaseActivity {
       adapter.setOnItemClickListener(new FriendsRequestAdapter.OnItemClickListener() {
           @Override
           public void onItemClick(View view, int position) {
-              Toast.makeText(getApplicationContext(),"点击了 我",Toast.LENGTH_LONG).show();
+              Toast.makeText(getApplicationContext(),""+position,Toast.LENGTH_LONG).show();
+              Bundle bundle = new Bundle();
+              bundle.putString("remark",pushben.getBody().getRemark() );
+              bundle.putString("headImgPath",pushben.getBody().getHeadImgPath());
+              bundle.putString("signature",pushben.getBody().getSignature());
+              bundle.putString("area",pushben.getBody().getArea());
+              bundle.putString("nickname",pushben.getBody().getNickName());
+              bundle.putString("friendid",pushben.getBody().getFriendId());
+              ActivityLauncherUtil.launcher(getApplicationContext(),FriendRequestsActivity.class,bundle,"userInfo");
           }
       });
+    }
+
+    @Override
+    public void yes(int pos) {
+        Toast.makeText(getApplicationContext(),"点击了 yes",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void no(int pos) {
+        Toast.makeText(getApplicationContext(),"点击了 no",Toast.LENGTH_LONG).show();
     }
 }

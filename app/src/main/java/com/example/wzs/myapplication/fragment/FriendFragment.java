@@ -13,11 +13,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.wzs.myapplication.activity.FriendsRequestsActivity;
+import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
-import com.example.wzs.myapplication.model.HYXX;
-import com.example.wzs.myapplication.model.YZXX;
+
+import com.example.wzs.myapplication.model.FriendsRequestsPush;
+import com.example.wzs.myapplication.model.ReadCacheMessage;
+import com.example.wzs.myapplication.model.friendMsg.YZXX;
+import com.example.wzs.myapplication.network.MyCallback;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
+import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseFragment;
@@ -28,7 +33,10 @@ import com.example.wzs.myapplication.weight.CompareSort;
 import com.example.wzs.myapplication.weight.SideBarView;
 import com.example.wzs.myapplication.adapter.UserAdapter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +62,8 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     TextView not_read_number;
     private UserAdapter mAdapter;
     private ArrayList<User> userArrayList = new ArrayList<>();
-
+    int notReadMessagenumber = 0;
+   private FriendsRequestsPush friendsRequestsPush;
     @Override
     protected int setLayoutId() {
         return R.layout.fragment_friend;
@@ -62,7 +71,7 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 
     @Override
     protected void initView(View contentView) {
-
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -70,6 +79,7 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
         addData();
         mListview.setOnScrollListener(this);
         init();
+        ReadOfferLineMessage();
     }
 
     private void addData() {
@@ -102,7 +112,6 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 */
 
     }
-
 
     @Subscribe
     public void userLogin(MessageEvent messageEvent) {
@@ -194,4 +203,45 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
             ActivityLauncherUtil.launcher(getContext(), FriendsRequestsActivity.class);
         }
     };
+
+    private void ReadOfferLineMessage() {
+        HXApplication.retrofitUtils.postData(userSearch(), new MyCallback<ReadCacheMessage>() {
+            @Override
+            public void onSuccess(ReadCacheMessage readCacheMessage) {
+                if (readCacheMessage.getBody().isSuccessful()) {
+                    int addFriendsNotReadNumber = readCacheMessage.getBody().getResultData().size();
+                    for (int i = 0; i < readCacheMessage.getBody().getResultData().size(); i++) {
+                        String msg = readCacheMessage.getBody().getResultData().get(i).getMsg();
+                        Log.i("onsuccess", "onSuccess: " + msg);
+                        if (Constant.HXCS_JC_YZXX.equals(msg)) {
+                            notReadMessagenumber++;
+                        }
+                    }
+                    new QBadgeView(getContext()).bindTarget(not_read_number).setBadgeNumber(notReadMessagenumber).setBadgeBackgroundColor(0xffffeb3b).setBadgeTextColor(0xff000000).stroke(0xff000000, 1, true);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+            }
+        });
+    }
+
+
+    private String userSearch() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject1 = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+
+        try {
+            jsonObject.put("code", Constant.HXCS_JC_HCXX);
+            jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
+            jsonObject2.put("header", jsonObject);
+            jsonObject2.put("body", jsonObject1);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject2.toString();
+    }
 }

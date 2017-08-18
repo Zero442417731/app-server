@@ -5,12 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.wzs.myapplication.config.Constant;
+import com.example.wzs.myapplication.model.FriendsRequestsPush;
 import com.example.wzs.myapplication.weight.RoundImageView;
 import com.nonecity.R;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,8 +27,11 @@ import butterknife.ButterKnife;
 public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAdapter.FriendsRequestHolder> implements View.OnClickListener {
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
+    private YesOrNo yesorot;
     private String[] mTitles;
     private OnItemClickListener mOnItemClickListener = null;
+    FriendsRequestsPush.BodyBean bodyBeanData;
+    ArrayList<FriendsRequestsPush.BodyBean> mlist = new ArrayList<FriendsRequestsPush.BodyBean>();
 
     @Override
     public void onClick(View view) {
@@ -41,21 +49,36 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         mContext = context;
     }
 
+    public FriendsRequestAdapter(Context context, FriendsRequestsPush bean) {
+        this(context);
+        mlist.add(bean.getBody());
+    }
+
     @Override
     public FriendsRequestHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.item_friends_requests, parent, false);
         FriendsRequestHolder vh = new FriendsRequestHolder(view);
-view.setOnClickListener(this);
+        view.setOnClickListener(this);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(FriendsRequestHolder holder, int position) {
         holder.itemView.setTag(position);
+        holder.imgYes.setOnClickListener(new ImgYesOrNoClickListener(position));
+        holder.imgNo.setOnClickListener(new ImgYesOrNoClickListener(position));
+//        bodyBeanData = mlist.get(position);
+//        for (int i = 0; i < mlist.size(); i++) {
+//            holder.textRemake.setText(bodyBeanData.getRemark());
+//            holder.textNike.setText(bodyBeanData.getNickName());
+//            Glide.with(mContext).load(bodyBeanData.getHeadImgPath()).into(holder.imgHead);
+//        }
+//        holder.textFrom.setText("来源：" + "来自手机账号查找");
     }
 
     @Override
     public int getItemCount() {
+//        return mlist.size();
         return 2;
     }
 
@@ -72,6 +95,10 @@ view.setOnClickListener(this);
         LinearLayout lineYesOrNo;
         @Bind(R.id.item)
         LinearLayout item;
+        @Bind(R.id.img_yes)
+        ImageView imgYes;
+        @Bind(R.id.img_no)
+        ImageView imgNo;
 
         public FriendsRequestHolder(View itemView) {
             super(itemView);
@@ -81,5 +108,40 @@ view.setOnClickListener(this);
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
+    }
+
+
+    public void setYesorot(YesOrNo yesorot) {
+        this.yesorot = yesorot;
+    }
+
+    public interface YesOrNo {
+        void yes(int pos);
+
+        void no(int pos);
+    }
+
+    class ImgYesOrNoClickListener implements View.OnClickListener {
+        private int pos;
+
+        public ImgYesOrNoClickListener(int pos) {
+            this.pos = pos;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (yesorot == null) {
+                return;
+            }
+            switch (view.getId()) {
+                case R.id.img_yes:
+                    yesorot.yes(pos);
+                    break;
+                case R.id.img_no:
+                    yesorot.no(pos);
+                    break;
+            }
+        }
     }
 }
