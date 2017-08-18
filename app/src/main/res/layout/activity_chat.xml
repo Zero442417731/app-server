@@ -1,9 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.wzs.myapplication.activity.ChatActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <include layout="@layout/title_layout" />
+
+    <FrameLayout
+        android:id="@+id/mFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#00ff00">
+
+    </FrameLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:background="#00ffdd"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:text="23121"
+            android:visibility="visible" />
+
+        <EditText
+            android:id="@+id/mtext"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1" />
+
+
+        <ImageView
+            android:layout_marginRight="10dp"
+            android:id="@+id/eraser"
+            android:background="#00ffdd"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <ImageView
+
+            android:id="@+id/personMore"
+            android:background="#00ffdd"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'me.tatarka:gradle-retrolambda:3.2.0'
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
     }
 }
 
@@ -13,7 +14,7 @@ allprojects {
     repositories {
         jcenter()
         maven {
-            url "https://maven.google.com"
+            url "http://192.168.31.101:8081/nexus/content/groups/public/"
         }
     }
 }

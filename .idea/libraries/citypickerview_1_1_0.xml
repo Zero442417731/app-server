@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="citypickerview-1.1.0">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/d45012c8842a658f23777c890ff6a1feff7684d6/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/d45012c8842a658f23777c890ff6a1feff7684d6/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/14b7732a0aee77c11d2c0b35116ce048013a43e1/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/14b7732a0aee77c11d2c0b35116ce048013a43e1/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

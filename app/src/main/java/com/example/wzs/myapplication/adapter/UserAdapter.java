@@ -1,14 +1,19 @@
 package com.example.wzs.myapplication.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wzs.myapplication.activity.ChatActivity;
+import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
+import com.example.wzs.myapplication.utils.GlideImageLoaderUtil;
 import com.example.wzs.myapplication.weight.ChineseToEnglish;
 import com.nonecity.R;
 import com.example.wzs.myapplication.model.User;
@@ -19,19 +24,23 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/1/8.
  */
-public class UserAdapter extends BaseAdapter{
+public class UserAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<User> users;
+
     public UserAdapter(Context context) {
         this.mContext = context;
         users = new ArrayList<>();
     }
 
-    public void setData(List<User> data){
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public void setData(List<User> data) {
         this.users.clear();
         this.users.addAll(data);
     }
-
 
 
     @Override
@@ -58,28 +67,36 @@ public class UserAdapter extends BaseAdapter{
             viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.title);
             viewHolder.tvName = (TextView) convertView.findViewById(R.id.name);
             viewHolder.tvItem = (LinearLayout) convertView.findViewById(R.id.item);
+            viewHolder.imageView = convertView.findViewById(R.id.mHead);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         User user = users.get(position);
-
-        user.getName();
-
-
-
+        GlideImageLoaderUtil.displayImage(user.getHeadImgPath(), viewHolder.imageView);
         viewHolder.tvName.setText(users.get(position).getName());
         viewHolder.tvItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext,users.get(position).getName(),Toast.LENGTH_SHORT).show();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("headImgPath", user.getHeadImgPath());
+                bundle.putString("nickName", user.getName());
+                bundle.putString("sex", user.getSex());
+                bundle.putString("mobilePhone", user.getMobilePhone());
+                bundle.putString("id", user.getId());
+                bundle.putString("friendId", user.getFriendId());
+                bundle.putString("signature", user.getSignature());
+                bundle.putString("userCode", user.getUserCode());
+                ActivityLauncherUtil.launcher(mContext, ChatActivity.class, bundle, "userInfo");
+                Toast.makeText(mContext, users.get(position).getName(), Toast.LENGTH_SHORT).show();
             }
         });
         //当前的item的title与上一个item的title不同的时候回显示title(A,B,C......)
-        if(position == getFirstLetterPosition(position) && !users.get(position).getLetter().equals("@")){
+        if (position == getFirstLetterPosition(position) && !users.get(position).getLetter().equals("@")) {
             viewHolder.tvTitle.setVisibility(View.VISIBLE);
             viewHolder.tvTitle.setText(users.get(position).getLetter().toUpperCase());
-        }else {
+        } else {
             viewHolder.tvTitle.setVisibility(View.GONE);
         }
         return convertView;
@@ -97,7 +114,7 @@ public class UserAdapter extends BaseAdapter{
         int cnAscii = ChineseToEnglish.getCnAscii(letter.toUpperCase().charAt(0));
         int size = users.size();
         for (int i = 0; i < size; i++) {
-            if(cnAscii == users.get(i).getLetter().charAt(0)){
+            if (cnAscii == users.get(i).getLetter().charAt(0)) {
                 return i;
             }
         }
@@ -106,13 +123,14 @@ public class UserAdapter extends BaseAdapter{
 
     /**
      * 顺序遍历所有元素．找到letter下的第一个item对应的position
+     *
      * @param letter
      * @return
      */
-    public int getFirstLetterPosition(String letter){
+    public int getFirstLetterPosition(String letter) {
         int size = users.size();
         for (int i = 0; i < size; i++) {
-            if(letter.charAt(0) == users.get(i).getLetter().charAt(0)){
+            if (letter.charAt(0) == users.get(i).getLetter().charAt(0)) {
                 return i;
             }
         }
@@ -120,6 +138,7 @@ public class UserAdapter extends BaseAdapter{
     }
 
     class ViewHolder {
+        ImageView imageView;
         TextView tvName;
         TextView tvTitle;
         LinearLayout tvItem;

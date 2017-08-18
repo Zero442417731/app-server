@@ -7,18 +7,18 @@ package com.example.wzs.myapplication.event;
 public class EventId {
 
     //测试
-    public static final int TEST = 001;
+    public static final String TEST = "001";
 
     //登陆验证
-    public static final int UDER_NAME = 100;
-    public static final int UDER_PWD = 101;
+    public static final String UDER_NAME = "100";
+    public static final String UDER_PWD = "101";
     //登陆验证 成功
-    public static final int USERLOGIN_SUSSES = 200;
+    public static final String USERLOGIN_SUSSES = "200";
     //登陆验证 失败
-    public static final int USERLOGIN_ERROR = 201;
+    public static final String USERLOGIN_ERROR = "201";
 
     //好友验证推送
-    public static final int USER_TS = 300;
+    public static final String USER_TS = "300";
 
 
 

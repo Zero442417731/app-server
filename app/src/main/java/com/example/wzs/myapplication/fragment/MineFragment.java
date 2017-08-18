@@ -1,9 +1,11 @@
 package com.example.wzs.myapplication.fragment;
 
+import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +31,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Enumeration;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -71,12 +78,16 @@ public class MineFragment extends BaseFragment {
     @Override
     protected void initData() {
         String userHead = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead");
-        LogUtil.e("userhead", userHead);
-        GlideImageLoaderUtil.displayImageInFragment(this, userHead, this.userHead);
-        GlideImageLoaderUtil.displayImageInFragment(this, userHead, mineBg);
-        mineName.setText(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "nickName"));
-        mineSignature.setText(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userSignature"));
 
+        LogUtil.e("userhead", userHead);
+        if (!TextUtils.isEmpty(userHead)) {
+            GlideImageLoaderUtil.displayImageInFragment(this, userHead, this.userHead);
+            GlideImageLoaderUtil.displayImageInFragment(this, userHead, mineBg);
+            mineName.setText(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "nickName"));
+            mineSignature.setText(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userSignature"));
+        }
+
+        LogUtil.e("IP-----", getIP(HXApplication.mContext));
     }
 
     @Override
@@ -107,5 +118,23 @@ public class MineFragment extends BaseFragment {
             case R.id.person_setting:
                 break;
         }
+    }
+
+    public static String getIP(Context context) {
+
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && (inetAddress instanceof Inet4Address)) {
+                        return inetAddress.getHostAddress().toString();
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

@@ -2,16 +2,16 @@ package com.example.wzs.myapplication.event;
 
 
 public class MessageEvent<T> {
-    public int friendUserId;
+    public String friendUserId;
 
     public T messageContent;
 
-    public MessageEvent(int friendUserId, T messageContent) {
+    public MessageEvent(String friendUserId, T messageContent) {
         this.friendUserId = friendUserId;
         this.messageContent = messageContent;
     }
 
-    public MessageEvent(int friendUserId) {
+    public MessageEvent(String friendUserId) {
         this.friendUserId = friendUserId;
     }
 
@@ -23,11 +23,11 @@ public class MessageEvent<T> {
         this.messageContent = messageContent;
     }
 
-    public int getFriendUserId() {
+    public String getFriendUserId() {
         return friendUserId;
     }
 
-    public void setFriendUserId(int friendUserId) {
+    public void setFriendUserId(String friendUserId) {
         this.friendUserId = friendUserId;
     }
 }

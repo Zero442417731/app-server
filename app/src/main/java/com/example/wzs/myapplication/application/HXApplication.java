@@ -13,7 +13,7 @@ import com.example.wzs.myapplication.base.BaseActivity;
 import com.example.wzs.myapplication.base.BaseFragment;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.SignInfo;
-import com.example.wzs.myapplication.model.UserInfo;
+
 import com.example.wzs.myapplication.model.UserLoginInfo;
 import com.example.wzs.myapplication.network.RetrofitUtils;
 import com.example.wzs.myapplication.utils.GlideImageLoader;
@@ -38,7 +38,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class HXApplication extends Application {
     private static HXApplication instance;
     private UserLoginInfo userLoginInfo;
-    private UserInfo userInfo;
+
     private SignInfo signInfo;
     public static BaseActivity context;
     public static Context mContext;
@@ -152,13 +152,6 @@ public class HXApplication extends Application {
         this.userLoginInfo = userLoginInfo;
     }
 
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
 
     public SignInfo getSignInfo() {
         return signInfo;

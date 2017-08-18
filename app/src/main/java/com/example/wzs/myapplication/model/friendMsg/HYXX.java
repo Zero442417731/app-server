@@ -20,14 +20,14 @@ public class HYXX implements Serializable {
      * drawingData : [{"action":"动作, int类型：1down，2move，3up","X":"起始x坐标值,  float类型","Y":"起始y坐标值,  float类型","Ttime":"毫秒延时.long类型"},{"action":"动作, int类型：1down，2move，3up","X":"起始x坐标值,  float类型","Y":"起始y坐标值,  float类型","Ttime":"毫秒延时.long类型"}]
      */
 
-    private String token;
     private String friendUserId;
+    private String token;
     private String drawingId;
     private String order;
     private String command;
     private String paintSize;
     private String paintColor;
-    private List<DrawingDataBean> drawingData;
+
 
     public String getToken() {
         return token;
@@ -85,57 +85,4 @@ public class HYXX implements Serializable {
         this.paintColor = paintColor;
     }
 
-    public List<DrawingDataBean> getDrawingData() {
-        return drawingData;
-    }
-
-    public void setDrawingData(List<DrawingDataBean> drawingData) {
-        this.drawingData = drawingData;
-    }
-
-    public static class DrawingDataBean {
-        /**
-         * action : 动作, int类型：1down，2move，3up
-         * X : 起始x坐标值,  float类型
-         * Y : 起始y坐标值,  float类型
-         * Ttime : 毫秒延时.long类型
-         */
-
-        private String action;
-        private String X;
-        private String Y;
-        private String Ttime;
-
-        public String getAction() {
-            return action;
-        }
-
-        public void setAction(String action) {
-            this.action = action;
-        }
-
-        public String getX() {
-            return X;
-        }
-
-        public void setX(String X) {
-            this.X = X;
-        }
-
-        public String getY() {
-            return Y;
-        }
-
-        public void setY(String Y) {
-            this.Y = Y;
-        }
-
-        public String getTtime() {
-            return Ttime;
-        }
-
-        public void setTtime(String Ttime) {
-            this.Ttime = Ttime;
-        }
-    }
 }
