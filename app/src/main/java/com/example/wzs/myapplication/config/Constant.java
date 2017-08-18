@@ -33,5 +33,12 @@ public class Constant {
 
 public static String HXCS_JC_YHCZ="HXCS-JC-YHCZ";
 public static String HXCS_JC_HYTJ="HXCS-JC-HYTJ";
+public static String HXCS_JC_HCXX="HXCS-JC-HCXX";//缓存消息
+    public static String HXCS_JC_YZXX="HXCS-JC-YZXX";
+    public static String HXCS_JC_YZTG="HXCS-JC-YZTG";
+/**
+ * 用于存储sharedpreferences 变量名
+ */
+public static String PUSH_MESSAGE_NUMBER="push_message_number";
 
 }
