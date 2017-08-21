@@ -1,22 +1,26 @@
 package com.example.wzs.myapplication.network;
 
-import android.content.Intent;
 import android.util.Log;
 
 import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
-import com.example.wzs.myapplication.model.friendMsg.HYXX;
+import com.example.wzs.myapplication.model.DrawModel;
 import com.example.wzs.myapplication.model.XTJC;
 import com.example.wzs.myapplication.model.UserLoginInfo;
+import com.example.wzs.myapplication.model.friendMsg.HYXX;
 import com.example.wzs.myapplication.model.friendMsg.YZXX;
 import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
+import com.google.gson.Gson;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -40,8 +44,17 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("Client close ");
+        //重新连接服务器
+        ctx.channel().eventLoop().schedule(new Runnable() {
+            @Override
+            public void run() {
+            ClientUtil.doConnect();
+            }
+        }, 2, TimeUnit.SECONDS);
+        ctx.close();
         super.channelInactive(ctx);
     }
+
 
 
     @Override
@@ -70,7 +83,7 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
             }
         } else if (code.equals("HXCS-JC-XTJC")) {
             //心跳包检测
-            LogUtil.e("心跳----",body.toString());
+            LogUtil.e("心跳----", body.toString());
             XTJC test = objectMapper.readValue(body.toString(), XTJC.class);
             EventBus.getDefault().post(new MessageEvent<XTJC>(EventId.TEST, test));
 
@@ -81,14 +94,20 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
             Log.d("body", yzxx.getFriendId());
         } else if (code.equals("HXCS-JC-HYXX")) {
             //好友信息
+
             HYXX hyxx = objectMapper.readValue(body.toString(), HYXX.class);
             String friendUserId = body.get("friendUserId").getTextValue();
-            //processCustomMessage(friendUserId,hyxx);
-            //EventBus.getDefault().post(new MessageEvent(friendUserId, hyxx));
-            Intent intent = new Intent();
-            intent.putExtra(friendUserId, hyxx);
-            intent.setAction(friendUserId);
-            HXApplication.mContext.sendBroadcast(intent);
+            LogUtil.e("好友消息----", "------------" + hyxx.toString());
+
+            List<HYXX.DrawingDataBean> drawingData = hyxx.getDrawingData();
+            for (int i = 0; i < drawingData.size(); i++) {
+                HYXX.DrawingDataBean drawingDataBean = drawingData.get(i);
+                LogUtil.e("----X坐标-----",drawingDataBean.getX()+"");
+            }
+
+
+            EventBus.getDefault().post(new MessageEvent(friendUserId, hyxx));
+
 
         }
 

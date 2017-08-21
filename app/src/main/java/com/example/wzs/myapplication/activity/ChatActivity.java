@@ -1,7 +1,9 @@
 package com.example.wzs.myapplication.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,7 +15,9 @@ import com.example.wzs.myapplication.event.MessageEvent;
 import com.example.wzs.myapplication.model.DrawModel;
 import com.example.wzs.myapplication.model.User;
 
+import com.example.wzs.myapplication.model.friendMsg.HYXX;
 import com.example.wzs.myapplication.utils.LogUtil;
+import com.example.wzs.myapplication.utils.SDPackageUtil;
 import com.example.wzs.myapplication.weight.DrawView;
 import com.nonecity.R;
 
@@ -68,9 +72,6 @@ public class ChatActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
-
-
         Bundle userInfo = getIntent().getBundleExtra("userInfo");
         id = userInfo.getString("id");
         userID = id;
@@ -89,13 +90,34 @@ public class ChatActivity extends BaseActivity {
 
 
     private void broadView() {
-        drawView = new DrawView(this, "11", id, 700, 700);
+
+
+
+
+        drawView = new DrawView(this, "11", id, SDPackageUtil.getScreenWidth(this),SDPackageUtil.getScreenHeight(this));
         drawView.setIsb(true);
         mFrame.addView(drawView);
 
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ViewTreeObserver vto = mFrame.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                int height = mFrame.getMeasuredHeight();
+                int width = mFrame.getMeasuredWidth();
+                Log.d("sss", "onCreate: "+height+"-----"+width);
+                return true;
+            }
+        });
+
+        Log.d(TAG, "mFrame.getWidth():-------" + SDPackageUtil.getScreenWidth(this));
+        Log.d(TAG, "mFrame.getHeight():-------" + SDPackageUtil.getScreenHeight(this));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +130,7 @@ public class ChatActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back_img:
+
                 break;
             case R.id.more:
                 break;
@@ -123,18 +146,18 @@ public class ChatActivity extends BaseActivity {
     }
 
     @Subscribe
-    public void msg(MessageEvent<DrawModel> messageEvent) {
+    public void msg(MessageEvent<HYXX> messageEvent) {
         switch (messageEvent.getFriendUserId()) {
 
             case "c6212e4205fd4d23993d228dc75bc2d4":
 
-              DrawModel.BodyBean body = messageEvent.getMessageContent().getBody();
+              HYXX body = messageEvent.getMessageContent();
 
                drawView.setCanvasDate(body);
                 LogUtil.e("接收到的消息-----大师兄------",messageEvent.getMessageContent().toString());
                 break;
             case "30cb481d37ac487a81fc73ec13b1beee":
-                DrawModel.BodyBean body1 = messageEvent.getMessageContent().getBody();
+                HYXX body1 = messageEvent.getMessageContent();
 
                 drawView.setCanvasDate(body1);
                 LogUtil.e("接收到的消息------二师兄-----",messageEvent.getMessageContent().toString());

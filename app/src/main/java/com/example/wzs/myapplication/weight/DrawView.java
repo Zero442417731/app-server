@@ -13,7 +13,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-import com.example.wzs.myapplication.model.DrawModel;
+
+import com.example.wzs.myapplication.model.friendMsg.HYXX;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,9 +40,9 @@ public class DrawView extends View {
     private float mX, mY;// 临时点坐标
     private float mX2, mY2;// 临时点坐标
     private TimeDifference time_cha;
-    private DrawModel.BodyBean.DrawingDataBean drawingDataBean ;
+    private HYXX.DrawingDataBean drawingDataBean;
     private mSendDrawing fasong;
-    private LinkedList<DrawModel.BodyBean.DrawingDataBean> inshuju = new LinkedList<>();
+    private LinkedList<HYXX.DrawingDataBean> inshuju = new LinkedList<>();
     //Message msg;
 
 
@@ -100,7 +101,7 @@ public class DrawView extends View {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            mHandler.postDelayed(this, inshuju.getFirst().getTtime());
+            mHandler.postDelayed(this, inshuju.getFirst().getT());
             huitu(inshuju.removeFirst());
             invalidate();
             if (inshuju.size() == 0) {
@@ -115,64 +116,56 @@ public class DrawView extends View {
      *
      * @param indate
      */
-    private void huitu(DrawModel.BodyBean.DrawingDataBean indate) {
-        switch (indate.getAction()) {
+    private void huitu(HYXX.DrawingDataBean indate) {
+        switch (indate.getA()) {
             case 1:
-                touch_start2(indate.getX(), indate.getY());
+                touch_start2(indate.getX() * screenWidth, indate.getY() * screenHeight);
+                break;
             case 2:
-                touch_move2(indate.getX(), indate.getY());
+                m_move(indate.getX() * screenWidth, indate.getY() * screenHeight);
+                break;
             case 3:
                 touch_up2();
+                break;
         }
+        invalidate();
     }
 
     private void touch_start2(float x, float y) {
-        // 每次down下去重新new一个Path
-        mPath2 = new Path();
-        mPath2.moveTo(x, y);
-        // mPath2.moveTo(x + 50, y + 50);
         mX2 = x;
         mY2 = y;
+        if (mPath2 == null) {
+            mPath2 = new Path();
+        }
+        mPath2.moveTo(x, y);
     }
-
-    private void touch_move2(float x, float y) {
-        float dx = Math.abs(x - mX2);
-        float dy = Math.abs(mY2 - y);
-        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-            // 从x1,y1到x2,y2画一条贝塞尔曲线，更平滑(直接用mPath.lineTo也是可以的)
-            // 由此就可以制作各种画笔
+    private void m_move(float x, float y) {
+        //这里终点设为两点的中心点的目的在于使绘制的曲线更平滑，如果终点直接设置为x,y，效果和lineto是一样的,实际是折线效果
             mPath2.quadTo(mX2, mY2, (x + mX2) / 2, (y + mY2) / 2);
+            mCanvas.drawPath(mPath2, mPaint);
+
             mX2 = x;
             mY2 = y;
-        }
-        //mPath2.lineTo(x + 50, y + 50);
     }
 
     private void touch_up2() {
-        mPath2.lineTo(mX2, mY2);
-        // mPath2.lineTo(mX + 50, mY + 50);
-        //画笔抬起上一条会消失
-        // mCanvas.drawColor(0x66FFFFFF);
-        mCanvas.drawPath(mPath2, mPaint);
-        mCanvas.save();
-        mPath2 = null;// 重新置空
+        mPath2.reset();
+
     }
 
     //本地绘画
-    public void setCanvasDate(DrawModel.BodyBean mdate) {
+    public void setCanvasDate(HYXX mdate) {
         inshuju.addAll(mdate.getDrawingData());
         mHandler.removeCallbacks(mRunnable);
         mHandler.postDelayed(mRunnable, 0);
     }
 
-    public DrawView(Context context, String huabandeid,String friendID, int w, int h) {
+    public DrawView(Context context, String huabandeid, String friendID, int w, int h) {
         super(context);
         boardId = huabandeid;
         screenWidth = w;
-
         screenHeight = h;
         this.friendId = friendID;
-        Log.d("666", "简单画板: " + screenWidth + "---" + screenHeight);
         mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
                 Bitmap.Config.ARGB_8888);
         // 保存一次一次绘制出来的图形
@@ -268,7 +261,6 @@ public class DrawView extends View {
         if (savePath != null && savePath.size() > 0) {
             // 移除最后一个path,相当于出栈操作
             savePath.remove(savePath.size() - 1);
-
             Iterator<DrawPath> iter = savePath.iterator();
             while (iter.hasNext()) {
                 DrawPath drawPath = iter.next();
@@ -319,7 +311,7 @@ public class DrawView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (isb) {
-            drawingDataBean = new DrawModel.BodyBean.DrawingDataBean();
+            drawingDataBean = new HYXX.DrawingDataBean();
             float xx = event.getX();
             float yy = event.getY();
             switch (event.getAction()) {
@@ -361,7 +353,7 @@ public class DrawView extends View {
     private void touch_move(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(mY - y);
-        drawingDataBean = new DrawModel.BodyBean.DrawingDataBean();
+        drawingDataBean = new HYXX.DrawingDataBean();
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             // 从x1,y1到x2,y2画一条贝塞尔曲线，更平滑(直接用mPath.lineTo也是可以的)
             // 由此就可以制作各种画笔
@@ -370,12 +362,7 @@ public class DrawView extends View {
             mY = y;
         }
         drawingDataBean.setAll(x / screenWidth, y / screenHeight, 2, time_cha.shijiancha());
-
-
-
         fasong.mSendMess_move(drawingDataBean);
-        //  Log.d("666", "简单画板:  + shijiancha---" + drawingDataBean.getTtime());
-        //mPath2.lineTo(x + 50, y + 50);
     }
 
 

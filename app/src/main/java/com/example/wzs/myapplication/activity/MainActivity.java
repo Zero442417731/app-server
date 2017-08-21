@@ -21,6 +21,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.UserDetails;
+import com.example.wzs.myapplication.network.ClientUtil;
 import com.example.wzs.myapplication.network.MyCallback;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
@@ -117,7 +118,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Override
     protected void initView() {
-
+        ClientUtil.doConnect();
     }
 
     @Override
@@ -152,16 +153,16 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 HXApplication.retrofitUtils.postData(setUserJson(), new MyCallback<UserDetails>() {
                     @Override
                     public void onSuccess(UserDetails userDetails) {
-                            UserDetails.BodyBean.ResultDataBean resultData = userDetails.getBody().getResultData();
-                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "id", resultData.getId());
-                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "nickName", resultData.getNickName());
-                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userCode", resultData.getUserCode());
-                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone", resultData.getMobile());
-                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead", resultData.getPicUrl());
-                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userSignature", resultData.getSignature());
-                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "sex", resultData.getSex());
-                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "area", resultData.getArea());
-                            SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "addVerify", resultData.getAddVerify());
+                        UserDetails.BodyBean.ResultDataBean resultData = userDetails.getBody().getResultData();
+                        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "id", resultData.getId());
+                        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "nickName", resultData.getNickName());
+                        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userCode", resultData.getUserCode());
+                        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone", resultData.getMobile());
+                        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead", resultData.getPicUrl());
+                        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userSignature", resultData.getSignature());
+                        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "sex", resultData.getSex());
+                        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "area", resultData.getArea());
+                        SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "addVerify", resultData.getAddVerify());
                     }
 
                     @Override
@@ -169,7 +170,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
                     }
                 });
-
 
 
                 FragmentBuilder.changeFragment(MineFragment.class, R.id.mFram, true, null, true);
@@ -313,8 +313,8 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     sb.append("\nPoi: ");
 
 
-                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER,"latitude",location.getLatitude()+"");
-                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER,"longitude",location.getLongitude()+"");
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "latitude", location.getLatitude() + "");
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "longitude", location.getLongitude() + "");
 
 
                     LogUtil.w("aaaaa", sb.toString());
