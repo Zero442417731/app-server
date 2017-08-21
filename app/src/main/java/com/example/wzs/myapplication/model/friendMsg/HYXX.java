@@ -8,7 +8,6 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 public class HYXX implements Serializable {
-
     /**
      * token : 单用户登录唯一标示，必需
      * friendUserId : 好友用户id
@@ -27,7 +26,7 @@ public class HYXX implements Serializable {
     private String command;
     private String paintSize;
     private String paintColor;
-
+    private List<DrawingDataBean> drawingData;
 
     public String getToken() {
         return token;
@@ -85,4 +84,69 @@ public class HYXX implements Serializable {
         this.paintColor = paintColor;
     }
 
+    public List<DrawingDataBean> getDrawingData() {
+        return drawingData;
+    }
+
+    public void setDrawingData(List<DrawingDataBean> drawingData) {
+        this.drawingData = drawingData;
+    }
+
+    public static class DrawingDataBean {
+
+        /**
+         * action : 动作, int类型：1down，2move，3up
+         * X : 起始x坐标值,  float类型
+         * Y : 起始y坐标值,  float类型
+         * Ttime : 毫秒延时.long类型
+         */
+
+        private int a;
+        private float X;
+        private float Y;
+
+        public int getA() {
+            return a;
+        }
+
+        public void setA(int a) {
+            this.a = a;
+        }
+
+        public long getT() {
+            return T;
+        }
+
+        public void setT(long t) {
+            T = t;
+        }
+
+        private long T;
+
+        public void setAll( float x, float y,int action, long ttime) {
+            this.a = action;
+            X = x;
+            Y = y;
+            T = ttime;
+        }
+
+
+        public float getX() {
+            return X;
+        }
+
+        public void setX(float x) {
+            X = x;
+        }
+
+        public float getY() {
+            return Y;
+        }
+
+        public void setY(float y) {
+            Y = y;
+        }
+
+
+    }
 }
