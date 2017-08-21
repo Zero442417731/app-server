@@ -20,7 +20,6 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.wzs.myapplication.config.Constant;
-import com.example.wzs.myapplication.dbmanger.DbManager;
 import com.example.wzs.myapplication.model.UserDetails;
 import com.example.wzs.myapplication.network.MyCallback;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
