@@ -2,6 +2,7 @@ package com.example.wzs.myapplication.dbmanger.db_dao;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by hxcs-02 on 2017/8/22.
@@ -32,6 +33,26 @@ public class FriendsList {
     private String signature;
     private String sex;
     private String area;
+
+    @Generated(hash = 1852393997)
+    public FriendsList(Long _ID, String id, String friendId, String userCode,
+            String mobilePhone, String headImgPath, String nickName,
+            String signature, String sex, String area) {
+        this._ID = _ID;
+        this.id = id;
+        this.friendId = friendId;
+        this.userCode = userCode;
+        this.mobilePhone = mobilePhone;
+        this.headImgPath = headImgPath;
+        this.nickName = nickName;
+        this.signature = signature;
+        this.sex = sex;
+        this.area = area;
+    }
+
+    @Generated(hash = 1328136898)
+    public FriendsList() {
+    }
 
     public String getId() {
         return id;
@@ -103,5 +124,13 @@ public class FriendsList {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public Long get_ID() {
+        return this._ID;
+    }
+
+    public void set_ID(Long _ID) {
+        this._ID = _ID;
     }
 }

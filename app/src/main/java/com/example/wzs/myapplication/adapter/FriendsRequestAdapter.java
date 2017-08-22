@@ -17,6 +17,7 @@ import com.example.wzs.myapplication.weight.RoundImageView;
 import com.nonecity.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,9 +32,9 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
     private YesOrNo yesorot;
     private String[] mTitles;
     private OnItemClickListener mOnItemClickListener = null;
-    private RequestList.BodyBean bodyBeanData;
-    ArrayList<RequestList.BodyBean> mlist = new ArrayList<RequestList.BodyBean>();
-    private RequestList beanData;
+    private List<RequestList.BodyBean.ResultDataBean> mlist = new ArrayList<>();
+
+
     @Override
     public void onClick(View view) {
         if (mOnItemClickListener != null) {
@@ -50,9 +51,9 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         mContext = context;
     }
 
-    public FriendsRequestAdapter(Context context, RequestList bean) {
+    public FriendsRequestAdapter(Context context, List<RequestList.BodyBean.ResultDataBean> mlist) {
         this(context);
-        this.beanData = bean;
+        this.mlist = mlist;
     }
 
     @Override
@@ -65,12 +66,12 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
     @Override
     public void onBindViewHolder(FriendsRequestHolder holder, int position) {
-        bodyBeanData=mlist.get(position);
+        RequestList.BodyBean.ResultDataBean bodyBeanData = mlist.get(position);
 
         holder.itemView.setTag(position);
         holder.imgYes.setOnClickListener(new ImgYesOrNoClickListener(position));
         holder.imgNo.setOnClickListener(new ImgYesOrNoClickListener(position));
-       // bodyBeanData = mlist.get(position);
+        // bodyBeanData = mlist.get(position);
 //        for (int i = 0; i < mlist.size(); i++) {
 //            holder.textRemake.setText(bodyBeanData.getRemark());
 //            holder.textNike.setText(bodyBeanData.getNickName());
@@ -78,7 +79,8 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 //        }
 //        holder.textFrom.setText("来源：" + "来自手机账号查找");
         for (int i = 0; i < mlist.size(); i++) {
-            holder.textFrom.setText(bodyBeanData.getResultData().get(i).getArea());
+            holder.textFrom.setText(bodyBeanData.getArea());
+            //         holder.textFrom.setText(bodyBeanData.get(i).getArea());
         }
     }
 

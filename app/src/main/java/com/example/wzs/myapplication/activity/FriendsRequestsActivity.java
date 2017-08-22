@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,12 +17,16 @@ import com.example.wzs.myapplication.model.FriendsRequestsPush;
 import com.example.wzs.myapplication.model.RequestList;
 import com.example.wzs.myapplication.network.MyCallback;
 import com.example.wzs.myapplication.utils.ActivityLauncherUtil;
+import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.example.wzs.myapplication.weight.LinearDividerItemDecoration;
 import com.nonecity.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -47,7 +50,7 @@ public class FriendsRequestsActivity extends BaseActivity implements FriendsRequ
     RelativeLayout baseActionBar;
     // FriendsRequestsPush pushben;
     private static String TAG = "FriendsRequestsActivity";
-    private RequestList listBean;
+    private List<RequestList.BodyBean.ResultDataBean> resultDataBeen;
 
     @Override
     protected int setLayoutId() {
@@ -56,56 +59,22 @@ public class FriendsRequestsActivity extends BaseActivity implements FriendsRequ
 
     @Override
     protected void initView() {
+        changeTitle.setText("好友申请");
 
     }
 
     @Override
     protected void initData() {
-
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
-        changeTitle.setText("好友申请");
-        listBean = new RequestList();
+        resultDataBeen = new ArrayList<RequestList.BodyBean.ResultDataBean>();
         sendMessage();
-        try {
-            Thread.sleep(1000);
-            adapter = new FriendsRequestAdapter(getApplicationContext(), listBean);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        }).start();
+        // LogUtil.e("resultDataBeen-----",resultDataBeen.size()+"---"+resultDataBeen.get(1).getFriendId());
         recyclviewFriends.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter = new FriendsRequestAdapter(HXApplication.mContext, resultDataBeen);
         recyclviewFriends.setAdapter(adapter);
-        // listBean = new RequestList();
 
-        //  adapter.setYesorot(this);
-
-//        recyclviewFriends.addItemDecoration(new LinearDividerItemDecoration(this, 1));
-//        recyclviewFriends.setHasFixedSize(true);
-//        adapter.setOnItemClickListener(new FriendsRequestAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-////              Toast.makeText(getApplicationContext(),""+position,Toast.LENGTH_LONG).show();
-//                Bundle bundle = new Bundle();
-////              bundle.putString("remark",pushben.getBody().getRemark() );
-////              bundle.putString("headImgPath",pushben.getBody().getHeadImgPath());
-////              bundle.putString("signature",pushben.getBody().getSignature());
-////              bundle.putString("area",pushben.getBody().getArea());
-////              bundle.putString("nickname",pushben.getBody().getNickName());
-////              bundle.putString("friendid",pushben.getBody().getFriendId());
-//                ActivityLauncherUtil.launcher(getApplicationContext(), FriendRequestsActivity.class, bundle, "userInfo");
-//            }
-//        });
+        adapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void yes(int pos) {
@@ -117,14 +86,19 @@ public class FriendsRequestsActivity extends BaseActivity implements FriendsRequ
         Toast.makeText(getApplicationContext(), "点击了 no", Toast.LENGTH_LONG).show();
     }
 
+
     private void sendMessage() {
         HXApplication.retrofitUtils.postData(userSearch(), new MyCallback<RequestList>() {
             @Override
             public void onSuccess(RequestList requestList) {
                 if (requestList.getBody().isSuccessful()) {
                     Log.d(TAG, "onSuccess: ");
-                    requestList.getBody().getResultData();
-                } else {
+                    List<RequestList.BodyBean.ResultDataBean> resultData = requestList.getBody().getResultData();
+                    resultDataBeen.addAll(resultData);
+
+
+                    adapter.notifyDataSetChanged();
+
 
                 }
             }
