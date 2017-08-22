@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.wzs.myapplication.activity.FriendsRequestsActivity;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.dbmanger.DbManager;
+import com.example.wzs.myapplication.dbmanger.db_dao.FriendID;
 import com.example.wzs.myapplication.dbmanger.db_dao.UserInfoEntity;
 import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
@@ -68,7 +69,6 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     private ArrayList<User> userArrayList = new ArrayList<>();
 
 
-
     private DbManager dbManger;
 
 
@@ -94,7 +94,7 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     private void addData() {
         String[] contactsArray = getResources().getStringArray(R.array.data);
         // String[] headArray = getResources().getStringArray(R.array.head);
-       List<UserInfoEntity> userInfoEntities = dbManger.selectFriendList();
+        List<UserInfoEntity> userInfoEntities = dbManger.selectFriendList();
 
         LogUtil.e("userInfoEntities-----", userInfoEntities.size() + "");
 
@@ -257,14 +257,19 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 
                 for (int i = 0; i < resultData.size(); i++) {
                     FriendList.BodyBean.ResultDataBean resultDataBean = resultData.get(i);
-
+               //     FriendID friendID = new FriendID(null, resultDataBean.getFriendId());
                     UserInfoEntity userInfoEntity = new UserInfoEntity(null, resultDataBean.getId(),
                             resultDataBean.getFriendId(), resultDataBean.getUserCode(),
                             resultDataBean.getMobilePhone(), resultDataBean.getHeadImgPath(),
                             resultDataBean.getNickName(), resultDataBean.getSignature(),
                             resultDataBean.getSex(), resultDataBean.getArea(), resultDataBean.getOnLine());
+
+
                     dbManger.deleteAll(UserInfoEntity.class);
                     dbManger.insertData(userInfoEntity);
+                  //  dbManger.insertData(friendID);
+
+
                 }
 
                 LogUtil.e("resultData----", resultData.size() + "");

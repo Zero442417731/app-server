@@ -7,11 +7,11 @@
     tools:context="com.example.wzs.myapplication.activity.SetPasswordActivity">
 
     <RelativeLayout
-       android:gravity="center_vertical"
         android:id="@+id/base_action_bar"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="#767670">
+        android:background="#767670"
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/title_back_img"
@@ -31,27 +31,31 @@
             android:text="dasdasdas"
             android:textColor="#e8fffb"
             android:textSize="25.3sp" />
+
         <TextView
             android:id="@+id/textview"
-            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+
         <ImageView
             android:id="@+id/more"
-            android:layout_below="@id/textview"
-            android:src="@drawable/tab_circle_n"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_alignParentRight="true"/>
-        <ImageView
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textview"
+            android:src="@drawable/news_icon_data_normal"
+            android:visibility="visible" />
+
+        <TextView
             android:id="@+id/broad"
-            android:visibility="gone"
-            android:layout_toLeftOf="@id/more"
-            android:layout_below="@id/textview"
-            android:src="@drawable/common_tab_message_s"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
+            android:layout_below="@id/textview"
+            android:layout_toLeftOf="@id/more"
+            android:background="@drawable/news_icon_quantity_normal"
+            android:gravity="center"
+            android:text="1"
+            android:visibility="visible" />
     </RelativeLayout>
 </LinearLayout>

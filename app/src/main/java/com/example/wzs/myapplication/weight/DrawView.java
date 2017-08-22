@@ -13,7 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-
+import com.example.wzs.myapplication.model.friendMsg.DrawingDataBean;
 import com.example.wzs.myapplication.model.friendMsg.HYXX;
 
 import java.io.File;
@@ -40,9 +40,9 @@ public class DrawView extends View {
     private float mX, mY;// 临时点坐标
     private float mX2, mY2;// 临时点坐标
     private TimeDifference time_cha;
-    private HYXX.DrawingDataBean drawingDataBean;
+    private DrawingDataBean drawingDataBean;
     private mSendDrawing fasong;
-    private LinkedList<HYXX.DrawingDataBean> inshuju = new LinkedList<>();
+    private LinkedList<DrawingDataBean> inshuju = new LinkedList<>();
     //Message msg;
 
 
@@ -116,7 +116,7 @@ public class DrawView extends View {
      *
      * @param indate
      */
-    private void huitu(HYXX.DrawingDataBean indate) {
+    private void huitu(DrawingDataBean indate) {
         switch (indate.getA()) {
             case 1:
                 touch_start2(indate.getX() * screenWidth, indate.getY() * screenHeight);
@@ -154,8 +154,8 @@ public class DrawView extends View {
     }
 
     //本地绘画
-    public void setCanvasDate(HYXX mdate) {
-        inshuju.addAll(mdate.getDrawingData());
+    public void setCanvasDate(List<DrawingDataBean> mdate) {
+        inshuju.addAll(mdate);
         mHandler.removeCallbacks(mRunnable);
         mHandler.postDelayed(mRunnable, 0);
     }
@@ -311,7 +311,7 @@ public class DrawView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (isb) {
-            drawingDataBean = new HYXX.DrawingDataBean();
+            drawingDataBean = new DrawingDataBean();
             float xx = event.getX();
             float yy = event.getY();
             switch (event.getAction()) {
@@ -353,7 +353,7 @@ public class DrawView extends View {
     private void touch_move(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(mY - y);
-        drawingDataBean = new HYXX.DrawingDataBean();
+        drawingDataBean = new DrawingDataBean();
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             // 从x1,y1到x2,y2画一条贝塞尔曲线，更平滑(直接用mPath.lineTo也是可以的)
             // 由此就可以制作各种画笔

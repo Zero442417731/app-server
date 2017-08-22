@@ -19,16 +19,17 @@
     </FrameLayout>
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="5dp">
 
         <ImageView
-            android:background="#00ffdd"
-            android:layout_width="20dp"
+            android:id="@+id/news_key"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="23121"
+            android:layout_margin="1dp"
+            android:background="@drawable/news_key_selector"
             android:visibility="visible" />
 
         <EditText
@@ -36,23 +37,26 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/text" />
 
 
         <ImageView
-            android:layout_marginRight="10dp"
-            android:id="@+id/eraser"
-            android:background="#00ffdd"
-            android:layout_width="20dp"
+
+            android:id="@+id/brush"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/news_brush_selector"
             android:visibility="visible" />
 
         <ImageView
 
             android:id="@+id/personMore"
-            android:background="#00ffdd"
-            android:layout_width="20dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="@drawable/news_more_selector"
             android:visibility="visible" />
 
     </LinearLayout>

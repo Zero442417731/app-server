@@ -89,6 +89,8 @@ public class UserAdapter extends BaseAdapter {
                 bundle.putString("signature", user.getSignature());
                 bundle.putString("userCode", user.getUserCode());
                 ActivityLauncherUtil.launcher(mContext, ChatActivity.class, bundle, "userInfo");
+
+
                 Toast.makeText(mContext, users.get(position).getName(), Toast.LENGTH_SHORT).show();
             }
         });

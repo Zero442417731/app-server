@@ -6,71 +6,119 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
+
+import Decoder.BASE64Decoder;
+import Decoder.BASE64Encoder;
+
 
 /**
  * Created by hxcs-02 on 2017/8/21.
  */
 
 public class ZipUtil {
-    /**
-     * 字符串的压缩
+
+
+    /***
      *
-     * @param str 待压缩的字符串
-     * @return 返回压缩后的字符串
-     * @throws IOException
+     * @Title: compress
+     * @Description: 加密
+     * @param @param paramString
+     * @param @return    设定文件
+     * @return String    返回类型
+     * @throws
      */
-    public static String compress(String str) {
-        if (null == str || str.length() <= 0) {
-            return str;
-        }
-        // 创建一个新的 byte 数组输出流
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        // 使用默认缓冲区大小创建新的输出流
-        String replace = null;
+    public static final String compress(String paramString) {
+        if (paramString == null)
+            return null;
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        ZipOutputStream zipOutputStream = null;
+        byte[] arrayOfByte;
         try {
-            GZIPOutputStream gzip = new GZIPOutputStream(out);
-            // 将 b.length 个字节写入此输出流
-            gzip.write(str.getBytes());
-            gzip.close();
-            replace = out.toString("ISO-8859-1").replace("\n", "hxcs01").replace("\r", "hxcs02");
-        } catch (Exception e) {
-            e.printStackTrace();
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            zipOutputStream = new ZipOutputStream(byteArrayOutputStream);
+            zipOutputStream.putNextEntry(new ZipEntry("0"));
+            zipOutputStream.write(paramString.getBytes());
+            zipOutputStream.closeEntry();
+            arrayOfByte = byteArrayOutputStream.toByteArray();
+        } catch (IOException localIOException5) {
+            arrayOfByte = null;
+        } finally {
+            if (zipOutputStream != null)
+                try {
+                    zipOutputStream.close();
+                } catch (IOException localIOException6) {
+                }
+            if (byteArrayOutputStream != null)
+                try {
+                    byteArrayOutputStream.close();
+                } catch (IOException localIOException7) {
+                }
         }
-        // 使用指定的 charsetName，通过解码字节将缓冲区内容转换为字符串
-        return replace;
+
+        String base = new BASE64Encoder().encode(arrayOfByte);
+        return base.replace("\n", "hxcs01").replace("\r", "hxcs02").replace("hxcs03", "\r\n") ;
     }
 
     /**
-     * 字符串的解压
-     *
-     * @param str 对字符串解压
-     * @return 返回解压缩后的字符串
-     * @throws IOException
+     * @Title: decompress
+     * @Description:解密
+     * @param @param base
+     * @param @return    设定文件
+     * @return String    返回类型
+     * @throws
      */
-    public static String unCompress(String str) {
-        if (null == str || str.length() <= 0) {
-            return str;
-        }
-        // 创建一个新的 byte 数组输出流
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        String outStr = null;
-        // 创建一个 ByteArrayInputStream，使用 buf 作为其缓冲区数组
+    @SuppressWarnings("unused")
+    public static final String decompress(String base) {
+
+        byte[] paramArrayOfByte=null;
         try {
-            ByteArrayInputStream in = new ByteArrayInputStream(str.replace("hxcs01", "\n").replace("hxcs02", "\r")
-                    .getBytes("ISO-8859-1"));
-            // 使用默认缓冲区大小创建新的输入流
-            GZIPInputStream gzip = new GZIPInputStream(in);
-            byte[] buffer = new byte[256];
-            int n = 0;
-            while ((n = gzip.read(buffer)) >= 0) {// 将未压缩数据读入字节数组
-                // 将指定 byte 数组中从偏移量 off 开始的 len 个字节写入此 byte数组输出流
-                out.write(buffer, 0, n);
-            }
-            outStr = out.toString("GBK");
-        } catch (Exception e) {
+            paramArrayOfByte = new BASE64Decoder().decodeBuffer(base.replace("hxcs01", "\n").replace("hxcs02", "\r").replace("hxcs03", "\r\n"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        // 使用指定的 charsetName，通过解码字节将缓冲区内容转换为字符串
-        return outStr;
+
+        if (paramArrayOfByte == null)
+            return null;
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        ByteArrayInputStream byteArrayInputStream = null;
+        ZipInputStream zipInputStream = null;
+        String str;
+        try {
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            byteArrayInputStream = new ByteArrayInputStream(paramArrayOfByte);
+            zipInputStream = new ZipInputStream(byteArrayInputStream);
+            ZipEntry localZipEntry = zipInputStream.getNextEntry();
+            byte[] arrayOfByte = new byte[1024];
+            int i = -1;
+            while ((i = zipInputStream.read(arrayOfByte)) != -1)
+                byteArrayOutputStream.write(arrayOfByte, 0, i);
+            str = byteArrayOutputStream.toString();
+        } catch (IOException localIOException7) {
+            str = null;
+        } finally {
+            if (zipInputStream != null)
+                try {
+                    zipInputStream.close();
+                } catch (IOException localIOException8) {
+                }
+            if (byteArrayInputStream != null)
+                try {
+                    byteArrayInputStream.close();
+                } catch (IOException localIOException9) {
+                }
+            if (byteArrayOutputStream != null)
+                try {
+                    byteArrayOutputStream.close();
+                } catch (IOException localIOException10) {
+                }
+        }
+        return str;
     }
+
+
+
 }

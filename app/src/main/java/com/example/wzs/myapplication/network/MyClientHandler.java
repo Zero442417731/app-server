@@ -96,17 +96,13 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
             //好友信息
 
             HYXX hyxx = objectMapper.readValue(body.toString(), HYXX.class);
-            String friendUserId = body.get("friendUserId").getTextValue();
+
+
             LogUtil.e("好友消息----", "------------" + hyxx.toString());
 
-            List<HYXX.DrawingDataBean> drawingData = hyxx.getDrawingData();
-            for (int i = 0; i < drawingData.size(); i++) {
-                HYXX.DrawingDataBean drawingDataBean = drawingData.get(i);
-                LogUtil.e("----X坐标-----",drawingDataBean.getX()+"");
-            }
 
 
-            EventBus.getDefault().post(new MessageEvent(friendUserId, hyxx));
+            EventBus.getDefault().post(new MessageEvent(hyxx.getFriendUserId(), hyxx));
 
 
         }

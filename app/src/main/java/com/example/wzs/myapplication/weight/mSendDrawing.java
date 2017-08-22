@@ -2,14 +2,17 @@ package com.example.wzs.myapplication.weight;
 
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.DrawModel;
+import com.example.wzs.myapplication.model.friendMsg.DrawingDataBean;
 import com.example.wzs.myapplication.model.friendMsg.HYXX;
 import com.example.wzs.myapplication.network.ClientUtil;
 import com.example.wzs.myapplication.utils.JsonBinder;
+import com.example.wzs.myapplication.utils.List2Json;
 import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.example.wzs.myapplication.utils.ZipUtil;
 
 
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +31,10 @@ public class mSendDrawing {
     /**
      * 大概16毫秒一条，申请65个空间够1000毫秒使用
      */
-    private List<HYXX.DrawingDataBean> list_drawingDataBean = new ArrayList<>();
+    private List<DrawingDataBean> list_drawingDataBean = new ArrayList<>();
 
 
-    public mSendDrawing(String drawingId, String friendId, HYXX.DrawingDataBean drawingDataBean) {
+    public mSendDrawing(String drawingId, String friendId, DrawingDataBean drawingDataBean) {
         timer = new Timer();
         this.drawingId = drawingId;
         this.friendId = friendId;
@@ -39,13 +42,13 @@ public class mSendDrawing {
         startTime();
     }
 
-    public void mSendMess_move(HYXX.DrawingDataBean date) {
+    public void mSendMess_move(DrawingDataBean date) {
         LogUtil.e("坐标------", date.getX() + "------" + date.getY());
         list_drawingDataBean.add(date);
 
     }
 
-    public void mSendMess_up(HYXX.DrawingDataBean date) {
+    public void mSendMess_up(DrawingDataBean date) {
         for (int i = 0; i < list_drawingDataBean.size(); i++) {
             LogUtil.e("_________", "==========" + list_drawingDataBean.get(i).getX() + "----" + list_drawingDataBean.get(i).getY());
         }
@@ -73,19 +76,20 @@ public class mSendDrawing {
         bodyBean.setPaintColor("4");
 
 
+        String stringZip = List2Json.toDrawStringZip(list_drawingDataBean);
 
-       // String compress = ZipUtil.compress(jsonObject.toString());
 
-        //bodyBean.setDrawingData(compress);
-
+        bodyBean.setDrawingData(stringZip);
         drawModel.setHeader(headerBean);
-
         drawModel.setBody(bodyBean);
 
         String s = jsonBinder.toJson(drawModel);
-        LogUtil.e("发送消息----", s);
 
 
+
+
+
+        LogUtil.e("发送消息------", s);
         ClientUtil.sendMessage(s);
 
         return true;
