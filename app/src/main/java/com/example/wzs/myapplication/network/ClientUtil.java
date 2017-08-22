@@ -12,12 +12,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.wzs.myapplication.config.Constant;
+import com.example.wzs.myapplication.utils.LogUtil;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -41,7 +44,7 @@ public class ClientUtil {
     private static NioEventLoopGroup group;
     private static SocketChannel socketChannel;
     private ChannelFuture cf;
-    private  static Handler mHandler = new Handler() {
+    private static Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == MSG_REC) {
@@ -50,6 +53,8 @@ public class ClientUtil {
             }
         }
     };
+    private static Bootstrap bootstrap;
+    private static ChannelFutureListener channelFutureListener = null;
 
 
     // 连接到Socket服务端
@@ -61,7 +66,7 @@ public class ClientUtil {
                 try {
                     // Client服务启动器 3.x的ClientBootstrap
                     // 改为Bootstrap，且构造函数变化很大，这里用无参构造。
-                    Bootstrap bootstrap = new Bootstrap();
+                    bootstrap = new Bootstrap();
                     // 指定EventLoopGroup
                     bootstrap.group(group);
                     // 指定channel类型
@@ -77,7 +82,7 @@ public class ClientUtil {
                     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast("linecoder",new LineBasedFrameDecoder(100000000));
+                            socketChannel.pipeline().addLast("linecoder", new LineBasedFrameDecoder(100000000));
                             socketChannel.pipeline().addLast(new StringEncoder());
                             socketChannel.pipeline().addLast(new StringDecoder());
                             //客户端的逻辑
@@ -88,11 +93,25 @@ public class ClientUtil {
                     ChannelFuture future = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
                     if (future.isSuccess()) {
                         socketChannel = (SocketChannel) future.channel();
-
                     }
+                    channelFutureListener = new ChannelFutureListener() {
+                        public void operationComplete(ChannelFuture f) throws Exception {
+                            if (f.isSuccess()) {
+                                socketChannel = (SocketChannel) f.channel();
+                                LogUtil.w("---", "重新连接服务器成功");
+                            } else {
+                                //  Log.d(Config.TAG, "重新连接服务器失败");
+                                //  3秒后重新连接
+                                f.channel().eventLoop().schedule(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        doConnect();
+                                    }
+                                }, 3, TimeUnit.SECONDS);
+                            }
+                        }
+                    };
 
-
-                    //mChannel =  cf.sync().channel();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -107,7 +126,7 @@ public class ClientUtil {
             public void run() {
                 try {
                     // Log.i(TAG, "mChannel.write sth & " + mChannel.isOpen());
-                    socketChannel.writeAndFlush(o+ System.getProperty("line.separator"));
+                    socketChannel.writeAndFlush(o + System.getProperty("line.separator"));
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -116,6 +135,25 @@ public class ClientUtil {
         });
     }
 
+    //  连接到服务端
+    public static void doConnect() {
+        // Log.d(TAG, "doConnect");
+        ChannelFuture future = null;
+        try {
+            future = bootstrap.connect(new InetSocketAddress(
+                    Constant.HOST, Constant.PORT)).sync();
+            future.addListener(channelFutureListener);
+           // ChannelFuture future = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
+            if (future.isSuccess()) {
+                socketChannel = (SocketChannel) future.channel();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //future.addListener(channelFutureListener);
+            //     Log.d(TAG, "关闭连接");
+        }
+
+    }
 
 
 }

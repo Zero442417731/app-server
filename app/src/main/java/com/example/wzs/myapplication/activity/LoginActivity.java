@@ -68,7 +68,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-                ClientUtil.connected();
+        ClientUtil.connected();
         doubleClickExitUtil = new DoubleClickExitUtil();
     }
 
@@ -94,7 +94,7 @@ public class LoginActivity extends BaseActivity {
                 name = loginName.getText().toString().trim();
                 pwd = loginPwd.getText().toString().trim();
                 ClientUtil.sendMessage(setLogin());
-             //  UserLoginInfo userLoginInfo;
+                //  UserLoginInfo userLoginInfo;
 
               /*  if (userLoginInfo.getBody().isSuccessful()) {
                     SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone", userLoginInfo.getUsername());
@@ -127,14 +127,14 @@ public class LoginActivity extends BaseActivity {
         switch (messageEvent.getFriendUserId()) {
             case EventId.USERLOGIN_SUSSES:
                 boolean successful = (boolean) messageEvent.getMessageContent();
-                Log.i(TAG, "userLogin: "+successful );
+                Log.i(TAG, "userLogin: " + successful);
                 if (successful) {
                     ActivityLauncherUtil.launcher(this, MainActivity.class);
                 }
                 break;
             case EventId.USERLOGIN_ERROR:
                 String errorMsg = (String) messageEvent.getMessageContent();
-                Log.i(TAG, "userLogin: "+errorMsg);
+                Log.i(TAG, "userLogin: " + errorMsg);
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
@@ -145,7 +145,7 @@ public class LoginActivity extends BaseActivity {
                 new Thread() {
                     public void run() {
                         new Handler(Looper.getMainLooper()).post(runnable);//在子线程中直接去new 一个handler
-                //这种情况下，Runnable对象是运行在主线程中的，不可以进行联网操作，但是可以更新UI
+                        //这种情况下，Runnable对象是运行在主线程中的，不可以进行联网操作，但是可以更新UI
                     }
                 }.start();
 

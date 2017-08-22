@@ -2,6 +2,7 @@ package com.example.wzs.myapplication.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +67,10 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     private UserAdapter mAdapter;
     private ArrayList<User> userArrayList = new ArrayList<>();
 
+
+
     private DbManager dbManger;
+
 
     @Override
     protected int setLayoutId() {
@@ -90,8 +94,7 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     private void addData() {
         String[] contactsArray = getResources().getStringArray(R.array.data);
         // String[] headArray = getResources().getStringArray(R.array.head);
-
-        List<UserInfoEntity> userInfoEntities = dbManger.selectFriendList();
+       List<UserInfoEntity> userInfoEntities = dbManger.selectFriendList();
 
         LogUtil.e("userInfoEntities-----", userInfoEntities.size() + "");
 
@@ -250,6 +253,8 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
                 friendList.getBody().getResultData();
 
                 List<FriendList.BodyBean.ResultDataBean> resultData = friendList.getBody().getResultData();
+
+
                 for (int i = 0; i < resultData.size(); i++) {
                     FriendList.BodyBean.ResultDataBean resultDataBean = resultData.get(i);
 
