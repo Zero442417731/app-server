@@ -57,8 +57,6 @@ public class mSendDrawing {
 
         DrawModel.HeaderBean headerBean = new DrawModel.HeaderBean();
         headerBean.setCode("HXCS-JC-HYXX");
-
-
         DrawModel.BodyBean bodyBean = new DrawModel.BodyBean();
         bodyBean.setToken(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
         bodyBean.setFriendUserId(friendId);
@@ -67,15 +65,12 @@ public class mSendDrawing {
         bodyBean.setCommand("2");
         bodyBean.setPaintSize("3");
         bodyBean.setPaintColor("4");
-
         bodyBean.setDrawingData(list_drawingDataBean);
-
         drawModel.setBody(bodyBean);
         drawModel.setHeader(headerBean);
         String s = jsonBinder.toJson(drawModel);
         LogUtil.e("发送消息----", s);
         ClientUtil.sendMessage(s);
-
         return true;
     }
 

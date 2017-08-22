@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.FriendsRequestsPush;
+import com.example.wzs.myapplication.model.RequestList;
 import com.example.wzs.myapplication.weight.RoundImageView;
 import com.nonecity.R;
 
@@ -30,9 +31,9 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
     private YesOrNo yesorot;
     private String[] mTitles;
     private OnItemClickListener mOnItemClickListener = null;
-    FriendsRequestsPush.BodyBean bodyBeanData;
-    ArrayList<FriendsRequestsPush.BodyBean> mlist = new ArrayList<FriendsRequestsPush.BodyBean>();
-
+    private RequestList.BodyBean bodyBeanData;
+    ArrayList<RequestList.BodyBean> mlist = new ArrayList<RequestList.BodyBean>();
+    private RequestList beanData;
     @Override
     public void onClick(View view) {
         if (mOnItemClickListener != null) {
@@ -49,9 +50,9 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         mContext = context;
     }
 
-    public FriendsRequestAdapter(Context context, FriendsRequestsPush bean) {
+    public FriendsRequestAdapter(Context context, RequestList bean) {
         this(context);
-        mlist.add(bean.getBody());
+        this.beanData = bean;
     }
 
     @Override
@@ -64,22 +65,27 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
     @Override
     public void onBindViewHolder(FriendsRequestHolder holder, int position) {
+        bodyBeanData=mlist.get(position);
+
         holder.itemView.setTag(position);
         holder.imgYes.setOnClickListener(new ImgYesOrNoClickListener(position));
         holder.imgNo.setOnClickListener(new ImgYesOrNoClickListener(position));
-//        bodyBeanData = mlist.get(position);
+       // bodyBeanData = mlist.get(position);
 //        for (int i = 0; i < mlist.size(); i++) {
 //            holder.textRemake.setText(bodyBeanData.getRemark());
 //            holder.textNike.setText(bodyBeanData.getNickName());
 //            Glide.with(mContext).load(bodyBeanData.getHeadImgPath()).into(holder.imgHead);
 //        }
 //        holder.textFrom.setText("来源：" + "来自手机账号查找");
+        for (int i = 0; i < mlist.size(); i++) {
+            holder.textFrom.setText(bodyBeanData.getResultData().get(i).getArea());
+        }
     }
 
     @Override
     public int getItemCount() {
 //        return mlist.size();
-        return 2;
+        return mlist.size();
     }
 
     public static class FriendsRequestHolder extends RecyclerView.ViewHolder {

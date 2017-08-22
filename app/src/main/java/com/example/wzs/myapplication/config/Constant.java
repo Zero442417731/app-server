@@ -36,6 +36,7 @@ public static String HXCS_JC_HYTJ="HXCS-JC-HYTJ";
 public static String HXCS_JC_HCXX="HXCS-JC-HCXX";//缓存消息
     public static String HXCS_JC_YZXX="HXCS-JC-YZXX";
     public static String HXCS_JC_YZTG="HXCS-JC-YZTG";
+    public static String HXCS_JC_QQLB="HXCS-JC-QQLB";
 /**
  * 用于存储sharedpreferences 变量名
  */

@@ -285,6 +285,8 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
         return jsonObject2.toString();
     }
 }

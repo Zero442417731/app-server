@@ -40,7 +40,6 @@ public class DbManager {
     }
     public <T> void deleteData(T t){
         DaoSession daoSession=daoMaster.newSession();
-
         daoSession.delete(t);
     }
 

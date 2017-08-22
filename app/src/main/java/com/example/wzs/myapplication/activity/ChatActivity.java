@@ -27,8 +27,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ChatActivity extends BaseActivity {
-
-
     @Bind(R.id.title_back_img)
     ImageView titleBackImg;
     @Bind(R.id.change_title)
@@ -68,9 +66,6 @@ public class ChatActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
-
-
         Bundle userInfo = getIntent().getBundleExtra("userInfo");
         id = userInfo.getString("id");
         userID = id;
@@ -92,15 +87,12 @@ public class ChatActivity extends BaseActivity {
         drawView = new DrawView(this, "11", id, 700, 700);
         drawView.setIsb(true);
         mFrame.addView(drawView);
-
-
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 
@@ -125,17 +117,13 @@ public class ChatActivity extends BaseActivity {
     @Subscribe
     public void msg(MessageEvent<DrawModel> messageEvent) {
         switch (messageEvent.getFriendUserId()) {
-
             case "c6212e4205fd4d23993d228dc75bc2d4":
-
               DrawModel.BodyBean body = messageEvent.getMessageContent().getBody();
-
                drawView.setCanvasDate(body);
                 LogUtil.e("接收到的消息-----大师兄------",messageEvent.getMessageContent().toString());
                 break;
             case "30cb481d37ac487a81fc73ec13b1beee":
                 DrawModel.BodyBean body1 = messageEvent.getMessageContent().getBody();
-
                 drawView.setCanvasDate(body1);
                 LogUtil.e("接收到的消息------二师兄-----",messageEvent.getMessageContent().toString());
                 break;
