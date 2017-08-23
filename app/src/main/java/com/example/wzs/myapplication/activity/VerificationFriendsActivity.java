@@ -123,7 +123,7 @@ public class VerificationFriendsActivity extends BaseActivity {
         JSONObject jsonObject2 = new JSONObject();
 
         try {
-            jsonObject.put("code", Constant.HXCS_JC_HYTJ);
+            jsonObject.put("code", Constant.HYTJ);
             jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
             jsonObject1.put("remark", remake);
             jsonObject1.put("friendUserId", friendId);

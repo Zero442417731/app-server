@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.utils.LogUtil;
+import com.example.wzs.myapplication.utils.UserLoginUtils;
 
 import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.bootstrap.Bootstrap;
@@ -27,6 +29,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.serialization.ClassResolvers;
@@ -57,7 +60,7 @@ public class ClientUtil {
     private static ChannelFutureListener channelFutureListener = null;
 
 
-    // 连接到Socket服务端
+   // 连接到Socket服务端
     public static void connected() {
         new Thread() {
             @Override
@@ -85,15 +88,12 @@ public class ClientUtil {
                             socketChannel.pipeline().addLast("linecoder", new LineBasedFrameDecoder(100000000));
                             socketChannel.pipeline().addLast(new StringEncoder());
                             socketChannel.pipeline().addLast(new StringDecoder());
+
                             //客户端的逻辑
                             socketChannel.pipeline().addLast("handler", new MyClientHandler());
 
                         }
                     });
-                    ChannelFuture future = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
-                    if (future.isSuccess()) {
-                        socketChannel = (SocketChannel) future.channel();
-                    }
                     channelFutureListener = new ChannelFutureListener() {
                         public void operationComplete(ChannelFuture f) throws Exception {
                             if (f.isSuccess()) {
@@ -106,11 +106,17 @@ public class ClientUtil {
                                     @Override
                                     public void run() {
                                         doConnect();
+
                                     }
                                 }, 3, TimeUnit.SECONDS);
                             }
                         }
                     };
+                    ChannelFuture future = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
+                    if (future.isSuccess()) {
+                        future.addListener(channelFutureListener);
+                        socketChannel = (SocketChannel) future.channel();
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -118,6 +124,82 @@ public class ClientUtil {
             }
         }.start();
     }
+
+
+/*    // 初始化客户端
+    public static void initClient() {
+
+        NioEventLoopGroup group = new NioEventLoopGroup();
+
+        // Client服务启动器 3.x的ClientBootstrap
+        // 改为Bootstrap，且构造函数变化很大，这里用无参构造。
+        bootstrap = new Bootstrap();
+        // 指定EventLoopGroup
+        bootstrap.group(group);
+        // 指定channel类型
+        bootstrap.channel(NioSocketChannel.class);
+        // 指定Handler
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel ch) throws Exception {
+
+                socketChannel.pipeline().addLast("linecoder", new LineBasedFrameDecoder(100000000));
+                socketChannel.pipeline().addLast(new StringEncoder());
+                socketChannel.pipeline().addLast(new StringDecoder());
+            }
+        });
+        //设置TCP协议的属性
+        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
+        bootstrap.option(ChannelOption.SO_TIMEOUT, 5000);
+
+        channelFutureListener = new ChannelFutureListener() {
+            public void operationComplete(ChannelFuture f) throws Exception {
+
+                if (f.isSuccess()) {
+                    Log.d("", "重新连接服务器成功");
+                    socketChannel = (SocketChannel) f.channel();
+                } else {
+                    Log.d("", "重新连接服务器失败");
+                    //  3秒后重新连接
+                    f.channel().eventLoop().schedule(new Runnable() {
+                        @Override
+                        public void run() {
+                            doConnect();
+                        }
+                    }, 3, TimeUnit.SECONDS);
+                }
+            }
+        };
+        ChannelFuture future = null;
+        try {
+            future = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
+            if (future.isSuccess()) {
+                future.addListener(channelFutureListener);
+                socketChannel = (SocketChannel) future.channel();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }*/
+
+   /* //  连接到服务端
+    public static void doConnect() {
+        Log.d(TAG, "doConnect");
+        ChannelFuture future = null;
+        try {
+            future = bootstrap.connect(new InetSocketAddress(
+                    Constant.HOST, Constant.PORT));
+            future.addListener(channelFutureListener);
+            sendMessage("{\"header\":{\"code\":\"HXCS-JC-YHDL\"},\"body\":{\"username\":\"17610652623\",\"password\":\"25f9e794323b453885f5181f1b624d0b\",\"deviceId\":\"865372023884106\",\"ostype\":\"1\"}}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            //future.addListener(channelFutureListener);
+            Log.d(TAG, "关闭连接");
+        }
+
+    }*/
 
     //发送数据
     public static void sendMessage(Object o) {
@@ -137,15 +219,16 @@ public class ClientUtil {
 
     //  连接到服务端
     public static void doConnect() {
-        // Log.d(TAG, "doConnect");
+        Log.d("----------", "doConnect");
         ChannelFuture future = null;
         try {
             future = bootstrap.connect(new InetSocketAddress(
                     Constant.HOST, Constant.PORT)).sync();
             future.addListener(channelFutureListener);
-           // ChannelFuture future = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
+            // ChannelFuture future = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
             if (future.isSuccess()) {
                 socketChannel = (SocketChannel) future.channel();
+                socketChannel.writeAndFlush("{\"header\":{\"code\":\"HXCS-JC-YHDL\"},\"body\":{\"username\":\"17610652623\",\"password\":\"25f9e794323b453885f5181f1b624d0b\",\"deviceId\":\"865372023884106\",\"ostype\":\"1\"}}" + System.getProperty("line.separator"));
             }
         } catch (Exception e) {
             e.printStackTrace();

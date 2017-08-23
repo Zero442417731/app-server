@@ -57,17 +57,17 @@ public class UserDetails implements Serializable {
          * resultData : {"id":"用户id","nickName":"昵称","userCode":"用户编码","signature":"个性签名","sex":"性别 男/女/","area":"地区","addVerify":"被添加时是否需要验证，0:不需要 1:需要"}
          */
 
-        private String isSuccessful;
+        private boolean isSuccessful;
         private String errorCode;
         private String errorMsg;
         private ResultDataBean resultData;
 
-        public String getIsSuccessful() {
+        public boolean isSuccessful() {
             return isSuccessful;
         }
 
-        public void setIsSuccessful(String isSuccessful) {
-            this.isSuccessful = isSuccessful;
+        public void setSuccessful(boolean successful) {
+            isSuccessful = successful;
         }
 
         public String getErrorCode() {

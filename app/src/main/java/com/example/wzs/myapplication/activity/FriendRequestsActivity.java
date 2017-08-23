@@ -97,7 +97,7 @@ public class FriendRequestsActivity extends BaseActivity {
         JSONObject jsonObject1 = new JSONObject();
         JSONObject jsonObject2 = new JSONObject();
         try {
-            jsonObject.put("code", Constant.HXCS_JC_YZTG);
+            jsonObject.put("code", Constant.YZTG);
             jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
             jsonObject.put("friendid", friendid);
             jsonObject1.put("state", state);

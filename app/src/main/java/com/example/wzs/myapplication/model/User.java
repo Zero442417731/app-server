@@ -5,9 +5,7 @@ import com.nonecity.R;
 
 import java.io.Serializable;
 
-/**
- * Created by Administrator on 2016/1/8.
- */
+
 public class User implements Serializable {
     private String id;
     private String friendId;

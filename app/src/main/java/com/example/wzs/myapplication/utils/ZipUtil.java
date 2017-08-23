@@ -30,25 +30,27 @@ public class ZipUtil {
      * @return String    返回类型
      * @throws
      */
-    public static final String compress(String paramString) {
-        if (paramString == null)
-            return null;
-        ByteArrayOutputStream byteArrayOutputStream = null;
-        ZipOutputStream zipOutputStream = null;
-        byte[] arrayOfByte;
+    public static String compress(String str){
+        ByteArrayOutputStream byteArrayOutputStream =null;
+
+        GZIPOutputStream gzipOutputStream =null;
         try {
+            if (str == null || str.length() == 0) {
+                return str;
+            }
             byteArrayOutputStream = new ByteArrayOutputStream();
-            zipOutputStream = new ZipOutputStream(byteArrayOutputStream);
-            zipOutputStream.putNextEntry(new ZipEntry("0"));
-            zipOutputStream.write(paramString.getBytes());
-            zipOutputStream.closeEntry();
-            arrayOfByte = byteArrayOutputStream.toByteArray();
+            gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream);
+            gzipOutputStream.write(str.getBytes());
+            gzipOutputStream.close();
+
+            String base = new BASE64Encoder().encode(byteArrayOutputStream.toByteArray());
+            return base.replace("\n", "hxcs01").replace("\r", "hxcs02").replace("hxcs03", "\r\n") ;
         } catch (IOException localIOException5) {
-            arrayOfByte = null;
+            return null;
         } finally {
-            if (zipOutputStream != null)
+            if (gzipOutputStream != null)
                 try {
-                    zipOutputStream.close();
+                    gzipOutputStream.close();
                 } catch (IOException localIOException6) {
                 }
             if (byteArrayOutputStream != null)
@@ -57,9 +59,6 @@ public class ZipUtil {
                 } catch (IOException localIOException7) {
                 }
         }
-
-        String base = new BASE64Encoder().encode(arrayOfByte);
-        return base.replace("\n", "hxcs01").replace("\r", "hxcs02").replace("hxcs03", "\r\n") ;
     }
 
     /**
@@ -77,7 +76,6 @@ public class ZipUtil {
         try {
             paramArrayOfByte = new BASE64Decoder().decodeBuffer(base.replace("hxcs01", "\n").replace("hxcs02", "\r").replace("hxcs03", "\r\n"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -85,24 +83,25 @@ public class ZipUtil {
             return null;
         ByteArrayOutputStream byteArrayOutputStream = null;
         ByteArrayInputStream byteArrayInputStream = null;
-        ZipInputStream zipInputStream = null;
+        GZIPInputStream  gzipInputStream = null;
         String str;
         try {
             byteArrayOutputStream = new ByteArrayOutputStream();
             byteArrayInputStream = new ByteArrayInputStream(paramArrayOfByte);
-            zipInputStream = new ZipInputStream(byteArrayInputStream);
-            ZipEntry localZipEntry = zipInputStream.getNextEntry();
+            gzipInputStream = new GZIPInputStream(byteArrayInputStream);
+
             byte[] arrayOfByte = new byte[1024];
-            int i = -1;
-            while ((i = zipInputStream.read(arrayOfByte)) != -1)
-                byteArrayOutputStream.write(arrayOfByte, 0, i);
+            int n;
+            while ((n = gzipInputStream.read(arrayOfByte))>= 0) {
+                byteArrayOutputStream.write(arrayOfByte, 0, n);
+            }
             str = byteArrayOutputStream.toString();
         } catch (IOException localIOException7) {
             str = null;
         } finally {
-            if (zipInputStream != null)
+            if (gzipInputStream != null)
                 try {
-                    zipInputStream.close();
+                    gzipInputStream.close();
                 } catch (IOException localIOException8) {
                 }
             if (byteArrayInputStream != null)
@@ -118,7 +117,6 @@ public class ZipUtil {
         }
         return str;
     }
-
 
 
 }

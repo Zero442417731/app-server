@@ -506,26 +506,47 @@ public class PersonDataActivity extends BaseActivity implements ActionSheet.Menu
     }
 
     private void upload(String path) {
-        HXApplication.retrofitUtils.upload(path, SharedPreferencesUtil.getString(PersonDataActivity.this, "token"), DateUtil.getNowTime(), new IUpLoad<UploadHead>() {
+        Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
+        options.config = new BitmapFactory.Options().inPreferredConfig;
+        Tiny.getInstance().source(file).asFile().withOptions(options).compress(new FileCallback() {
             @Override
-            public void onSuccess(Response<ResponseBody> responseBody) {
-                if (responseBody.isSuccessful()) {
-                    LogUtil.e("上传文件--------", "成功");
-                    ToastUtil.showToast("上传头像成功");
+            public void callback(boolean isSuccess, String outfile) {
+                if (!isSuccess) {
+                    return;
                 } else {
-                    LogUtil.e("上传文件--------", "message" + responseBody.message());
-                    LogUtil.e("上传文件--------", "body" + responseBody.body());
-                    LogUtil.e("上传文件--------", "toString" + responseBody.toString());
-                    LogUtil.e("上传文件--------", "headers" + responseBody.headers());
-                    LogUtil.e("上传文件--------", "raw" + responseBody.raw());
-                    LogUtil.e("上传文件--------", "errorBody" + responseBody.errorBody());
+                    //在手机相册中显示刚拍摄的图片
+                    LogUtil.e("压缩地址----", outfile);
+                    File file = new File(outfile);
+                    LogUtil.e("file----", file.getPath());
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(file);
+                    mediaScanIntent.setData(contentUri);
+                    sendBroadcast(mediaScanIntent);
+                    HXApplication.retrofitUtils.upload(outfile, SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"), DateUtil.getNowTime(), new IUpLoad<UploadHead>() {
+                        @Override
+                        public void onSuccess(Response<ResponseBody> responseBody) {
+                            if (responseBody.isSuccessful()) {
+                                LogUtil.e("上传文件--------", "成功");
+                            } else {
+                                LogUtil.e("上传文件--------", "message" + responseBody.message());
+                                LogUtil.e("上传文件--------", "body" + responseBody.body());
+                                LogUtil.e("上传文件--------", "toString" + responseBody.toString());
+                                LogUtil.e("上传文件--------", "headers" + responseBody.headers());
+                                LogUtil.e("上传文件--------", "raw" + responseBody.raw());
+                                LogUtil.e("上传文件--------", "errorBody" + responseBody.errorBody());
+                            }
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            LogUtil.e("上传文件--------", "失败2");
+                        }
+                    });
+
                 }
+
             }
 
-            @Override
-            public void onError(String msg) {
-                LogUtil.e("上传文件--------", msg);
-            }
         });
     }
 

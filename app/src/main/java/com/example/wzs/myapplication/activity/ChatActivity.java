@@ -161,6 +161,19 @@ public class ChatActivity extends BaseActivity {
                 LogUtil.e("接收到的消息------二师兄-----", messageEvent.getMessageContent().toString());
 
                 break;
+            case "97ac22b7b9dd4c208070dc6f764266bf":
+
+                HYXX body2 = messageEvent.getMessageContent();
+
+                String drawingData2 = body2.getDrawingData();
+
+
+                List<DrawingDataBean> list3 = List2Json.fromDrawStringZip(drawingData2);
+
+                drawView.setCanvasDate(list3);
+                LogUtil.e("接收到的消息------二师兄-----", messageEvent.getMessageContent().toString());
+
+                break;
 
 
         }

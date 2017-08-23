@@ -115,7 +115,7 @@ public class FriendsRequestsActivity extends BaseActivity implements FriendsRequ
         JSONObject jsonObject1 = new JSONObject();
         JSONObject jsonObject2 = new JSONObject();
         try {
-            jsonObject.put("code", Constant.HXCS_JC_QQLB);
+            jsonObject.put("code", Constant.QQLB);
             jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
             jsonObject2.put("header", jsonObject);
             jsonObject2.put("body", jsonObject1);

@@ -28,19 +28,12 @@ public class UserAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<User> users;
 
-    public UserAdapter(Context context) {
+    public UserAdapter(Context context,ArrayList<User> users) {
         this.mContext = context;
-        users = new ArrayList<>();
+      this.users = users;
     }
 
-    public ArrayList<User> getUsers() {
-        return users;
-    }
 
-    public void setData(List<User> data) {
-        this.users.clear();
-        this.users.addAll(data);
-    }
 
 
     @Override

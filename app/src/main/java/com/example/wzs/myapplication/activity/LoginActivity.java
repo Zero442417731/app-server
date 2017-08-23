@@ -10,10 +10,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
 import com.example.wzs.myapplication.model.UserLoginInfo;
 import com.example.wzs.myapplication.utils.MD5Util;
+import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.example.wzs.myapplication.utils.ToastUtil;
 import com.nonecity.R;
 import com.example.wzs.myapplication.application.HXApplication;
@@ -129,6 +131,8 @@ public class LoginActivity extends BaseActivity {
                 boolean successful = (boolean) messageEvent.getMessageContent();
                 Log.i(TAG, "userLogin: " + successful);
                 if (successful) {
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER_PWD,"name",name);
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER_PWD,"pwd",pwd);
                     ActivityLauncherUtil.launcher(this, MainActivity.class);
                 }
                 break;

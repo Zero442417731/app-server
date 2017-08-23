@@ -77,6 +77,29 @@ public class MineFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        HXApplication.retrofitUtils.postData(setUserJson(), new MyCallback<UserDetails>() {
+            @Override
+            public void onSuccess(UserDetails userDetails) {
+
+                if (userDetails.getBody().isSuccessful()) {
+                    UserDetails.BodyBean.ResultDataBean resultData = userDetails.getBody().getResultData();
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "id", resultData.getId());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "nickName", resultData.getNickName());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userCode", resultData.getUserCode());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "phone", resultData.getMobile());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead", resultData.getPicUrl());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userSignature", resultData.getSignature());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "sex", resultData.getSex());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "area", resultData.getArea());
+                    SharedPreferencesUtil.setStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "addVerify", resultData.getAddVerify());
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
         String userHead = SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "userHead");
 
         LogUtil.e("userhead", userHead);
@@ -136,5 +159,19 @@ public class MineFragment extends BaseFragment {
             ex.printStackTrace();
         }
         return null;
+    }
+    public String setUserJson() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject1 = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        try {
+            jsonObject.put("code", "HXCS-JC-YHXX");
+            jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
+            jsonObject2.put("header", jsonObject);
+            jsonObject2.put("body", jsonObject1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject2.toString();
     }
 }

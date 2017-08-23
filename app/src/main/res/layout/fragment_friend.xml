@@ -4,31 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<RelativeLayout
-    android:id="@+id/new_friend"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="新的好友"
-        android:layout_margin="10dp"
-        android:textColor="@color/app_black"
-        android:textSize="18sp" />
+    <RelativeLayout
+        android:id="@+id/new_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:text="0"
-        android:textColor="@color/liji_material_red_500"
-        android:textSize="12sp"
-       android:gravity="center"
-        android:id="@+id/text_add_friends_not_read_number"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="新的好友"
+            android:textColor="@color/app_black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_add_friends_not_read_number"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/liji_material_red_500"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
