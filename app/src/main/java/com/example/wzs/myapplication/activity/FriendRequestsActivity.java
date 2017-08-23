@@ -13,7 +13,9 @@ import com.example.wzs.myapplication.application.HXApplication;
 import com.example.wzs.myapplication.base.BaseActivity;
 import com.example.wzs.myapplication.config.Constant;
 import com.example.wzs.myapplication.model.AddFriendsResponce;
+import com.example.wzs.myapplication.model.RequestList;
 import com.example.wzs.myapplication.network.MyCallback;
+import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
 import com.example.wzs.myapplication.weight.RoundImageView;
 import com.nonecity.R;
@@ -50,6 +52,13 @@ public class FriendRequestsActivity extends BaseActivity {
     LinearLayout lineYesOrNo;
     @Bind(R.id.text_friends_status)
     TextView textFriendsStatus;
+    @Bind(R.id.text_remake_info)
+    TextView textRemarkInfo;
+    @Bind(R.id.title_back_img)
+    ImageView titleBackImg;
+    @Bind(R.id.change_title)
+    TextView changeTitle;
+    private RequestList.BodyBean resultDataBean;
 
     @Override
     protected int setLayoutId() {
@@ -58,38 +67,38 @@ public class FriendRequestsActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        changeTitle.setText("好友申请");
     }
 
     @Override
     protected void initData() {
         mbundle = this.getIntent().getBundleExtra("userInfo");
+        friendid = mbundle.getString("friendid");
+        getMessgae();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        textArea.setText(mbundle.getString("area"));
-        textNikeName.setText(mbundle.getString("nickname"));
-        Glide.with(getApplicationContext()).load(mbundle.getString("headImgPath")).into(imgHead);
-        friendid = mbundle.getString("friendid");
-//textFrom.setText(mbundle.getString(""));
     }
 
-    @OnClick({R.id.btn_add_friends_no, R.id.btn_add_friends_yes})
+    @OnClick({R.id.btn_add_friends_no, R.id.btn_add_friends_yes, R.id.title_back_img})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_add_friends_no:
+                Toast.makeText(getApplicationContext(), "1234", Toast.LENGTH_LONG).show();
                 sendMessage(2);
                 break;
             case R.id.btn_add_friends_yes:
                 sendMessage(1);
                 break;
+            case R.id.title_back_img:
+                finish();
+                break;
             default:
                 break;
         }
-
     }
 
     private String userSearch(int state) {
@@ -99,11 +108,10 @@ public class FriendRequestsActivity extends BaseActivity {
         try {
             jsonObject.put("code", Constant.YZTG);
             jsonObject1.put("token", SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
-            jsonObject.put("friendid", friendid);
+            jsonObject1.put("friendId", friendid);
             jsonObject1.put("state", state);
             jsonObject2.put("header", jsonObject);
             jsonObject2.put("body", jsonObject1);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -114,21 +122,42 @@ public class FriendRequestsActivity extends BaseActivity {
         HXApplication.retrofitUtils.postData(userSearch(state), new MyCallback<AddFriendsResponce>() {
             @Override
             public void onSuccess(AddFriendsResponce addFriendsResponce) {
+                LogUtil.e(TAG, addFriendsResponce.getBody().getErrorMsg());
                 if (addFriendsResponce.getBody().isSuccessful()) {
-                    resultData = addFriendsResponce.getBody().getResultData();
-                    if (resultData.equals(1)) {
-                        Toast.makeText(getApplicationContext(), "成功", Toast.LENGTH_LONG).show();
-                        lineYesOrNo.setVisibility(View.GONE);
-                        textFriendsStatus.setText(View.VISIBLE);
-                        if (state == 1) {
-                            textFriendsStatus.setText("已同意");
-                        } else {
-                            textFriendsStatus.setText("已拒绝");
-                        }
+                    switch (addFriendsResponce.getBody().getResultData()) {
+                        case 1:
+                            textFriendsStatus.setVisibility(View.VISIBLE);
+                            btnAddFriendsNo.setVisibility(View.GONE);
+                            btnAddFriendsYes.setVisibility(View.GONE);
+                            switch (state) {
+                                case 1://添加好友成功同意
+                                    textFriendsStatus.setText("已同意");
+                                    break;
+                                case 2:
+                                    textFriendsStatus.setText("已拒绝添加好友");
+                                    break;
+                            }
+                            // Toast.makeText(getApplicationContext(),"已添加成功",Toast.LENGTH_LONG).show();
+                            break;
+                        case 0:
+                            textFriendsStatus.setVisibility(View.VISIBLE);
+                            btnAddFriendsNo.setVisibility(View.GONE);
+                            btnAddFriendsYes.setVisibility(View.GONE);
+                            switch (state) {
+                                case 1:
+                                    textFriendsStatus.setText("添加好友失败");
+                                    break;
+                                case 2:
+                                    textFriendsStatus.setText("拒绝添加好友失败");
+                                    break;
+                                default:
+                                    break;
+                            }
 
-
-                    } else {
-                        Toast.makeText(getApplicationContext(), "" + addFriendsResponce.getBody().getErrorMsg(), Toast.LENGTH_LONG).show();
+                            //     Toast.makeText(getApplicationContext(),"已添加成功",Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -138,5 +167,31 @@ public class FriendRequestsActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void getMessgae() {
+        //  resultDataBean = new RequestList.BodyBean();
+        // LogUtil.e(TAG,""+resultDataBean.getResultData().size());
+        Glide.with(getApplicationContext()).load(mbundle.getString("headImage")).into(imgHead);
+        textArea.setText(mbundle.getString("area"));
+        textFrom.setText("" + "通过ID查找");
+        textNikeName.setText(mbundle.getString("nikename"));
+        textRemarkInfo.setText(mbundle.getString("remark"));
+        switch (mbundle.getInt("state")) {
+            case 0:
+                textFriendsStatus.setVisibility(View.GONE);
+                btnAddFriendsYes.setVisibility(View.VISIBLE);
+                btnAddFriendsNo.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                //验证已通过
+                btnAddFriendsNo.setVisibility(View.GONE);
+                btnAddFriendsYes.setVisibility(View.GONE);
+
+                textFriendsStatus.setVisibility(View.VISIBLE);
+                textFriendsStatus.setText("已通过");
+                break;
+
+        }
     }
 }

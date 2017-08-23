@@ -66,11 +66,10 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     @Bind(R.id.text_add_friends_not_read_number)
     TextView not_read_number;
     private UserAdapter mAdapter;
-    private ArrayList<User> userArrayList;
+    private ArrayList<User> userArrayList = new ArrayList<>();
 
 
     private DbManager dbManger;
-    private List<UserInfoEntity> userInfoEntities;
 
 
     @Override
@@ -85,28 +84,79 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 
     @Override
     protected void initData() {
-        userArrayList = new ArrayList<>();
         dbManger = new DbManager();
-
         getFriend();
         addData();
-        init();
         mListview.setOnScrollListener(this);
+        init();
     }
 
     private void addData() {
         String[] contactsArray = getResources().getStringArray(R.array.data);
         // String[] headArray = getResources().getStringArray(R.array.head);
-        userInfoEntities = dbManger.selectFriendList();
+        List<UserInfoEntity> userInfoEntities = dbManger.selectFriendList();
+
+        LogUtil.e("userInfoEntities-----", userInfoEntities.size() + "");
+
+        for (int i = 0; i < userInfoEntities.size(); i++) {
+            UserInfoEntity resultDataBean = userInfoEntities.get(i);
+            User user = new User();
+            user.setName(resultDataBean.getNickName());
+            user.setFriendId(resultDataBean.getFriendId());
+            user.setSex(resultDataBean.getSex());
+            user.setSignature(resultDataBean.getSignature());
+            user.setHeadImgPath(resultDataBean.getHeadImgPath());
+            user.setId(resultDataBean.getId());
+            user.setMobilePhone(resultDataBean.getMobilePhone());
+            user.setUserCode(resultDataBean.getUserCode());
+            LogUtil.e("user_name-----", user.getName());
+            user.setArea(resultDataBean.getArea());
+            String firstSpell = ChineseToEnglish.getFirstSpell(userInfoEntities.get(i).getNickName());
+            String substring = firstSpell.substring(0, 1).toUpperCase();
+            user.setHeaderWord(substring);
+            if (substring.matches("[A-Z]")) {
+                user.setLetter(substring);
+            } else {
+                user.setLetter("#");
+            }
+            userArrayList.add(user);
+
+        }
+
+/*
+        //模拟添加数据到Arraylist
+        int length = contactsArray.length;
+        for (int i = 0; i < length; i++) {
+            User user = new User();
+            user.setName(contactsArray[i]);
+            String firstSpell = ChineseToEnglish.getFirstSpell(contactsArray[i]);
+            String substring = firstSpell.substring(0, 1).toUpperCase();
+            user.setHeaderWord(substring);
+            if (substring.matches("[A-Z]")) {
+                user.setLetter(substring);
+            } else {
+                user.setLetter("#");
+            }
+            userArrayList.add(user);
+        }*/
+/*
+
+        for (int i = 0; i < headArray.length; i++) {
+            User user = new User();
+            user.setName(headArray[i]);
+            user.setLetter("@");
+            userArrayList.add(user);
+        }
+*/
 
     }
 
 
     @Subscribe
-    public void userAdd(MessageEvent<YZXX> messageEvent) {
+    public void userLogin(MessageEvent messageEvent) {
         switch (messageEvent.getFriendUserId()) {
             case EventId.USER_TS:
-                YZXX messageContent = messageEvent.getMessageContent();
+                YZXX messageContent = (YZXX) messageEvent.getMessageContent();
                 String friendId = messageContent.getFriendId();
                 LogUtil.e("eventbus", "userLogin: " + friendId);
                 if (messageContent.getFriendId() != null) {
@@ -116,18 +166,18 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
                 break;
         }
 
-    }
 
+    }
 
     private void init() {
         //  rel_new_friends.setVisibility(View.GONE);
         //排序
         Collections.sort(userArrayList, new CompareSort());
         //设置数据
-        mAdapter = new UserAdapter(HXApplication.mContext, userArrayList);
-
-        mListview.setAdapter(mAdapter);
+        mAdapter = new UserAdapter(HXApplication.mContext);
+        mAdapter.setData(userArrayList);
         mAdapter.notifyDataSetChanged();
+        mListview.setAdapter(mAdapter);
 
         //设置回调
         sideBarView.setOnLetterSelectListen(this);
@@ -204,42 +254,23 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 
                 List<FriendList.BodyBean.ResultDataBean> resultData = friendList.getBody().getResultData();
 
+
                 for (int i = 0; i < resultData.size(); i++) {
                     FriendList.BodyBean.ResultDataBean resultDataBean = resultData.get(i);
-                    User user = new User();
-                    user.setName(resultDataBean.getNickName());
-                    user.setFriendId(resultDataBean.getFriendId());
-                    user.setSex(resultDataBean.getSex());
-                    user.setSignature(resultDataBean.getSignature());
-                    user.setHeadImgPath(resultDataBean.getHeadImgPath());
-                    user.setId(resultDataBean.getId());
-                    user.setMobilePhone(resultDataBean.getMobilePhone());
-                    user.setUserCode(resultDataBean.getUserCode());
-                    LogUtil.e("user_name-----", user.getName());
-                    user.setArea(resultDataBean.getArea());
-                    String firstSpell = ChineseToEnglish.getFirstSpell(resultDataBean.getNickName());
-                    if (firstSpell.length() > 0) {
-                        String substring = firstSpell.substring(0, 1).toUpperCase();
-                        user.setHeaderWord(substring);
+               //     FriendID friendID = new FriendID(null, resultDataBean.getFriendId());
+                    UserInfoEntity userInfoEntity = new UserInfoEntity(null, resultDataBean.getId(),
+                            resultDataBean.getFriendId(), resultDataBean.getUserCode(),
+                            resultDataBean.getMobilePhone(), resultDataBean.getHeadImgPath(),
+                            resultDataBean.getNickName(), resultDataBean.getSignature(),
+                            resultDataBean.getSex(), resultDataBean.getArea(), resultDataBean.getOnLine());
 
-                        //数据库插数据
-                        UserInfoEntity userInfoEntity = new UserInfoEntity(null, resultDataBean.getId(),
-                                resultDataBean.getFriendId(), resultDataBean.getUserCode(),
-                                resultDataBean.getMobilePhone(), resultDataBean.getHeadImgPath(),
-                                resultDataBean.getNickName(), resultDataBean.getSignature(),
-                                resultDataBean.getSex(), resultDataBean.getArea(), resultDataBean.getOnLine());
-                        dbManger.deleteAll(UserInfoEntity.class);
-                        dbManger.insertData(userInfoEntity);
-                        if (substring.matches("[A-Z]")) {
-                            user.setLetter(substring);
-                        } else {
-                            user.setLetter("#");
-                        }
-                        //联系人列表
-                        userArrayList.add(user);
-                    }
+
+                    dbManger.deleteAll(UserInfoEntity.class);
+                    dbManger.insertData(userInfoEntity);
+                  //  dbManger.insertData(friendID);
+
+
                 }
-                mAdapter.notifyDataSetChanged();
 
                 LogUtil.e("resultData----", resultData.size() + "");
 

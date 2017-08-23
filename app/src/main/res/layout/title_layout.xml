@@ -33,6 +33,7 @@
             android:textSize="25.3sp" />
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,10 +46,11 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/textview"
             android:src="@drawable/news_icon_data_normal"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/broad"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/textview"
@@ -56,6 +58,6 @@
             android:background="@drawable/news_icon_quantity_normal"
             android:gravity="center"
             android:text="1"
-            android:visibility="visible" />
+            android:visibility="invisible" />
     </RelativeLayout>
 </LinearLayout>

@@ -60,7 +60,15 @@ public class AddFriendsResponce implements Serializable {
         private boolean isSuccessful;
         private String errorCode;
         private String errorMsg;
-        private String resultData;
+        private int resultData;
+
+        public int getResultData() {
+            return resultData;
+        }
+
+        public void setResultData(int resultData) {
+            this.resultData = resultData;
+        }
 
         public boolean isSuccessful() {
             return isSuccessful;
@@ -86,12 +94,5 @@ public class AddFriendsResponce implements Serializable {
             this.errorMsg = errorMsg;
         }
 
-        public String getResultData() {
-            return resultData;
-        }
-
-        public void setResultData(String resultData) {
-            this.resultData = resultData;
-        }
     }
 }

@@ -48,13 +48,13 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
         ctx.channel().eventLoop().schedule(new Runnable() {
             @Override
             public void run() {
-                ClientUtil.doConnect();
-
+            ClientUtil.doConnect();
             }
         }, 2, TimeUnit.SECONDS);
         ctx.close();
         super.channelInactive(ctx);
     }
+
 
 
     @Override
@@ -65,10 +65,9 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
         String code = jsonNode.get("header").get("code").getTextValue();
         JsonNode body = jsonNode.get("body");
 
+        //Log.d("header",header.get("code").getTextValue().toString());
+        // Log.d("body",body.get("isSuccessful").getBooleanValue()+"");
 
-        switch (code) {
-
-        }
 
         if (code.equals("HXCS-JC-YHDL")) {
             //用户登录
@@ -100,6 +99,7 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
 
 
             LogUtil.e("好友消息----", "------------" + hyxx.toString());
+
 
 
             EventBus.getDefault().post(new MessageEvent(hyxx.getFriendUserId(), hyxx));
