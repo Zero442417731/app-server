@@ -94,14 +94,8 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
             Log.d("body", yzxx.getFriendId());
         } else if (code.equals("HXCS-JC-HYXX")) {
             //好友信息
-
             HYXX hyxx = objectMapper.readValue(body.toString(), HYXX.class);
-
-
             LogUtil.e("好友消息----", "------------" + hyxx.toString());
-
-
-
             EventBus.getDefault().post(new MessageEvent(hyxx.getFriendUserId(), hyxx));
 
 

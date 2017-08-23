@@ -8,7 +8,7 @@ import java.util.List;
  * 15.	HXCS-JC-QQLB  用户好友请求列表
  */
 
-public class RequestList implements Serializable {
+public  class RequestList implements Serializable {
 
     /**
      * header : {"code":"HXCS-JC-QQLB"}
@@ -120,7 +120,24 @@ public class RequestList implements Serializable {
             private String signature;
             private String sex;
             private String area;
-            private String state;
+            private int state;
+            private String remark;
+
+            public String getRemark() {
+                return remark;
+            }
+
+            public void setRemark(String remark) {
+                this.remark = remark;
+            }
+
+            public int getState() {
+                return state;
+            }
+
+            public void setState(int state) {
+                this.state = state;
+            }
 
             public String getId() {
                 return id;
@@ -202,13 +219,7 @@ public class RequestList implements Serializable {
                 this.area = area;
             }
 
-            public String getState() {
-                return state;
-            }
 
-            public void setState(String state) {
-                this.state = state;
-            }
         }
     }
 }

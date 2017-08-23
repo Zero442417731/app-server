@@ -165,8 +165,6 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
                 }
                 break;
         }
-
-
     }
 
     private void init() {
@@ -251,10 +249,7 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
             @Override
             public void onSuccess(FriendList friendList) {
                 friendList.getBody().getResultData();
-
                 List<FriendList.BodyBean.ResultDataBean> resultData = friendList.getBody().getResultData();
-
-
                 for (int i = 0; i < resultData.size(); i++) {
                     FriendList.BodyBean.ResultDataBean resultDataBean = resultData.get(i);
                //     FriendID friendID = new FriendID(null, resultDataBean.getFriendId());
@@ -263,13 +258,9 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
                             resultDataBean.getMobilePhone(), resultDataBean.getHeadImgPath(),
                             resultDataBean.getNickName(), resultDataBean.getSignature(),
                             resultDataBean.getSex(), resultDataBean.getArea(), resultDataBean.getOnLine());
-
-
                     dbManger.deleteAll(UserInfoEntity.class);
                     dbManger.insertData(userInfoEntity);
                   //  dbManger.insertData(friendID);
-
-
                 }
 
                 LogUtil.e("resultData----", resultData.size() + "");

@@ -21,6 +21,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.netty.handler.codec.http.HttpObjectDecoder;
 
 /**
  * Created by hxcs-04 on 2017/8/16.
@@ -71,16 +72,34 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         holder.itemView.setTag(position);
         holder.imgYes.setOnClickListener(new ImgYesOrNoClickListener(position));
         holder.imgNo.setOnClickListener(new ImgYesOrNoClickListener(position));
-        // bodyBeanData = mlist.get(position);
-//        for (int i = 0; i < mlist.size(); i++) {
-//            holder.textRemake.setText(bodyBeanData.getRemark());
-//            holder.textNike.setText(bodyBeanData.getNickName());
-//            Glide.with(mContext).load(bodyBeanData.getHeadImgPath()).into(holder.imgHead);
-//        }
-//        holder.textFrom.setText("来源：" + "来自手机账号查找");
+
         for (int i = 0; i < mlist.size(); i++) {
             holder.textFrom.setText(bodyBeanData.getArea());
             //         holder.textFrom.setText(bodyBeanData.get(i).getArea());
+            holder.textNike.setText(bodyBeanData.getNickName());
+            holder.textRemake.setText("备注：" + bodyBeanData.getRemark());
+            holder.textFrom.setText("来源：" + "通过手机号查找");
+            Glide.with(mContext).load(bodyBeanData.getHeadImgPath()).into(holder.imgHead);
+            switch (bodyBeanData.getState()) {
+                /**
+                 * e" : "状态 0:好友关系待验证 1:验证通过 2:屏蔽好友"
+                 */
+                case 1:
+                    holder.lineYesOrNo.setVisibility(View.GONE);
+                    holder.lineFriendsStatus.setVisibility(View.VISIBLE);
+                    holder.textFriendsStatus.setText("已通过");
+                    break;
+                case 2:
+//屏蔽好友操作
+                    break;
+                case 0:
+//                    holder.lineYesOrNo.setVisibility(View.GONE);
+//                    holder.lineFriendsStatus.setVisibility(View.VISIBLE);
+//                    holder.textFriendsStatus.setText("待验证");
+                    holder.lineYesOrNo.setVisibility(View.VISIBLE);
+                    holder.lineFriendsStatus.setVisibility(View.GONE);
+                    break;
+            }
         }
     }
 
@@ -99,7 +118,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         TextView textRemake;
         @Bind(R.id.text_from)
         TextView textFrom;
-        @Bind(R.id.line_yes_or_no)
+        @Bind(R.id.line_yes_or_not)
         LinearLayout lineYesOrNo;
         @Bind(R.id.item)
         LinearLayout item;
@@ -107,6 +126,10 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         ImageView imgYes;
         @Bind(R.id.img_no)
         ImageView imgNo;
+        @Bind(R.id.line_friends_status)
+        LinearLayout lineFriendsStatus;
+        @Bind(R.id.text_friends_status)
+        TextView textFriendsStatus;
 
         public FriendsRequestHolder(View itemView) {
             super(itemView);
