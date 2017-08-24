@@ -21,8 +21,8 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        DrawingDataBeanDao.createTable(db, ifNotExists);
         FriendMsgDao.createTable(db, ifNotExists);
+        DrawingDataBeanDao.createTable(db, ifNotExists);
         UserInfoEntityDao.createTable(db, ifNotExists);
         FriendIDDao.createTable(db, ifNotExists);
         FriendsListDao.createTable(db, ifNotExists);
@@ -30,8 +30,8 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        DrawingDataBeanDao.dropTable(db, ifExists);
         FriendMsgDao.dropTable(db, ifExists);
+        DrawingDataBeanDao.dropTable(db, ifExists);
         UserInfoEntityDao.dropTable(db, ifExists);
         FriendIDDao.dropTable(db, ifExists);
         FriendsListDao.dropTable(db, ifExists);
@@ -53,8 +53,8 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(DrawingDataBeanDao.class);
         registerDaoClass(FriendMsgDao.class);
+        registerDaoClass(DrawingDataBeanDao.class);
         registerDaoClass(UserInfoEntityDao.class);
         registerDaoClass(FriendIDDao.class);
         registerDaoClass(FriendsListDao.class);

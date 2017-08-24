@@ -102,25 +102,20 @@ public class ClientUtil {
 
             ChannelFuture future = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
             if (future.isSuccess()) {
-
                 socketChannel = (SocketChannel) future.channel();
-            } else {
                 while (true) {
                     try {
                         if (socketChannel != null && !socketChannel.isActive()) {
                             ChannelFuture channelFuture = bootstrap.connect(Constant.HOST, Constant.PORT).sync();
                             socketChannel = (SocketChannel) channelFuture.channel();
                             socketChannel.writeAndFlush(UserLoginUtils.setLogin()+System.getProperty("line.separator"));
-
                         }
-
                         TimeUnit.SECONDS.sleep(5);
                     } catch (Exception e) {
                         continue;
                     }
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Override
     protected void initView() {
-        ClientUtil.doConnect();
+
     }
 
     @Override

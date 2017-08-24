@@ -28,6 +28,7 @@ import com.zhy.android.percent.support.PercentLinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -124,7 +125,7 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
     public void userLogin(MessageEvent messageEvent) {
         switch (messageEvent.getFriendUserId()) {
             case EventId.USERLOGIN_SUSSES:

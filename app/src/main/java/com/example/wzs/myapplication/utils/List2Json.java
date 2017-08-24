@@ -102,7 +102,7 @@ public class List2Json {
             DrawingDataBean ss=new DrawingDataBean();
             String[] strnum =  strArray[i].split(",");
             if(strnum.length==4) {
-                ss.setAll(Float.parseFloat(strnum[1]), Float.parseFloat(strnum[2]), Integer.parseInt(strnum[0]), Long.parseLong(strnum[3]));
+                ss.setAll(Integer.parseInt(strnum[0]),Float.parseFloat(strnum[1]), Float.parseFloat(strnum[2]),  Long.parseLong(strnum[3]));
                 LogUtil.e("转换测试：", strnum[0] + "------" +strnum[1] + "------" +strnum[2] + "------" +strnum[3]  );//输出测试
                 list_drawingDataBean.add(ss);
             }

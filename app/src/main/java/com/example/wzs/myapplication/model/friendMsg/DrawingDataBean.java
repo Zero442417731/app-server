@@ -36,7 +36,7 @@ public class DrawingDataBean {
 
     private long T;
 
-    public void setAll(float x, float y, int action, long ttime) {
+    public void setAll(int action,float x, float y, long ttime) {
         this.A = action;
         X = x;
         Y = y;

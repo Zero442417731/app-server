@@ -61,11 +61,8 @@ public class mSendDrawing {
     private boolean fasong() {
         JsonBinder jsonBinder = JsonBinder.buildNormalBinder();
         DrawModel drawModel = new DrawModel();
-
         DrawModel.HeaderBean headerBean = new DrawModel.HeaderBean();
         headerBean.setCode("HXCS-JC-HYXX");
-
-
         DrawModel.BodyBean bodyBean = new DrawModel.BodyBean();
         bodyBean.setToken(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
         bodyBean.setFriendUserId(friendId);
@@ -74,11 +71,7 @@ public class mSendDrawing {
         bodyBean.setCommand("2");
         bodyBean.setPaintSize("3");
         bodyBean.setPaintColor("4");
-
-
         String stringZip = List2Json.toDrawStringZip(list_drawingDataBean);
-
-
         bodyBean.setDrawingData(stringZip);
         drawModel.setHeader(headerBean);
         drawModel.setBody(bodyBean);
