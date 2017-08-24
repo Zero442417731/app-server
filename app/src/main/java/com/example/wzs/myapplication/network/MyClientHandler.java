@@ -44,14 +44,6 @@ public class MyClientHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("Client close ");
-        //重新连接服务器
-        ctx.channel().eventLoop().schedule(new Runnable() {
-            @Override
-            public void run() {
-            ClientUtil.doConnect();
-            }
-        }, 2, TimeUnit.SECONDS);
-        ctx.close();
         super.channelInactive(ctx);
     }
 
