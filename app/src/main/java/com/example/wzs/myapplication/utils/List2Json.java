@@ -1,7 +1,6 @@
 package com.example.wzs.myapplication.utils;
 
 import com.example.wzs.myapplication.model.friendMsg.DrawingDataBean;
-import com.example.wzs.myapplication.model.friendMsg.HYXX;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,8 +34,6 @@ public class List2Json {
         return json;
 
     }
-
-
 
     /**
      * 对象转JSON字符
@@ -73,7 +70,9 @@ public class List2Json {
             Iterator<DrawingDataBean> iter = list_drawingDataBean.iterator();
             while (iter.hasNext()) {
                 DrawingDataBean sss= iter.next();
-                str += sss.getA()+","+sss.getX()+","+ sss.getY()+","+ sss.getT()+";";
+                //乘万取整 精确4位
+                //str += sss.getA()+","+(int)(sss.getX()*10000)+","+(int)(sss.getY()*10000)+","+ sss.getT()+";";
+                str += sss.getA()+","+sss.getX()+","+sss.getY()+","+ sss.getT()+";";
             }
         }
         return str;
@@ -103,7 +102,7 @@ public class List2Json {
             String[] strnum =  strArray[i].split(",");
             if(strnum.length==4) {
                 ss.setAll(Integer.parseInt(strnum[0]),Float.parseFloat(strnum[1]), Float.parseFloat(strnum[2]),  Long.parseLong(strnum[3]));
-                LogUtil.e("转换测试：", strnum[0] + "------" +strnum[1] + "------" +strnum[2] + "------" +strnum[3]  );//输出测试
+                //LogUtil.e("转换测试：", strnum[0] + "------" +strnum[1] + "------" +strnum[2] + "------" +strnum[3]  );//输出测试
                 list_drawingDataBean.add(ss);
             }
         }

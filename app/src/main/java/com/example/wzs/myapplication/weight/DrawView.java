@@ -8,13 +8,12 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-
 import com.example.wzs.myapplication.model.friendMsg.DrawingDataBean;
 import com.example.wzs.myapplication.model.friendMsg.HYXX;
+import com.example.wzs.myapplication.utils.List2Json;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,7 +40,7 @@ public class DrawView extends View {
     private float mX2, mY2;// 临时点坐标
     private TimeDifference time_cha;
     private DrawingDataBean drawingDataBean;
-    private mSendDrawing fasong;
+    private mSendDrawing fasong=new mSendDrawing();
     private LinkedList<DrawingDataBean> inshuju = new LinkedList<>();
     //Message msg;
 
@@ -97,6 +96,15 @@ public class DrawView extends View {
     }
 
 
+    //本地绘画
+    public void setCanvasDate(HYXX mdate) {
+
+        List<DrawingDataBean> list = List2Json.fromDrawStringZip(mdate.getDrawingData());
+        inshuju.addAll(list);
+        mHandler.removeCallbacks(mRunnable);
+        mHandler.postDelayed(mRunnable, 0);
+    }
+
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new Runnable() {
         @Override
@@ -142,23 +150,17 @@ public class DrawView extends View {
     private void m_move(float x, float y) {
         //这里终点设为两点的中心点的目的在于使绘制的曲线更平滑，如果终点直接设置为x,y，效果和lineto是一样的,实际是折线效果
             mPath2.quadTo(mX2, mY2, (x + mX2) / 2, (y + mY2) / 2);
-            mCanvas.drawPath(mPath2, mPaint);
-
             mX2 = x;
             mY2 = y;
     }
 
     private void touch_up2() {
+        mCanvas.drawPath(mPath2, mPaint);
         mPath2.reset();
 
     }
 
-    //本地绘画
-    public void setCanvasDate(List<DrawingDataBean> mdate) {
-        inshuju.addAll(mdate);
-        mHandler.removeCallbacks(mRunnable);
-        mHandler.postDelayed(mRunnable, 0);
-    }
+
 
     public DrawView(Context context, String huabandeid, String friendID, int w, int h) {
         super(context);
@@ -239,13 +241,19 @@ public class DrawView extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
+        //画布背景颜色
         canvas.drawColor(0xff22FFFF);
         // 将前面已经画过得显示出来
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+        if (mPath2 != null) {
+            // 实时的显示
+            canvas.drawPath(mPath2, mPaint);
+        }
+
         if (mPath != null) {
             // 实时的显示
+
             canvas.drawPath(mPath, mPaint);
-            // canvas.drawPath(mPath2, mPaint);
         }
     }
 
@@ -292,17 +300,16 @@ public class DrawView extends View {
         mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
                 Bitmap.Config.ARGB_8888);
         mCanvas.setBitmap(mBitmap);// 重新设置画布，相当于清空画布
-
         savePath.clear();
         invalidate();
 
     }
 
+
     /**
      * 重做的核心思想就是将撤销的路径保存到另外一个集合里面(栈)， 然后从redo的集合里面取出最顶端对象， 画在画布上面即可。
      */
     public void redo() {
-
 
         // TODO
     }
@@ -311,13 +318,11 @@ public class DrawView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (isb) {
-            drawingDataBean = new DrawingDataBean();
             float xx = event.getX();
             float yy = event.getY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     touch_start(xx, yy);
-                    //  Log.d("操作：", "按下操作 颜色：" + Integer.toHexString(mPaint.getColor()) + "笔宽：" + mPaint.getStrokeWidth() + "坐标:" + x + "," + y);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     touch_move(xx, yy);
@@ -334,26 +339,29 @@ public class DrawView extends View {
 
 
     private void touch_start(float x, float y) {
-
         // 每次down下去重新new一个Path
         mPath = new Path();
         time_cha = new TimeDifference();
-        drawingDataBean.setAll(x / screenWidth, y / screenHeight, 1, 0);
+        // drawingDataBean.setAll(1,x / screenWidth, y / screenHeight,  0);
         dp = new DrawPath();
-        dp.path = mPath;
+       // dp.path = mPath;
         dp.paint = mPaint;
         dp.userID = 100001;
+        dp.mDateCount=(new Date()).getTime();
         mPath.moveTo(x, y);
         mX = x;
         mY = y;
-        fasong = new mSendDrawing(boardId, friendId, drawingDataBean);
+        //设置发送参数
+        fasong.SetmSendDrawing(boardId,friendId,dp.mDateCount,mPaint.getColor(),mPaint.getStrokeWidth());
+        fasong.senddrawing(1,x/screenWidth,y/screenHeight,0);
     }
+
 
 
     private void touch_move(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(mY - y);
-        drawingDataBean = new DrawingDataBean();
+        //drawingDataBean = new DrawingDataBean();
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             // 从x1,y1到x2,y2画一条贝塞尔曲线，更平滑(直接用mPath.lineTo也是可以的)
             // 由此就可以制作各种画笔
@@ -361,8 +369,7 @@ public class DrawView extends View {
             mX = x;
             mY = y;
         }
-        drawingDataBean.setAll(x / screenWidth, y / screenHeight, 2, time_cha.shijiancha());
-        fasong.mSendMess_move(drawingDataBean);
+        fasong.senddrawing(2,x/screenWidth,y/screenHeight,time_cha.shijiancha());
     }
 
 
@@ -372,15 +379,15 @@ public class DrawView extends View {
         //画笔抬起上一条会消失
         //   mCanvas.drawColor(0x5522FFFF);
         mCanvas.drawPath(mPath, mPaint);
-        mCanvas.save();
+        //mCanvas.save();
         //mCanvas.drawPath(mPath2, mPaint);
         // 将一条完整的路径保存下来(相当于入栈操作)
         dp.path = mPath;
-        dp.mDateCount = (new Date()).getTime();
+       // dp.mDateCount = (new Date()).getTime();
         savePath.add(dp);
-        drawingDataBean.setAll(mX / screenWidth, mY / screenHeight, 3, time_cha.shijiancha());
-        fasong.mSendMess_up(drawingDataBean);
-
+        //drawingDataBean.setAll(3,mX / screenWidth, mY / screenHeight, time_cha.shijiancha());
+       // fasong.mSendMess_up(drawingDataBean);
+        fasong.senddrawing(3,mX/screenWidth,mY/screenHeight,time_cha.shijiancha());
         mPath = null;// 重新置空
     }
 

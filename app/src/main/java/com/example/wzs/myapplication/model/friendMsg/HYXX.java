@@ -1,7 +1,6 @@
 package com.example.wzs.myapplication.model.friendMsg;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by hxcs-02 on 2017/8/4.
@@ -24,8 +23,8 @@ public class HYXX implements Serializable {
     private String drawingId;
     private String order;
     private String command;
-    private String paintSize;
-    private String paintColor;
+    private float paintSize;
+    private int paintColor;
 
 
     private String drawingData;
@@ -78,19 +77,19 @@ public class HYXX implements Serializable {
         this.command = command;
     }
 
-    public String getPaintSize() {
+    public float getPaintSize() {
         return paintSize;
     }
 
-    public void setPaintSize(String paintSize) {
+    public void setPaintSize(float paintSize) {
         this.paintSize = paintSize;
     }
 
-    public String getPaintColor() {
+    public int getPaintColor() {
         return paintColor;
     }
 
-    public void setPaintColor(String paintColor) {
+    public void setPaintColor(int paintColor) {
         this.paintColor = paintColor;
     }
 

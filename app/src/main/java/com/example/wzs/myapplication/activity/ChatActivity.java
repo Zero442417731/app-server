@@ -9,25 +9,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.wzs.myapplication.base.BaseActivity;
-import com.example.wzs.myapplication.dbmanger.DbManager;
-import com.example.wzs.myapplication.dbmanger.db_dao.FriendID;
 import com.example.wzs.myapplication.event.MessageEvent;
 import com.example.wzs.myapplication.model.friendMsg.DrawingDataBean;
 import com.example.wzs.myapplication.model.friendMsg.HYXX;
-import com.example.wzs.myapplication.utils.JsonBinder;
-import com.example.wzs.myapplication.utils.List2Json;
 import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SDPackageUtil;
-import com.example.wzs.myapplication.utils.ZipUtil;
 import com.example.wzs.myapplication.weight.DrawView;
 import com.nonecity.R;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.io.IOException;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -97,6 +88,7 @@ public class ChatActivity extends BaseActivity {
         broadView();
 
 
+
     }
 
 
@@ -125,52 +117,43 @@ public class ChatActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
+
     @Subscribe
     public void msg(MessageEvent<HYXX> messageEvent) {
+//        HYXX body=messageEvent.getMessageContent();
+//switch (body.getCommand()){
+//    case "1"://画板
+//        drawView.setCanvasDate(body);
+//        break;
+//    case "2"://橡皮
+//        break;
+//    case "3"://拖动
+//        break;
+//    case "4"://删除
+//        break;
+//    case "5"://文字
+//        break;
+//    case "6"://语音
+//        break;
+//
+//}
+//
+
         switch (messageEvent.getFriendUserId()) {
-
-
-
-
             case "c6212e4205fd4d23993d228dc75bc2d4":
-
-
                 HYXX body = messageEvent.getMessageContent();
-
-                String drawingData = body.getDrawingData();
-
-
-                List<DrawingDataBean> list = List2Json.fromDrawStringZip(drawingData);
-
-
-                drawView.setCanvasDate(list);
+                drawView.setCanvasDate(body);
                 LogUtil.e("接收到的消息-----大师兄------", messageEvent.getMessageContent().toString());
-
-
                 break;
             case "30cb481d37c487a81fc73ec13b1beee":
 
                 HYXX body1 = messageEvent.getMessageContent();
-
-                String drawingData1 = body1.getDrawingData();
-
-
-                List<DrawingDataBean> list2 = List2Json.fromDrawStringZip(drawingData1);
-
-                drawView.setCanvasDate(list2);
+                drawView.setCanvasDate(body1);
                 LogUtil.e("接收到的消息------二师兄-----", messageEvent.getMessageContent().toString());
-
                 break;
             case "97ac22b7b9dd4c208070dc6f764266bf":
-
                 HYXX body2 = messageEvent.getMessageContent();
-
-                String drawingData2 = body2.getDrawingData();
-
-
-                List<DrawingDataBean> list3 = List2Json.fromDrawStringZip(drawingData2);
-
-                drawView.setCanvasDate(list3);
+                drawView.setCanvasDate(body2);
                 LogUtil.e("接收到的消息------二师兄-----", messageEvent.getMessageContent().toString());
 
                 break;
