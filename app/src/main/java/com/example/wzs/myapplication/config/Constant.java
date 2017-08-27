@@ -1,8 +1,5 @@
 package com.example.wzs.myapplication.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by hxcs-02 on 2017/7/25.
  */
@@ -20,6 +17,7 @@ public class Constant {
     public static final String FLAG_MT = "1";
     public static final String FIRST_OPEN = "first_open";
 
+
     /******************************************sharedprefrence******************************************/
     public static String CONFIG_SHAREDPREFRENCE_CONFIG = "sharedprefrence_config";
     public static String CONFIG_SHAREDPREFRENCE_USER = "sharedprefrence_user";
@@ -27,7 +25,7 @@ public class Constant {
     /***
      * 接口编号
      */
-    public static final String BASE = "HXCS-JC-";
+    private static final String BASE = "HXCS-JC-";
     //1.	HXCS-JC-YHZC  用户注册
     public static final String YHZC = BASE + "YHZC";
     //2.	HXCS-JC-FSDX  发送短信验证码
@@ -89,5 +87,13 @@ public class Constant {
      * 用于存储sharedpreferences 变量名
      */
     public static String PUSH_MESSAGE_NUMBER = "push_message_number";
+
+
+    /******************************************画板常量******************************************/
+
+    /**
+     * 画的过程若移动距离没超过这个值则不绘制
+     */
+    public static final float TOUCH_TOLERANCE = 10;
 
 }

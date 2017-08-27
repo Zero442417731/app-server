@@ -39,14 +39,13 @@ public class mSendDrawing {
      * @param color  画笔颜色
      * @param penwidth  画笔宽度
      */
-    public void SetmSendDrawing(String drawingId, String friendId, long  Order ,int color, float penwidth) {
+    public void SetmSendDrawing(String drawingId, String friendId, long  Order ,int color, int penwidth) {
         this.drawingId = drawingId;
         this.friendId = friendId;
         this.color=color;
         this.width=penwidth;
         this.order =Order;
     }
-
 
     public void  senddrawing( int a,float x,float y,long t ){
         DrawingDataBean drawingDataBean =new DrawingDataBean().setAll(a, x, y, t);
@@ -94,24 +93,27 @@ public class mSendDrawing {
 
 
     private boolean fasong() {
-        HYXX body =new HYXX();
-        body.setToken(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
-        body.setFriendUserId(friendId);
-        body.setDrawingId(drawingId);
-        body.setOrder(String.valueOf(order));
-        body.setCommand("1");
-        body.setPaintSize(width);
-        body.setPaintColor(color);
-        String stringZip = List2Json.toDrawStringZip(list_drawingDataBean);
-        body.setDrawingData(stringZip);
-        SendMsg send=new SendMsg(Constant.HYXX);
-        send.setBody(body);
-        send.sendMessage();
+        if(list_drawingDataBean.size()>0) {
+            HYXX body = new HYXX();
+            body.setToken(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
+            body.setFriendUserId(friendId);
+            body.setDrawingId(drawingId);
+            body.setOrder(order);
+            body.setCommand("1");
+            body.setPaintSize((int)width);
+            body.setPaintColor(color);
+            String stringZip = List2Json.toDrawStringZip(list_drawingDataBean);
+            LogUtil.e("发送消息:", stringZip);
+            body.setDrawingData(stringZip);
+            SendMsg send = new SendMsg(Constant.HYXX);
+            send.setBody(body);
+            send.sendMessage();
+            return true;
+        }else {
+            return false;
+        }
 
 
-//
-//
-//
 //        JsonBinder jsonBinder = JsonBinder.buildNormalBinder();
 //        DrawModel drawModel = new DrawModel();
 //        DrawModel.HeaderBean headerBean = new DrawModel.HeaderBean();
@@ -126,7 +128,7 @@ public class mSendDrawing {
 //
 //        LogUtil.e("发送消息------", s);
 //        ClientUtil.sendMessage(s);
-        return true;
+
     }
 
 

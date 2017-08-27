@@ -3,17 +3,12 @@ package com.example.wzs.myapplication.weight;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.os.Environment;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.wzs.myapplication.model.friendMsg.DrawingDataBean;
 import com.example.wzs.myapplication.model.friendMsg.HYXX;
-import com.example.wzs.myapplication.utils.List2Json;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,55 +17,47 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+
+import static com.example.wzs.myapplication.config.Constant.TOUCH_TOLERANCE;
 
 /**
  * Created by hxcs-02 on 2017/8/17.
  */
 
-public class DrawView extends View {
+public class DrawView extends View implements qunliaoxiaoxi.MyCallInterface {
     private Bitmap mBitmap;
     private Canvas mCanvas;
-    private Path mPath;
-    private Path mPath2;
     private Paint mBitmapPaint;// 画布的画笔
-    private Paint mPaint;// 真实的画笔
+    private MyPen myPen = new MyPen();//我的笔
+    private MyPath mPath;//我画的路径
     private float mX, mY;// 临时点坐标
-    private float mX2, mY2;// 临时点坐标
-    private TimeDifference time_cha;
-    private DrawingDataBean drawingDataBean;
-    private mSendDrawing fasong=new mSendDrawing();
-    private LinkedList<DrawingDataBean> inshuju = new LinkedList<>();
-    //Message msg;
+    private TimeDifference time_cha;//计算时间差
+    private mSendDrawing fasong = new mSendDrawing();//发送画笔内容
+    private boolean isb = false;//是否可以涂画，默认false
+    private String boardId;//画板id
+    private String userid;//我的ID
+    private String friendId;//对方id
 
+    private static List<DrawPath> savePath;// 保存Path路径的集合,用List集合来模拟栈
+    private DrawPath dp;   // 记录Path路径的对象
 
-    /**
-     * 是否可以涂画，默认false
-     */
-    private boolean isb = false;
-    /**
-     * 画板的id
-     */
-    private String boardId;
-    /**
-     * 用户的id
-     */
-    private long userid;
-    private String friendId;
-
-    Thread t1 = new Thread();
-    private static final float TOUCH_TOLERANCE = 4;
-    //Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-
-    // 保存Path路径的集合,用List集合来模拟栈
-    private static List<DrawPath> savePath;
-
-    // 记录Path路径的对象
-    private DrawPath dp;
-    private DrawPath dp2;
+    private List<qunliaoxiaoxi> qunliao= new ArrayList<qunliaoxiaoxi>();
 
     private int screenWidth, screenHeight;// 屏幕长宽
+
+
+    @Override
+    public void jiekou(DrawPath dp) {
+        mCanvas.drawPath(dp.path, dp.paint);
+        savePath.add(dp);
+    }
+
+
+    @Override
+    public void shuaxin() {
+        invalidate();// 刷新
+    }
 
 
     /**
@@ -85,78 +72,29 @@ public class DrawView extends View {
         mCanvas.setBitmap(mBitmap);// 重新设置画布，相当于清空画布
         // 清空画布，但是如果图片有背景的话，则使用上面的重新初始化的方法，用该方法会将背景清空掉...
         if (savePath != null && savePath.size() > 0) {
-            Iterator<DrawPath> iter = savePath.iterator();
-            while (iter.hasNext()) {
-                DrawPath drawPath = iter.next();
-                mCanvas.drawPath(drawPath.path, drawPath.paint);
+            for(DrawPath dd:savePath){
+                mCanvas.drawPath(dd.path, dd.paint);
             }
             invalidate();// 刷新
         }
 
     }
 
-
     //本地绘画
     public void setCanvasDate(HYXX mdate) {
-
-        List<DrawingDataBean> list = List2Json.fromDrawStringZip(mdate.getDrawingData());
-        inshuju.addAll(list);
-        mHandler.removeCallbacks(mRunnable);
-        mHandler.postDelayed(mRunnable, 0);
-    }
-
-    private Handler mHandler = new Handler();
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mHandler.postDelayed(this, inshuju.getFirst().getT());
-            huitu(inshuju.removeFirst());
-            invalidate();
-            if (inshuju.size() == 0) {
-                mHandler.removeCallbacks(this);
-                return;
+        boolean bNull=true;
+        if(qunliao.size()>0){
+            for (qunliaoxiaoxi qun : qunliao){
+                if (qun.getFriendId()==mdate.getUserid()){
+                    qun.setQunliao(mdate);
+                    bNull=false;
+                }
             }
         }
-    };
-
-    /**
-     * 根据数据画图
-     *
-     * @param indate
-     */
-    private void huitu(DrawingDataBean indate) {
-        switch (indate.getA()) {
-            case 1:
-                touch_start2(indate.getX() * screenWidth, indate.getY() * screenHeight);
-                break;
-            case 2:
-                m_move(indate.getX() * screenWidth, indate.getY() * screenHeight);
-                break;
-            case 3:
-                touch_up2();
-                break;
+        if(bNull){
+            qunliao.add(new qunliaoxiaoxi(mdate,screenWidth,screenHeight));
         }
-        invalidate();
-    }
 
-    private void touch_start2(float x, float y) {
-        mX2 = x;
-        mY2 = y;
-        if (mPath2 == null) {
-            mPath2 = new Path();
-        }
-        mPath2.moveTo(x, y);
-    }
-    private void m_move(float x, float y) {
-        //这里终点设为两点的中心点的目的在于使绘制的曲线更平滑，如果终点直接设置为x,y，效果和lineto是一样的,实际是折线效果
-            mPath2.quadTo(mX2, mY2, (x + mX2) / 2, (y + mY2) / 2);
-            mX2 = x;
-            mY2 = y;
-    }
-
-    private void touch_up2() {
-        mCanvas.drawPath(mPath2, mPaint);
-        mPath2.reset();
 
     }
 
@@ -172,88 +110,44 @@ public class DrawView extends View {
                 Bitmap.Config.ARGB_8888);
         // 保存一次一次绘制出来的图形
         mCanvas = new Canvas(mBitmap);
-        //mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);// 设置外边缘
-        mPaint.setStrokeCap(Paint.Cap.ROUND);// 形状
-        mPaint.setStrokeWidth(30);// 画笔宽度
-        mPaint.setColor(0xFF333300);// 画笔颜色
-        /** 画笔特效 */
-        // float[] direction =new float[]{0,1,1};//光源方向
-        // float light =0.6f;//环境光亮度
-        // float specular =6;//反射等级
-        // float blur=3.5f;//模糊级别
-        // EmbossMaskFilter emboss =new EmbossMaskFilter(direction,light,specular,blur);
-        // EmbossMaskFilter emboss =new EmbossMaskFilter(direction,light,specular,blur);
-        // BlurMaskFilter eeee =new BlurMaskFilter(10,BlurMaskFilter.Blur.SOLID);
-        //  mPaint.setMaskFilter(eeee);
-        // mPaint.getPathEffect();
+        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         savePath = new ArrayList<DrawPath>();
     }
+
 
     /**
      * 设置是否为画笔工具
      */
-
-
     public void setIsb(boolean setisbi) {
         isb = setisbi;
     }
 
+
     /**
      * 设置画笔
      */
-
-    public void setmPaint(int penColor, int penSize, boolean bPen) {
-        if (bPen) {//画笔
-            mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
-            mPaint.setStyle(Paint.Style.STROKE);
-            mPaint.setStrokeWidth(penSize);
-            mPaint.setColor(penColor);
-            // mPaint.setAlpha(mPenAlpha);
-            mPaint.setAntiAlias(true);
-            mPaint.setStrokeJoin(Paint.Join.ROUND);
-            mPaint.setStrokeCap(Paint.Cap.ROUND);
-            mPaint.getPathEffect();
-        } else {//橡皮擦
-            mPaint = new Paint();
-            mPaint.setStyle(Paint.Style.STROKE);
-            mPaint.setAlpha(255);
-            mPaint.setColor(Color.WHITE);
-            mPaint.setStrokeWidth(penSize);
-            mPaint.setAntiAlias(true);
-            mPaint.setStrokeJoin(Paint.Join.ROUND);
-            mPaint.setStrokeCap(Paint.Cap.ROUND);
-            mPaint.getPathEffect();
-
-
-        }
+    public void setMypen(int penColor, int penSize, boolean bPen) {
+        myPen.setPen(penColor, penSize, bPen);
     }
 
-    public void isFlag(int flag) {
-        switch (flag) {
-            case 1:
-                break;
-        }
-    }
+
 
     @Override
     public void onDraw(Canvas canvas) {
         //画布背景颜色
-        canvas.drawColor(0xff22FFFF);
+        //canvas.drawColor(0xff22FFFF);
         // 将前面已经画过得显示出来
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-        if (mPath2 != null) {
-            // 实时的显示
-            canvas.drawPath(mPath2, mPaint);
-        }
-
         if (mPath != null) {
             // 实时的显示
-
-            canvas.drawPath(mPath, mPaint);
+            canvas.drawPath(mPath, myPen);
+        }
+        if(qunliao.size()>0){
+            for (qunliaoxiaoxi qun : qunliao){
+                if(qun.getmPath()!=null){
+                    canvas.drawPath(qun.getmPath(), qun.getMyPen());
+                }
+            }
         }
     }
 
@@ -340,55 +234,44 @@ public class DrawView extends View {
 
     private void touch_start(float x, float y) {
         // 每次down下去重新new一个Path
-        mPath = new Path();
+        mPath = new MyPath();
         time_cha = new TimeDifference();
-        // drawingDataBean.setAll(1,x / screenWidth, y / screenHeight,  0);
         dp = new DrawPath();
-       // dp.path = mPath;
-        dp.paint = mPaint;
+        dp.paint = myPen;
         dp.userID = 100001;
-        dp.mDateCount=(new Date()).getTime();
-        mPath.moveTo(x, y);
+        dp.mDateCount = (new Date()).getTime();
+        mPath.touch_start(x, y);
         mX = x;
         mY = y;
         //设置发送参数
-        fasong.SetmSendDrawing(boardId,friendId,dp.mDateCount,mPaint.getColor(),mPaint.getStrokeWidth());
-        fasong.senddrawing(1,x/screenWidth,y/screenHeight,0);
+        fasong.SetmSendDrawing(boardId, friendId, dp.mDateCount, myPen.getColor(), (int) myPen.getStrokeWidth());
+        fasong.senddrawing(1, x / screenWidth, y / screenHeight, 0);
     }
-
 
 
     private void touch_move(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(mY - y);
-        //drawingDataBean = new DrawingDataBean();
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-            // 从x1,y1到x2,y2画一条贝塞尔曲线，更平滑(直接用mPath.lineTo也是可以的)
-            // 由此就可以制作各种画笔
-            mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+            mPath.touch_move(x, y);
             mX = x;
             mY = y;
+            fasong.senddrawing(2, x / screenWidth, y / screenHeight, time_cha.shijiancha());
         }
-        fasong.senddrawing(2,x/screenWidth,y/screenHeight,time_cha.shijiancha());
+
     }
 
-
     private void touch_up() {
-        mPath.lineTo(mX, mY);
-        // mPath2.lineTo(mX + 50, mY + 50);
-        //画笔抬起上一条会消失
-        //   mCanvas.drawColor(0x5522FFFF);
-        mCanvas.drawPath(mPath, mPaint);
+        mPath.touch_up();
+        //画笔抬起上一条会消失,
+        //mCanvas.drawColor(0x5522FFFF);
+        mCanvas.drawPath(mPath, myPen);
         //mCanvas.save();
-        //mCanvas.drawPath(mPath2, mPaint);
         // 将一条完整的路径保存下来(相当于入栈操作)
         dp.path = mPath;
-       // dp.mDateCount = (new Date()).getTime();
         savePath.add(dp);
-        //drawingDataBean.setAll(3,mX / screenWidth, mY / screenHeight, time_cha.shijiancha());
-       // fasong.mSendMess_up(drawingDataBean);
-        fasong.senddrawing(3,mX/screenWidth,mY/screenHeight,time_cha.shijiancha());
-        mPath = null;// 重新置空
+        fasong.senddrawing(3, mX / screenWidth, mY / screenHeight, time_cha.shijiancha());
+        mPath.reset();// 重新置空
     }
 
 }
