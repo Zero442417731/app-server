@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#e6e7ec"
+   >
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#ffffff"
+       >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/msg_head"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/news_tab_insert_icon_n"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_toRightOf="@id/msg_head"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp">
+            <TextView
+                android:id="@+id/msg_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Steve"
+                android:textSize="15sp"
+                android:textColor="#333333"/>
+            <LinearLayout
+                android:layout_below="@id/msg_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:id="@+id/msg_broad"
+                    android:layout_width="9dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/list_icon_panel1"/>
+                <TextView
+                    android:id="@+id/msg_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="See you"
+                    android:textColor="#999999"
+                    android:layout_marginLeft="5dp"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/msg_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="23:00"
+                android:textColor="#999999"
+                android:textSize="10sp"/>
+            <TextView
+                android:gravity="center"
+                android:text="1"
+                android:textColor="#ffffff"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:background="@drawable/news_voice_sign"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

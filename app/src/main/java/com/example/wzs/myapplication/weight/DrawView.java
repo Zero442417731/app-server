@@ -338,7 +338,7 @@ public class DrawView extends View {
         // 每次down下去重新new一个Path
         mPath = new Path();
         time_cha = new TimeDifference();
-        drawingDataBean.setAll(x / screenWidth, y / screenHeight, 1, 0);
+        drawingDataBean.setAll(1,x / screenWidth, y / screenHeight,  0);
         dp = new DrawPath();
         dp.path = mPath;
         dp.paint = mPaint;
@@ -361,7 +361,7 @@ public class DrawView extends View {
             mX = x;
             mY = y;
         }
-        drawingDataBean.setAll(x / screenWidth, y / screenHeight, 2, time_cha.shijiancha());
+        drawingDataBean.setAll( 2,x / screenWidth, y / screenHeight, time_cha.shijiancha());
         fasong.mSendMess_move(drawingDataBean);
     }
 
@@ -378,7 +378,7 @@ public class DrawView extends View {
         dp.path = mPath;
         dp.mDateCount = (new Date()).getTime();
         savePath.add(dp);
-        drawingDataBean.setAll(mX / screenWidth, mY / screenHeight, 3, time_cha.shijiancha());
+        drawingDataBean.setAll( 3,mX / screenWidth, mY / screenHeight, time_cha.shijiancha());
         fasong.mSendMess_up(drawingDataBean);
 
         mPath = null;// 重新置空

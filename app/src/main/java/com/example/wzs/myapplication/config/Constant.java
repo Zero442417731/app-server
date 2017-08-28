@@ -78,6 +78,9 @@ public class Constant {
     public static final String HYXX = BASE + "HYXX";
     //25.	HXCS-JC-XTJC  心跳包检测(5秒)
     public static final String XTJC = BASE + "XTJC";
+    //26.	HXCS-JC-HYSX  好友列表刷新推送(服务端调客户端)
+    public static final String HYSX = BASE + "HYSX";
+
 
     public static String HXCS_JC_YHCZ = "HXCS-JC-YHCZ";
     public static String HXCS_JC_HYTJ = "HXCS-JC-HYTJ";

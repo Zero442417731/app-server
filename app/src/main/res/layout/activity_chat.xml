@@ -7,7 +7,60 @@
     android:orientation="vertical"
     tools:context="com.example.wzs.myapplication.activity.ChatActivity">
 
-    <include layout="@layout/title_layout" />
+    <RelativeLayout
+        android:id="@+id/base_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#767670"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/title_back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/navibar_icon_return"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/change_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="dasdasdas"
+            android:textColor="#e8fffb"
+            android:textSize="25.3sp" />
+
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+
+        <ImageView
+            android:id="@+id/more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textview"
+            android:src="@drawable/news_icon_data_normal"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/broad"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textview"
+            android:layout_toLeftOf="@id/more"
+            android:background="@drawable/news_icon_quantity_normal"
+            android:gravity="center"
+            android:text="1"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/mFrame"
@@ -16,9 +69,25 @@
         android:layout_weight="1"
         android:background="#00ff00">
 
+
+
+        <ListView
+            android:id="@+id/chat_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+
     </FrameLayout>
 
+    <com.example.wzs.myapplication.chat_ui.ChatPrimaryMenu
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+    </com.example.wzs.myapplication.chat_ui.ChatPrimaryMenu>
+
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
@@ -30,6 +99,14 @@
             android:layout_height="match_parent"
             android:layout_margin="1dp"
             android:background="@drawable/news_key_selector"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/news_nonic"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:background="@drawable/news_key_selector"
             android:visibility="visible" />
 
         <EditText
@@ -37,8 +114,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:layout_weight="1"
             android:layout_marginRight="10dp"
+            android:layout_weight="1"
             android:background="@drawable/text" />
 
 

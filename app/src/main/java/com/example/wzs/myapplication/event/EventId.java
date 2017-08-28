@@ -20,6 +20,7 @@ public class EventId {
     //好友验证推送
     public static final String USER_TS = "300";
 
-
+    //好友刷新
+    public static final String FRIENDSREFRESH = "400";
 
 }

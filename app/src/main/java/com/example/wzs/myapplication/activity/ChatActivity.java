@@ -5,28 +5,23 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.wzs.myapplication.base.BaseActivity;
-import com.example.wzs.myapplication.dbmanger.DbManager;
-import com.example.wzs.myapplication.dbmanger.db_dao.FriendID;
 import com.example.wzs.myapplication.event.MessageEvent;
 import com.example.wzs.myapplication.model.friendMsg.DrawingDataBean;
 import com.example.wzs.myapplication.model.friendMsg.HYXX;
-import com.example.wzs.myapplication.utils.JsonBinder;
 import com.example.wzs.myapplication.utils.List2Json;
 import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SDPackageUtil;
-import com.example.wzs.myapplication.utils.ZipUtil;
 import com.example.wzs.myapplication.weight.DrawView;
 import com.nonecity.R;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.Bind;
@@ -58,6 +53,10 @@ public class ChatActivity extends BaseActivity {
     ImageView brush;
     @Bind(R.id.personMore)
     ImageView personMore;
+    @Bind(R.id.chat_list)
+    ListView chatList;
+    @Bind(R.id.news_nonic)
+    ImageView newsNonic;
     private String friendId;
     private String id;
     public String userID;
@@ -130,8 +129,6 @@ public class ChatActivity extends BaseActivity {
         switch (messageEvent.getFriendUserId()) {
 
 
-
-
             case "c6212e4205fd4d23993d228dc75bc2d4":
 
 
@@ -197,5 +194,9 @@ public class ChatActivity extends BaseActivity {
             case R.id.personMore:
                 break;
         }
+    }
+
+    @OnClick(R.id.news_nonic)
+    public void onViewClicked() {
     }
 }

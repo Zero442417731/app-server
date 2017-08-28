@@ -21,20 +21,20 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        FriendMsgDao.createTable(db, ifNotExists);
         DrawingDataBeanDao.createTable(db, ifNotExists);
-        UserInfoEntityDao.createTable(db, ifNotExists);
         FriendIDDao.createTable(db, ifNotExists);
+        FriendMsgDao.createTable(db, ifNotExists);
         FriendsListDao.createTable(db, ifNotExists);
+        UserInfoEntityDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        FriendMsgDao.dropTable(db, ifExists);
         DrawingDataBeanDao.dropTable(db, ifExists);
-        UserInfoEntityDao.dropTable(db, ifExists);
         FriendIDDao.dropTable(db, ifExists);
+        FriendMsgDao.dropTable(db, ifExists);
         FriendsListDao.dropTable(db, ifExists);
+        UserInfoEntityDao.dropTable(db, ifExists);
     }
 
     /**
@@ -53,11 +53,11 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(FriendMsgDao.class);
         registerDaoClass(DrawingDataBeanDao.class);
-        registerDaoClass(UserInfoEntityDao.class);
         registerDaoClass(FriendIDDao.class);
+        registerDaoClass(FriendMsgDao.class);
         registerDaoClass(FriendsListDao.class);
+        registerDaoClass(UserInfoEntityDao.class);
     }
 
     public DaoSession newSession() {

@@ -22,6 +22,7 @@ import com.example.wzs.myapplication.event.EventId;
 import com.example.wzs.myapplication.event.MessageEvent;
 
 import com.example.wzs.myapplication.model.FriendList;
+import com.example.wzs.myapplication.model.FriendsRefresh;
 import com.example.wzs.myapplication.model.UserInfo;
 import com.example.wzs.myapplication.model.friendMsg.YZXX;
 import com.example.wzs.myapplication.network.MyCallback;
@@ -85,9 +86,10 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
 
     @Override
     protected void initData() {
+        //初始化联系人列表集合
         userArrayList = new ArrayList<>();
+        //初始化数据库
         dbManger = new DbManager();
-
         getFriend();
         addData();
         init();
@@ -95,18 +97,21 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
     }
 
     private void addData() {
-        String[] contactsArray = getResources().getStringArray(R.array.data);
-        // String[] headArray = getResources().getStringArray(R.array.head);
+
         userInfoEntities = dbManger.selectFriendList();
 
     }
 
-
+    /**
+     * eventBus 传递数据
+     * @param messageEvent
+     * @param <T>
+     */
     @Subscribe
-    public void userAdd(MessageEvent<YZXX> messageEvent) {
+    public <T> void userAdd(MessageEvent<T> messageEvent) {
         switch (messageEvent.getFriendUserId()) {
             case EventId.USER_TS:
-                YZXX messageContent = messageEvent.getMessageContent();
+                YZXX messageContent = (YZXX) messageEvent.getMessageContent();
                 String friendId = messageContent.getFriendId();
                 LogUtil.e("eventbus", "userLogin: " + friendId);
                 if (messageContent.getFriendId() != null) {
@@ -114,11 +119,19 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
                     new QBadgeView(getContext()).bindTarget(not_read_number).setBadgeNumber(1).setBadgeBackgroundColor(0xffffeb3b).setBadgeTextColor(0xff000000).stroke(0xff000000, 1, true);
                 }
                 break;
+            case EventId.FRIENDSREFRESH:
+                //好友列表刷新通知
+                FriendsRefresh friendsRefresh = (FriendsRefresh) messageEvent.getMessageContent();
+                LogUtil.e("好友列表刷新通知-------",friendsRefresh.getState());
+                getFriend();
+                break;
         }
 
     }
 
-
+    /**
+     * 数据初始化
+     */
     private void init() {
         //  rel_new_friends.setVisibility(View.GONE);
         //排序
@@ -196,55 +209,18 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
         }
     };
 
+    /**
+     * 获取好友列表
+     */
     private void getFriend() {
         HXApplication.retrofitUtils.postData(getFriendList(), new MyCallback<FriendList>() {
             @Override
             public void onSuccess(FriendList friendList) {
                 friendList.getBody().getResultData();
-
                 List<FriendList.BodyBean.ResultDataBean> resultData = friendList.getBody().getResultData();
-
-                for (int i = 0; i < resultData.size(); i++) {
-                    FriendList.BodyBean.ResultDataBean resultDataBean = resultData.get(i);
-                    User user = new User();
-                    user.setName(resultDataBean.getNickName());
-                    user.setFriendId(resultDataBean.getFriendId());
-                    user.setSex(resultDataBean.getSex());
-                    user.setSignature(resultDataBean.getSignature());
-                    user.setHeadImgPath(resultDataBean.getHeadImgPath());
-                    user.setId(resultDataBean.getId());
-                    user.setMobilePhone(resultDataBean.getMobilePhone());
-                    user.setUserCode(resultDataBean.getUserCode());
-                    LogUtil.e("user_name-----", user.getName());
-                    user.setArea(resultDataBean.getArea());
-                    String firstSpell = ChineseToEnglish.getFirstSpell(resultDataBean.getNickName());
-                    if (firstSpell.length() > 0) {
-                        String substring = firstSpell.substring(0, 1).toUpperCase();
-                        user.setHeaderWord(substring);
-
-                        //数据库插数据
-                        UserInfoEntity userInfoEntity = new UserInfoEntity(null, resultDataBean.getId(),
-                                resultDataBean.getFriendId(), resultDataBean.getUserCode(),
-                                resultDataBean.getMobilePhone(), resultDataBean.getHeadImgPath(),
-                                resultDataBean.getNickName(), resultDataBean.getSignature(),
-                                resultDataBean.getSex(), resultDataBean.getArea(), resultDataBean.getOnLine());
-                        dbManger.deleteAll(UserInfoEntity.class);
-                        dbManger.insertData(userInfoEntity);
-                        if (substring.matches("[A-Z]")) {
-                            user.setLetter(substring);
-                        } else {
-                            user.setLetter("#");
-                        }
-                        //联系人列表
-                        userArrayList.add(user);
-                    }
-                }
-                mAdapter.notifyDataSetChanged();
-
+                refreshList(resultData);
                 LogUtil.e("resultData----", resultData.size() + "");
-
             }
-
             @Override
             public void onError(String msg) {
 
@@ -252,6 +228,10 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
         });
     }
 
+    /**
+     * 好友列表参数怕拼接
+     * @return
+     */
     public String getFriendList() {
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonObject1 = new JSONObject();
@@ -264,8 +244,49 @@ public class FriendFragment extends BaseFragment implements SideBarView.LetterSe
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         return jsonObject2.toString();
+    }
+
+    /**
+     * 刷新好友列表
+     * @param resultData 返回好有数目
+     */
+    private void refreshList(List<FriendList.BodyBean.ResultDataBean> resultData) {
+        for (int i = 0; i < resultData.size(); i++) {
+            FriendList.BodyBean.ResultDataBean resultDataBean = resultData.get(i);
+            User user = new User();
+            user.setName(resultDataBean.getNickName());
+            user.setFriendId(resultDataBean.getFriendId());
+            user.setSex(resultDataBean.getSex());
+            user.setSignature(resultDataBean.getSignature());
+            user.setHeadImgPath(resultDataBean.getHeadImgPath());
+            user.setId(resultDataBean.getId());
+            user.setMobilePhone(resultDataBean.getMobilePhone());
+            user.setUserCode(resultDataBean.getUserCode());
+            LogUtil.e("user_name-----", user.getName());
+            user.setArea(resultDataBean.getArea());
+            String firstSpell = ChineseToEnglish.getFirstSpell(resultDataBean.getNickName());
+            if (firstSpell.length() > 0) {
+                String substring = firstSpell.substring(0, 1).toUpperCase();
+                user.setHeaderWord(substring);
+
+                //数据库插数据
+                UserInfoEntity userInfoEntity = new UserInfoEntity(null, resultDataBean.getId(),
+                        resultDataBean.getFriendId(), resultDataBean.getUserCode(),
+                        resultDataBean.getMobilePhone(), resultDataBean.getHeadImgPath(),
+                        resultDataBean.getNickName(), resultDataBean.getSignature(),
+                        resultDataBean.getSex(), resultDataBean.getArea(), resultDataBean.getOnLine());
+                dbManger.deleteAll(UserInfoEntity.class);
+                dbManger.insertData(userInfoEntity);
+                if (substring.matches("[A-Z]")) {
+                    user.setLetter(substring);
+                } else {
+                    user.setLetter("#");
+                }
+                //联系人列表
+                userArrayList.add(user);
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 }
