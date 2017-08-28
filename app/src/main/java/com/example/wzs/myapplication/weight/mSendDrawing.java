@@ -1,18 +1,12 @@
 package com.example.wzs.myapplication.weight;
 
 import com.example.wzs.myapplication.config.Constant;
-import com.example.wzs.myapplication.model.DrawModel;
+import com.example.wzs.myapplication.model.SendMsg;
 import com.example.wzs.myapplication.model.friendMsg.DrawingDataBean;
 import com.example.wzs.myapplication.model.friendMsg.HYXX;
-import com.example.wzs.myapplication.network.ClientUtil;
-import com.example.wzs.myapplication.utils.JsonBinder;
 import com.example.wzs.myapplication.utils.List2Json;
 import com.example.wzs.myapplication.utils.LogUtil;
 import com.example.wzs.myapplication.utils.SharedPreferencesUtil;
-import com.example.wzs.myapplication.utils.ZipUtil;
-
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,77 +19,118 @@ import java.util.TimerTask;
 
 public class mSendDrawing {
     private static int timeLong = 1000;//时间间隔毫秒
-    private static Timer timer;
+    private static Timer  timer = new Timer();
     private String drawingId;
     private String friendId;
+    private int color;
+    private float width;
+    private long order;
     /**
      * 大概16毫秒一条，申请65个空间够1000毫秒使用
      */
     private List<DrawingDataBean> list_drawingDataBean = new ArrayList<>();
 
 
-    public mSendDrawing(String drawingId, String friendId, DrawingDataBean drawingDataBean) {
-        timer = new Timer();
+    /**
+     * 设置参数
+     * @param drawingId 画板id
+     * @param friendId  好友id
+     * @param Order  时间节点
+     * @param color  画笔颜色
+     * @param penwidth  画笔宽度
+     */
+    public void SetmSendDrawing(String drawingId, String friendId, long  Order ,int color, int penwidth) {
         this.drawingId = drawingId;
         this.friendId = friendId;
-        this.list_drawingDataBean.add(drawingDataBean);
-        startTime();
+        this.color=color;
+        this.width=penwidth;
+        this.order =Order;
     }
 
-    public void mSendMess_move(DrawingDataBean date) {
+    public void  senddrawing( int a,float x,float y,long t ){
+        DrawingDataBean drawingDataBean =new DrawingDataBean().setAll(a, x, y, t);
+        switch (a){
+            case 1:
+                mSendMess_start(drawingDataBean);
+                break;
+            case 2:
+                mSendMess_move(drawingDataBean);
+                break;
+            case 3:
+                mSendMess_up(drawingDataBean);
+                break;
+
+        }
+
+    }
+
+    //1
+    private void mSendMess_start(DrawingDataBean date) {
+        timer = new Timer();
+        this.list_drawingDataBean.add(date);
+        startTime();
+
+    }
+
+    //2
+    private void mSendMess_move(DrawingDataBean date) {
         LogUtil.e("坐标------", date.getX() + "------" + date.getY());
         list_drawingDataBean.add(date);
 
     }
 
-    public void mSendMess_up(DrawingDataBean date) {
+
+    //3
+    private void mSendMess_up(DrawingDataBean date) {
         for (int i = 0; i < list_drawingDataBean.size(); i++) {
             LogUtil.e("_________", "==========" + list_drawingDataBean.get(i).getX() + "----" + list_drawingDataBean.get(i).getY());
         }
         list_drawingDataBean.add(date);
-
         endTime();
     }
 
 
+
+
     private boolean fasong() {
-        JsonBinder jsonBinder = JsonBinder.buildNormalBinder();
-        DrawModel drawModel = new DrawModel();
-        DrawModel.HeaderBean headerBean = new DrawModel.HeaderBean();
-        headerBean.setCode("HXCS-JC-HYXX");
-        DrawModel.BodyBean bodyBean = new DrawModel.BodyBean();
-        bodyBean.setToken(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
-        bodyBean.setFriendUserId(friendId);
-        bodyBean.setDrawingId(drawingId);
-        bodyBean.setOrder("1");
-        bodyBean.setCommand("2");
-        bodyBean.setPaintSize("3");
-        bodyBean.setPaintColor("4");
-        String stringZip = List2Json.toDrawStringZip(list_drawingDataBean);
-        bodyBean.setDrawingData(stringZip);
-        drawModel.setHeader(headerBean);
-        drawModel.setBody(bodyBean);
-
-        String s = jsonBinder.toJson(drawModel);
-
-
-
+        if(list_drawingDataBean.size()>0) {
+            HYXX body = new HYXX();
+            body.setToken(SharedPreferencesUtil.getStringPreferences(Constant.CONFIG_SHAREDPREFRENCE_USER, "token"));
+            body.setFriendUserId(friendId);
+            body.setDrawingId(drawingId);
+            body.setOrder(order);
+            body.setCommand("1");
+            body.setPaintSize((int)width);
+            body.setPaintColor(color);
+            String stringZip = List2Json.toDrawStringZip(list_drawingDataBean);
+            LogUtil.e("发送消息:", stringZip);
+            body.setDrawingData(stringZip);
+            SendMsg send = new SendMsg(Constant.HYXX);
+            send.setBody(body);
+            send.sendMessage();
+            return true;
+        }else {
+            return false;
+        }
 
 
-        LogUtil.e("发送消息------", s);
-        ClientUtil.sendMessage(s);
+//        JsonBinder jsonBinder = JsonBinder.buildNormalBinder();
+//        DrawModel drawModel = new DrawModel();
+//        DrawModel.HeaderBean headerBean = new DrawModel.HeaderBean();
+//        headerBean.setCode("HXCS-JC-HYXX");
+//        DrawModel.BodyBean bodyBean = new DrawModel.BodyBean();
+//        //String stringZip = List2Json.toDrawStringZip(list_drawingDataBean);
+//        bodyBean.setDrawingData(stringZip);
+//        drawModel.setHeader(headerBean);
+//        drawModel.setBody(bodyBean);
+//
+//        String s = jsonBinder.toJson(drawModel);
+//
+//        LogUtil.e("发送消息------", s);
+//        ClientUtil.sendMessage(s);
 
-        return true;
     }
 
-    /**
-     * 清空缓存
-     */
-    private void clear() {
-
-        list_drawingDataBean.clear();
-
-    }
 
     public void startTime() {
 
@@ -103,7 +138,7 @@ public class mSendDrawing {
             @Override
             public void run() {
                 if (fasong()) {
-                    clear();
+                    list_drawingDataBean.clear();
                 }
             }
 
@@ -114,7 +149,7 @@ public class mSendDrawing {
     public void endTime() {
         timer.cancel();// 停止定时器
         if (fasong()) {
-            clear();
+            list_drawingDataBean.clear();
         }
 
     }

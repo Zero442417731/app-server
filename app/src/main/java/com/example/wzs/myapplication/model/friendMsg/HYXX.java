@@ -1,7 +1,6 @@
 package com.example.wzs.myapplication.model.friendMsg;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by hxcs-02 on 2017/8/4.
@@ -10,7 +9,8 @@ import java.util.List;
 public class HYXX implements Serializable {
     /**
      * token : 单用户登录唯一标示，必需
-     * friendUserId : 好友用户id
+     * friendUserId : 接收用户id
+     * userid:发送用户id
      * drawingId : 画板id
      * order : 顺序，long类型.按当前时间毫秒作为顺序标记.
      * command : 命令：画笔,橡皮,拖动,删除.int类型
@@ -20,13 +20,13 @@ public class HYXX implements Serializable {
      */
 
     private String friendUserId;
+    private String userid;
     private String token;
     private String drawingId;
-    private String order;
+    private long order;
     private String command;
-    private String paintSize;
-    private String paintColor;
-
+    private int paintSize;
+    private int paintColor;
 
     private String drawingData;
 
@@ -62,11 +62,11 @@ public class HYXX implements Serializable {
         this.drawingId = drawingId;
     }
 
-    public String getOrder() {
+    public long getOrder() {
         return order;
     }
 
-    public void setOrder(String order) {
+    public void setOrder(long order) {
         this.order = order;
     }
 
@@ -78,21 +78,27 @@ public class HYXX implements Serializable {
         this.command = command;
     }
 
-    public String getPaintSize() {
+    public int getPaintSize() {
         return paintSize;
     }
 
-    public void setPaintSize(String paintSize) {
+    public void setPaintSize(int paintSize) {
         this.paintSize = paintSize;
     }
 
-    public String getPaintColor() {
+    public int getPaintColor() {
         return paintColor;
     }
 
-    public void setPaintColor(String paintColor) {
+    public void setPaintColor(int paintColor) {
         this.paintColor = paintColor;
     }
 
+    public String getUserid() {
+        return userid;
+    }
 
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 }

@@ -17,6 +17,16 @@ public class DrawingDataBean {
     private int A;
     private float X;
     private float Y;
+    private long T;
+
+    public DrawingDataBean setAll(int action,float x, float y, long ttime) {
+        this.A = action;
+        X = x;
+        Y = y;
+        T = ttime;
+        return this;
+    }
+
 
     public int getA() {
         return A;
@@ -33,16 +43,6 @@ public class DrawingDataBean {
     public void setT(long t) {
         T = t;
     }
-
-    private long T;
-
-    public void setAll(int action,float x, float y, long ttime) {
-        this.A = action;
-        X = x;
-        Y = y;
-        T = ttime;
-    }
-
 
     public float getX() {
         return X;
